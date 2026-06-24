@@ -1,0 +1,5675 @@
+:root {
+  --guindo: #421304;
+  --guindo-dark: #2A0B03;
+  --guindo-mid: #6E1C0F;
+  --gold: #FFC928;
+  --cream: #FFF4E6;
+  --white: #FFFFFF;
+  --text: #2B2B2B;
+  --muted: #6D5B50;
+  --soft-yellow: #FFEAA0;
+  --soft-pink: #FFDCE8;
+  --soft-blue: #DDF2FF;
+  --soft-green: #DFF4D8;
+  --line: rgba(66, 19, 4, 0.13);
+  --shadow: 0 22px 54px rgba(42, 11, 3, 0.22);
+  --soft-shadow: 0 18px 38px rgba(42, 11, 3, 0.14);
+  --radius: 24px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 8% 10%, rgba(255, 201, 40, 0.16), transparent 24%),
+    radial-gradient(circle at 92% 18%, rgba(221, 242, 255, 0.55), transparent 18%),
+    linear-gradient(180deg, var(--cream), var(--white) 54%, var(--cream));
+  color: var(--text);
+  font-family: "Manrope", Arial, sans-serif;
+}
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+a { color: inherit; text-decoration: none; }
+
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px clamp(18px, 4vw, 64px);
+  color: var(--white);
+  background: transparent;
+  transition: background 220ms ease, box-shadow 220ms ease;
+}
+.site-header.scrolled,
+.site-header.open {
+  background: rgba(42, 11, 3, 0.96);
+  box-shadow: 0 12px 34px rgba(42, 11, 3, 0.28);
+  backdrop-filter: blur(14px);
+}
+.site-header:not(.scrolled):not(.open) {
+  color: var(--guindo);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 900;
+}
+.brand img {
+  width: 50px;
+  height: 50px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--white);
+  box-shadow: 0 10px 24px rgba(255, 201, 40, 0.22);
+}
+.brand span { max-width: 230px; line-height: 1.08; }
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+.site-nav > a,
+.nav-link {
+  position: relative;
+  padding: 12px 0;
+  border: 0;
+  background: transparent;
+  color: var(--white);
+  font: inherit;
+  cursor: pointer;
+  opacity: 0.94;
+}
+.site-header:not(.scrolled):not(.open) .site-nav > a,
+.site-header:not(.scrolled):not(.open) .nav-link {
+  color: var(--guindo);
+}
+.site-header:not(.scrolled):not(.open) .nav-toggle {
+  border-color: rgba(66, 19, 4, 0.35);
+  background: rgba(255, 255, 255, 0.5);
+}
+.site-header:not(.scrolled):not(.open) .nav-toggle span {
+  background: var(--guindo);
+}
+.site-nav > a::after,
+.nav-link::after {
+  position: absolute;
+  left: 0;
+  bottom: 4px;
+  width: 0;
+  height: 3px;
+  content: "";
+  border-radius: 999px;
+  background: var(--gold);
+  transition: width 180ms ease;
+}
+.site-nav > a:hover::after,
+.site-nav > a.active::after,
+.has-submenu:hover .nav-link::after,
+.has-submenu.open .nav-link::after { width: 100%; }
+.nav-item { position: relative; }
+.submenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  min-width: 210px;
+  padding: 10px;
+  border: 1px solid rgba(255, 244, 230, 0.16);
+  border-radius: 16px;
+  background: rgba(42, 11, 3, 0.96);
+  box-shadow: var(--shadow);
+  transform: translateX(-50%) translateY(8px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+}
+.has-submenu:hover .submenu,
+.has-submenu.open .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+.submenu a {
+  display: block;
+  padding: 11px 12px;
+  border-radius: 10px;
+  color: var(--cream);
+}
+.submenu a:hover { background: rgba(255, 201, 40, 0.14); color: var(--gold); }
+
+.nav-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+}
+.nav-toggle span {
+  display: block;
+  width: 21px;
+  height: 2px;
+  margin: 5px auto;
+  background: var(--white);
+}
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 148px clamp(20px, 6vw, 86px) 92px;
+  color: var(--guindo);
+  background:
+    radial-gradient(circle at 18% 15%, rgba(255, 255, 255, 0.96), transparent 30%),
+    radial-gradient(circle at 86% 18%, rgba(255, 201, 40, 0.22), transparent 22%),
+    radial-gradient(circle at 50% 96%, rgba(255, 201, 40, 0.3), transparent 24%),
+    linear-gradient(135deg, #fffaf2 0%, var(--cream) 46%, #fffdf8 100%);
+}
+.hero::before,
+.hero::after,
+.section::before,
+.page-hero::before {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+  border-radius: 999px;
+}
+.hero::before {
+  z-index: 0;
+  right: clamp(18px, 8vw, 116px);
+  top: 116px;
+  width: 120px;
+  height: 120px;
+  border: 2px solid rgba(255, 201, 40, 0.5);
+  box-shadow: 0 0 40px rgba(255, 201, 40, 0.16);
+}
+.hero::after {
+  z-index: 0;
+  left: clamp(18px, 7vw, 102px);
+  top: 172px;
+  width: 96px;
+  height: 96px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 16px 48px rgba(66, 19, 4, 0.08);
+}
+.hero-shell {
+  position: relative;
+  z-index: 2;
+  width: min(1180px, 100%);
+  padding: clamp(10px, 1.5vw, 18px);
+  border-radius: clamp(28px, 4vw, 46px);
+  background: rgba(255, 255, 255, 0.54);
+  box-shadow: 0 32px 88px rgba(66, 19, 4, 0.2);
+  backdrop-filter: blur(10px);
+}
+.hero-sparkles {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 30%, rgba(255, 201, 40, 0.75) 0 2px, transparent 3px),
+    radial-gradient(circle at 74% 24%, rgba(255, 255, 255, 0.95) 0 2px, transparent 3px),
+    radial-gradient(circle at 82% 64%, rgba(255, 201, 40, 0.58) 0 3px, transparent 4px),
+    radial-gradient(circle at 30% 75%, rgba(66, 19, 4, 0.22) 0 2px, transparent 3px);
+  animation: sparkleFloat 6s ease-in-out infinite alternate;
+}
+.hero-wave-field {
+  position: absolute;
+  left: -8%;
+  right: -8%;
+  bottom: -12px;
+  z-index: 1;
+  height: 220px;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 86% at 50% 120%, rgba(255, 201, 40, 0.36), transparent 62%);
+}
+.hero-wave-field::before,
+.hero-wave-field::after {
+  position: absolute;
+  left: 0;
+  right: 0;
+  content: "";
+  border-radius: 50%;
+  transform-origin: center;
+}
+.hero-wave-field::before {
+  bottom: 8px;
+  height: 150px;
+  border-top: 3px solid rgba(255, 201, 40, 0.82);
+  box-shadow:
+    0 -18px 0 -16px rgba(66, 19, 4, 0.34),
+    0 -38px 0 -36px rgba(255, 201, 40, 0.5);
+  animation: waveDrift 7s ease-in-out infinite alternate;
+}
+.hero-wave-field::after {
+  bottom: -38px;
+  height: 180px;
+  border-top: 2px solid rgba(66, 19, 4, 0.32);
+  animation: waveDrift 8s ease-in-out infinite alternate-reverse;
+}
+.frequency-bars {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: 66px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  height: 72px;
+}
+.frequency-bars span {
+  width: clamp(5px, 0.8vw, 10px);
+  height: 26px;
+  border-radius: 999px;
+  background: var(--guindo);
+  box-shadow: 0 10px 22px rgba(66, 19, 4, 0.16);
+  animation: frequencyPulse 1.8s ease-in-out infinite;
+}
+.frequency-bars span:nth-child(2n) {
+  height: 46px;
+  background: var(--gold);
+  animation-delay: 120ms;
+}
+.frequency-bars span:nth-child(3n) { height: 62px; animation-delay: 260ms; }
+.frequency-bars span:nth-child(4n) { height: 34px; animation-delay: 420ms; }
+.frequency-bars span:nth-child(5n) { height: 56px; animation-delay: 560ms; }
+@keyframes sparkleFloat {
+  from { opacity: 0.55; transform: translateY(0); }
+  to { opacity: 0.95; transform: translateY(-10px); }
+}
+@keyframes waveDrift {
+  from { transform: translateX(-24px) scaleX(1.02); }
+  to { transform: translateX(24px) scaleX(1); }
+}
+@keyframes frequencyPulse {
+  0%, 100% { transform: scaleY(0.72); opacity: 0.72; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+@keyframes objectiveTitleIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.hero-carousel {
+  position: relative;
+  min-height: clamp(520px, 68vh, 720px);
+  z-index: 2;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: clamp(24px, 3.5vw, 38px);
+  background: var(--guindo-dark);
+  box-shadow: 0 28px 70px rgba(66, 19, 4, 0.34);
+}
+.hero-slide,
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+}
+.hero-slide {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  opacity: 0;
+  transform: scale(1);
+  transition: opacity 1100ms ease, transform 6000ms ease-in-out;
+  will-change: opacity, transform;
+}
+.hero-slide.active { opacity: 1; }
+.hero-slide.active.is-zooming { transform: scale(1.03); }
+.hero-overlay {
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(42,11,3,0.92), rgba(66,19,4,0.75), rgba(66,19,4,0.45)),
+    linear-gradient(0deg, rgba(42, 11, 3, 0.3), transparent 42%);
+}
+.hero-content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  width: 100%;
+  padding: clamp(32px, 7vw, 86px);
+  text-align: center;
+  text-shadow: 0 4px 22px rgba(0, 0, 0, 0.34);
+}
+.hero-content::before {
+  display: block;
+  width: 128px;
+  height: 5px;
+  margin: 0 auto 24px;
+  content: "";
+  border-radius: 999px;
+  background: var(--gold);
+}
+.eyebrow {
+  margin: 0 0 14px;
+  color: var(--gold);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+.hero h1 {
+  max-width: 1040px;
+  margin: 0 auto 18px;
+  color: var(--white);
+  font-family: "Lora", Georgia, serif;
+  font-size: clamp(3rem, 7vw, 6.4rem);
+  line-height: 0.98;
+}
+.hero-subtitle,
+.hero-brief {
+  max-width: 760px;
+  margin: 0 auto;
+  color: var(--cream);
+  font-weight: 700;
+  line-height: 1.6;
+}
+.hero-subtitle { font-size: clamp(1.12rem, 2vw, 1.45rem); }
+.hero-brief { margin-top: 10px; font-size: 1.05rem; }
+
+.hero-actions,
+.footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 34px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 13px 23px;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  font-weight: 900;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 18px 34px rgba(42, 11, 3, 0.18); }
+.btn-primary {
+  background: var(--gold);
+  color: var(--guindo-dark);
+  box-shadow: 0 16px 34px rgba(255, 201, 40, 0.24);
+}
+.btn-secondary,
+.btn-outline-light {
+  border-color: rgba(255, 201, 40, 0.86);
+  background: rgba(66, 19, 4, 0.5);
+  color: var(--white);
+  backdrop-filter: blur(8px);
+}
+.btn-light { background: var(--white); color: var(--guindo); }
+.hero-dots {
+  position: relative;
+  z-index: 3;
+  width: fit-content;
+  margin: 18px auto 0;
+  display: flex;
+  gap: 10px;
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 244, 230, 0.18);
+  border-radius: 999px;
+  background: rgba(42, 11, 3, 0.34);
+  backdrop-filter: blur(10px);
+}
+.hero-dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 244, 230, 0.58);
+  cursor: pointer;
+  transition: width 220ms ease, background 220ms ease, opacity 220ms ease;
+}
+.hero-dot.active { width: 30px; border-radius: 999px; background: var(--gold); }
+
+.section {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(82px, 10vw, 128px) clamp(20px, 6vw, 86px);
+}
+.section::before {
+  right: -54px;
+  top: 52px;
+  width: 160px;
+  height: 160px;
+  background: rgba(255, 201, 40, 0.12);
+}
+.section:nth-of-type(even)::before {
+  right: auto;
+  left: -64px;
+  background: rgba(221, 242, 255, 0.42);
+}
+.page-main {
+  padding-top: 78px;
+}
+.page-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 360px;
+  display: grid;
+  align-content: end;
+  padding: 120px clamp(20px, 6vw, 86px) 64px;
+  color: var(--cream);
+  background:
+    radial-gradient(circle at 15% 0%, rgba(255, 201, 40, 0.16), transparent 30%),
+    linear-gradient(135deg, var(--guindo-dark), var(--guindo));
+}
+.page-hero::before {
+  right: clamp(24px, 8vw, 120px);
+  bottom: 42px;
+  width: 132px;
+  height: 132px;
+  border: 2px solid rgba(255, 201, 40, 0.36);
+}
+.page-hero.image-page {
+  min-height: 520px;
+  background-size: cover;
+  background-position: center;
+}
+.page-hero h1 {
+  max-width: 980px;
+  margin: 0;
+  color: var(--gold);
+  font-family: "Lora", Georgia, serif;
+  font-size: clamp(2.6rem, 6vw, 5.6rem);
+  line-height: 1.02;
+}
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+.quick-card {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  min-height: 230px;
+  padding: 30px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(255, 244, 230, 0.92)),
+    var(--white);
+  box-shadow: var(--soft-shadow);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.quick-card::after {
+  position: absolute;
+  right: -28px;
+  bottom: -28px;
+  width: 108px;
+  height: 108px;
+  content: "";
+  border-radius: 999px;
+  background: var(--soft-pink);
+}
+.quick-card span {
+  display: block;
+  width: 58px;
+  height: 8px;
+  margin-bottom: 22px;
+  border-radius: 999px;
+  background: var(--gold);
+}
+.quick-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+.wide {
+  max-width: 860px;
+  margin-inline: auto;
+}
+.section-cream { background: var(--cream); }
+.section-white { background: var(--white); }
+.section-dark {
+  background: radial-gradient(circle at 10% 20%, rgba(255, 201, 40, 0.14), transparent 30%),
+    linear-gradient(135deg, var(--guindo-dark), var(--guindo));
+  color: var(--cream);
+}
+.section-mid {
+  background: radial-gradient(circle at 90% 12%, rgba(255, 201, 40, 0.13), transparent 28%),
+    linear-gradient(135deg, var(--guindo-mid), var(--guindo));
+  color: var(--cream);
+}
+.section-shell,
+.subsection,
+.section-heading,
+.district-grid,
+.center-detail,
+.contact-grid { position: relative; z-index: 1; }
+.section-shell,
+.about-layout,
+.objective-layout,
+.callout-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
+  gap: clamp(30px, 5vw, 76px);
+  align-items: center;
+}
+.callout-layout.reverse { grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1fr); }
+.subsection { margin-top: clamp(66px, 9vw, 118px); }
+.section-heading {
+  max-width: 880px;
+  margin-bottom: 42px;
+}
+.centered { margin-inline: auto; text-align: center; }
+h2, h3 { margin: 0; }
+h2 {
+  color: var(--guindo);
+  font-family: "Lora", Georgia, serif;
+  font-size: clamp(2.3rem, 4.8vw, 4.3rem);
+  line-height: 1.05;
+}
+h3 {
+  color: var(--guindo);
+  font-family: "Lora", Georgia, serif;
+  font-size: clamp(1.25rem, 2vw, 1.8rem);
+}
+p { color: var(--muted); font-size: 1.03rem; line-height: 1.75; }
+.section-dark h2, .section-mid h2, .section-dark h3, .section-mid h3 { color: var(--gold); }
+.section-dark p, .section-mid p { color: var(--cream); }
+
+.section-copy,
+.objective-card,
+.callout-card {
+  padding: clamp(26px, 4vw, 42px);
+  border-radius: var(--radius);
+  box-shadow: var(--soft-shadow);
+}
+.section-copy,
+.objective-card {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.9);
+}
+.section-dark .callout-card,
+.section-mid .callout-card {
+  border: 1px solid rgba(255, 244, 230, 0.18);
+  background: rgba(255, 244, 230, 0.1);
+}
+.section-image { margin: 0; }
+.section-image img {
+  width: 100%;
+  min-height: 370px;
+  object-fit: cover;
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+  border: 8px solid rgba(255, 255, 255, 0.72);
+}
+
+.about-feature {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(255, 201, 40, 0.22), transparent 22%),
+    radial-gradient(circle at 84% 18%, rgba(255, 255, 255, 0.78), transparent 20%),
+    radial-gradient(circle at 92% 82%, rgba(66, 19, 4, 0.08), transparent 18%),
+    linear-gradient(135deg, #fffaf2 0%, var(--cream) 54%, #fffaf5 100%);
+}
+.about-feature::before {
+  position: absolute;
+  inset: 44px auto auto 6%;
+  width: 96px;
+  height: 96px;
+  content: "";
+  border: 1px solid rgba(255, 201, 40, 0.55);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 201, 40, 0.18), transparent 58%);
+  box-shadow:
+    0 0 0 18px rgba(255, 201, 40, 0.06),
+    0 24px 44px rgba(66, 19, 4, 0.08);
+}
+.about-feature::after {
+  position: absolute;
+  right: 6%;
+  bottom: 36px;
+  width: 170px;
+  height: 170px;
+  content: "";
+  border-radius: 42% 58% 57% 43%;
+  background:
+    radial-gradient(circle at 34% 34%, rgba(255, 201, 40, 0.2), transparent 34%),
+    rgba(66, 19, 4, 0.08);
+  filter: blur(0.2px);
+}
+.about-deco {
+  position: absolute;
+  z-index: 0;
+  border-radius: 999px;
+  pointer-events: none;
+}
+.about-deco-one {
+  left: 4%;
+  bottom: 18%;
+  width: 12px;
+  height: 12px;
+  background: var(--gold);
+  box-shadow:
+    34px -28px 0 rgba(66, 19, 4, 0.2),
+    74px 18px 0 rgba(255, 201, 40, 0.32),
+    106px -38px 0 rgba(255, 255, 255, 0.86);
+}
+.about-deco-two {
+  top: 19%;
+  right: 14%;
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 201, 40, 0.72);
+  box-shadow:
+    32px 30px 0 rgba(255, 220, 232, 0.95),
+    -44px 46px 0 rgba(66, 19, 4, 0.18),
+    -88px -22px 0 rgba(255, 255, 255, 0.9);
+}
+.about-feature-layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 0.98fr) minmax(360px, 1.02fr);
+  gap: clamp(34px, 5.5vw, 86px);
+  align-items: center;
+}
+.about-card {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(30px, 4vw, 50px);
+  border: 1px solid rgba(66, 19, 4, 0.14);
+  border-radius: 34px;
+  background:
+    linear-gradient(90deg, rgba(66, 19, 4, 0.07), transparent 18%),
+    rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 28px 58px rgba(66, 19, 4, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(12px);
+}
+.about-card::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 100%;
+  content: "";
+  background: linear-gradient(180deg, var(--gold), #ffe08a 38%, var(--guindo));
+  box-shadow: 0 0 24px rgba(255, 201, 40, 0.38);
+}
+.about-card::after {
+  position: absolute;
+  right: -70px;
+  top: -70px;
+  width: 190px;
+  height: 190px;
+  content: "";
+  border-radius: 44% 56% 52% 48%;
+  background:
+    radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.55), transparent 32%),
+    rgba(255, 201, 40, 0.18);
+}
+.about-card h2 {
+  margin-bottom: 12px;
+  color: var(--guindo);
+  font-size: clamp(2.35rem, 4vw, 4.3rem);
+  line-height: 0.98;
+}
+.about-card h2::after {
+  display: block;
+  width: 94px;
+  height: 4px;
+  margin-top: 18px;
+  content: "";
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--gold), rgba(255, 201, 40, 0));
+  box-shadow: 0 0 18px rgba(255, 201, 40, 0.45);
+}
+.about-subtitle {
+  max-width: 520px;
+  margin: 0 0 24px;
+  color: var(--guindo-mid);
+  font-weight: 900;
+  font-size: clamp(1.03rem, 1.6vw, 1.24rem);
+}
+.about-card p:not(.eyebrow):not(.about-subtitle) {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: clamp(18px, 2.2vw, 24px);
+  border: 1px solid rgba(66, 19, 4, 0.1);
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(255, 244, 230, 0.78), rgba(255, 255, 255, 0.88));
+  color: var(--text);
+  font-size: 1.04rem;
+  line-height: 1.78;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76);
+}
+.about-tags {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+.about-tags span {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 62px;
+  padding: 13px 15px;
+  border: 1px solid rgba(255, 201, 40, 0.45);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 16% 20%, rgba(255, 201, 40, 0.18), transparent 34%),
+    rgba(255, 255, 255, 0.9);
+  color: var(--guindo);
+  font-size: 0.9rem;
+  font-weight: 900;
+  box-shadow: 0 14px 24px rgba(66, 19, 4, 0.1);
+}
+.about-tags i {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 35%, var(--white) 0 16%, transparent 17%),
+    linear-gradient(135deg, var(--gold), #ffe08a);
+  box-shadow:
+    0 0 0 5px rgba(255, 201, 40, 0.15),
+    0 0 18px rgba(255, 201, 40, 0.38);
+}
+.about-photo {
+  position: relative;
+  margin: 0;
+  min-height: 500px;
+}
+.about-photo::before {
+  position: absolute;
+  inset: 36px -26px -24px 34px;
+  content: "";
+  border-radius: 46px;
+  background:
+    radial-gradient(circle at 78% 16%, rgba(255, 244, 230, 0.46), transparent 18%),
+    linear-gradient(135deg, var(--gold) 0%, #ffe08a 22%, var(--guindo) 100%);
+  box-shadow:
+    0 28px 54px rgba(66, 19, 4, 0.24),
+    0 0 34px rgba(255, 201, 40, 0.28);
+}
+.about-photo::after {
+  position: absolute;
+  left: -24px;
+  bottom: 42px;
+  width: 112px;
+  height: 112px;
+  content: "";
+  border-radius: 50%;
+  background: rgba(255, 244, 230, 0.92);
+  box-shadow:
+    inset 0 0 0 13px rgba(255, 201, 40, 0.36),
+    0 0 0 1px rgba(66, 19, 4, 0.1),
+    0 20px 36px rgba(66, 19, 4, 0.18);
+}
+.about-photo img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  object-fit: cover;
+  object-position: center;
+  border: 10px solid rgba(255, 255, 255, 0.84);
+  border-radius: 40px;
+  box-shadow:
+    0 30px 62px rgba(42, 11, 3, 0.24),
+    0 0 0 1px rgba(255, 201, 40, 0.18);
+}
+
+.stats-grid,
+.values-grid,
+.mission-grid,
+.team-grid,
+.district-grid,
+.contact-grid,
+.home-impact-grid,
+.access-grid,
+.requirement-grid,
+.benefit-grid,
+.center-team-grid {
+  display: grid;
+  gap: 24px;
+}
+.home-impact-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  position: relative;
+  z-index: 1;
+}
+.impact-card,
+.access-card,
+.requirement-grid article,
+.benefit-grid article,
+.center-team-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(66, 19, 4, 0.12);
+  border-radius: var(--radius);
+  box-shadow: var(--soft-shadow);
+}
+.impact-card {
+  min-height: 270px;
+  padding: 30px;
+  background: rgba(255, 244, 230, 0.96);
+}
+.impact-card::before,
+.access-card::before,
+.requirement-grid article::before,
+.benefit-grid article::before,
+.center-team-card::before {
+  position: absolute;
+  top: -42px;
+  right: -38px;
+  width: 118px;
+  height: 118px;
+  content: "";
+  border-radius: 999px;
+  opacity: 0.82;
+}
+.impact-icon {
+  display: inline-grid;
+  place-items: center;
+  min-width: 96px;
+  height: 96px;
+  margin-bottom: 22px;
+  border-radius: 28px;
+  background: var(--guindo);
+  color: var(--gold);
+  font-family: "Lora", Georgia, serif;
+  font-size: 2.4rem;
+  font-weight: 800;
+  box-shadow: inset 0 -8px 18px rgba(0, 0, 0, 0.14);
+}
+.impact-card h3,
+.impact-card p { position: relative; z-index: 1; }
+.impact-card h3 { color: var(--guindo); }
+.impact-card p { margin-bottom: 0; color: var(--muted); }
+.access-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  position: relative;
+  z-index: 1;
+}
+.access-card {
+  min-height: 250px;
+  padding: 28px;
+  background: linear-gradient(180deg, var(--white), var(--cream));
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.access-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+.access-card span {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 24px;
+  border-radius: 18px;
+  background: var(--guindo);
+  color: var(--gold);
+  font-weight: 900;
+}
+.access-card h3,
+.access-card p { position: relative; z-index: 1; }
+.access-card p { margin-bottom: 0; }
+.accent-yellow::before { background: var(--soft-yellow); }
+.accent-pink::before { background: var(--soft-pink); }
+.accent-blue::before { background: var(--soft-blue); }
+.accent-green::before { background: var(--soft-green); }
+.stats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.stat-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 250px;
+  padding: 34px 26px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--white), var(--cream));
+  text-align: center;
+  box-shadow: var(--soft-shadow);
+}
+.stat-card::before {
+  position: absolute;
+  top: -42px;
+  right: -32px;
+  width: 130px;
+  height: 130px;
+  content: "";
+  border-radius: 999px;
+  background: var(--soft-yellow);
+}
+.stat-icon,
+.values-grid span {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 20px;
+  border-radius: 18px;
+  background: var(--guindo);
+}
+.stat-icon::after,
+.values-grid span::after {
+  width: 18px;
+  height: 18px;
+  content: "";
+  border-radius: 50%;
+  background: var(--gold);
+}
+.stat-card strong {
+  display: block;
+  color: var(--guindo);
+  font-family: "Lora", Georgia, serif;
+  font-size: clamp(4rem, 7vw, 6.8rem);
+  line-height: 0.92;
+}
+.stat-card p {
+  max-width: 230px;
+  margin: 20px auto 0;
+  color: var(--guindo);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+.impact-strip {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 201, 40, 0.22), transparent 25%),
+    radial-gradient(circle at 88% 14%, rgba(255, 224, 138, 0.18), transparent 22%),
+    radial-gradient(circle at 50% 110%, rgba(255, 201, 40, 0.18), transparent 34%),
+    linear-gradient(135deg, var(--guindo-dark) 0%, var(--guindo) 54%, #2a0b03 100%);
+}
+.impact-strip::before {
+  position: absolute;
+  inset: 10% auto auto 5%;
+  width: 170px;
+  height: 170px;
+  content: "";
+  border: 1px solid rgba(255, 201, 40, 0.22);
+  border-radius: 48% 52% 44% 56%;
+  background:
+    radial-gradient(circle at 34% 30%, rgba(255, 201, 40, 0.16), transparent 30%),
+    rgba(255, 244, 230, 0.04);
+  box-shadow:
+    0 0 42px rgba(255, 201, 40, 0.14),
+    92vw 42px 0 -54px rgba(255, 244, 230, 0.06);
+}
+.impact-strip::after {
+  position: absolute;
+  right: -90px;
+  bottom: -80px;
+  width: 310px;
+  height: 310px;
+  content: "";
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(255, 201, 40, 0.16), transparent 50%),
+    radial-gradient(circle at 35% 28%, rgba(255, 244, 230, 0.14), transparent 18%);
+  filter: blur(1px);
+}
+.impact-spark {
+  position: absolute;
+  z-index: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--gold);
+  pointer-events: none;
+  filter: drop-shadow(0 0 12px rgba(255, 201, 40, 0.75));
+}
+.impact-spark-one {
+  left: 18%;
+  top: 24%;
+  box-shadow:
+    72px 120px 0 rgba(255, 224, 138, 0.52),
+    180px -18px 0 rgba(255, 244, 230, 0.28),
+    360px 158px 0 rgba(255, 201, 40, 0.32);
+}
+.impact-spark-two {
+  right: 14%;
+  top: 30%;
+  opacity: 0.75;
+  box-shadow:
+    -84px 132px 0 rgba(255, 224, 138, 0.44),
+    -220px 24px 0 rgba(255, 244, 230, 0.24),
+    40px 180px 0 rgba(255, 201, 40, 0.34);
+}
+.impact-strip .section-heading,
+.impact-strip .stats-grid {
+  position: relative;
+  z-index: 1;
+}
+.impact-strip .section-heading {
+  margin-bottom: clamp(28px, 4vw, 48px);
+}
+.impact-strip .section-heading h2 {
+  display: inline-block;
+  position: relative;
+  color: var(--gold);
+  font-size: clamp(2.6rem, 5vw, 5rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  text-shadow: 0 0 26px rgba(255, 201, 40, 0.24);
+}
+.impact-strip .section-heading h2::after {
+  display: block;
+  width: 120px;
+  height: 4px;
+  margin: 18px auto 0;
+  content: "";
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 201, 40, 0), var(--gold), rgba(255, 201, 40, 0));
+  box-shadow: 0 0 18px rgba(255, 201, 40, 0.48);
+}
+.impact-strip .stats-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2.2vw, 26px);
+}
+.impact-strip .stat-card {
+  min-height: 268px;
+  padding: clamp(28px, 3vw, 36px) 22px;
+  border: 1px solid rgba(255, 201, 40, 0.28);
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 82% 16%, rgba(255, 201, 40, 0.2), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 244, 230, 0.95));
+  box-shadow:
+    0 26px 46px rgba(42, 11, 3, 0.28),
+    0 0 30px rgba(255, 201, 40, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.84);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.impact-strip .stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 30px 58px rgba(42, 11, 3, 0.34),
+    0 0 38px rgba(255, 201, 40, 0.22);
+}
+.impact-strip .stat-card::before {
+  top: -54px;
+  right: -44px;
+  width: 142px;
+  height: 142px;
+  background:
+    radial-gradient(circle at 34% 32%, rgba(255, 255, 255, 0.52), transparent 20%),
+    rgba(255, 201, 40, 0.2);
+}
+.impact-strip .stat-card::after {
+  position: absolute;
+  left: 20px;
+  bottom: 18px;
+  width: 70px;
+  height: 70px;
+  content: "";
+  border-radius: 55% 45% 50% 50%;
+  background: rgba(66, 19, 4, 0.06);
+}
+.impact-strip .stat-icon {
+  position: relative;
+  z-index: 1;
+  width: 58px;
+  height: 58px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, var(--guindo), var(--guindo-dark));
+  box-shadow:
+    0 16px 28px rgba(66, 19, 4, 0.18),
+    0 0 0 7px rgba(255, 201, 40, 0.16);
+}
+.impact-strip .stat-icon::after {
+  width: 22px;
+  height: 22px;
+  background:
+    radial-gradient(circle at 35% 35%, var(--white) 0 13%, transparent 14%),
+    var(--gold);
+  box-shadow: 0 0 16px rgba(255, 201, 40, 0.54);
+}
+.impact-strip .stat-card strong {
+  position: relative;
+  z-index: 1;
+  color: var(--gold);
+  font-size: clamp(3.7rem, 6vw, 6.2rem);
+  text-shadow:
+    0 3px 0 rgba(66, 19, 4, 0.18),
+    0 0 22px rgba(255, 201, 40, 0.36);
+}
+.impact-strip .stat-card h3 {
+  position: relative;
+  z-index: 1;
+  max-width: 245px;
+  margin: 18px auto 0;
+  color: var(--guindo);
+  font-size: 0.96rem;
+  font-weight: 900;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+.values-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.values-grid article,
+.team-grid article,
+.contact-grid article {
+  position: relative;
+  overflow: hidden;
+  padding: 26px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--white);
+  box-shadow: var(--soft-shadow);
+  text-align: center;
+}
+.values-grid article:nth-child(2n)::before,
+.team-grid article:nth-child(2n)::before,
+.contact-grid article:nth-child(2n)::before {
+  position: absolute;
+  inset: auto -28px -42px auto;
+  width: 108px;
+  height: 108px;
+  content: "";
+  border-radius: 999px;
+  background: var(--soft-blue);
+  opacity: 0.72;
+}
+.mission-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.image-card {
+  overflow: hidden;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--white);
+  box-shadow: var(--soft-shadow);
+}
+.image-card img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+}
+.image-card div { padding: 28px; }
+.image-card div::before {
+  display: block;
+  width: 70px;
+  height: 5px;
+  margin-bottom: 18px;
+  content: "";
+  border-radius: 999px;
+  background: var(--gold);
+}
+.team-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+
+.district-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.district-card {
+  position: relative;
+  overflow: hidden;
+  padding: 24px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: linear-gradient(145deg, var(--cream), var(--white));
+  box-shadow: var(--soft-shadow);
+}
+.district-card::before {
+  position: absolute;
+  right: -30px;
+  top: -38px;
+  width: 104px;
+  height: 104px;
+  content: "";
+  border-radius: 999px;
+  background: var(--soft-green);
+}
+.district-card h3,
+.district-card .center-buttons { position: relative; z-index: 1; }
+.center-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+.center-button {
+  padding: 10px 13px;
+  border: 1px solid rgba(66, 19, 4, 0.16);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--guindo);
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 180ms ease, transform 180ms ease;
+}
+.center-button:hover { background: var(--gold); transform: translateY(-2px); }
+.center-detail {
+  margin-top: 42px;
+  border-radius: 30px;
+  overflow: hidden;
+  background: var(--cream);
+  box-shadow: var(--shadow);
+}
+.center-hero {
+  min-height: 260px;
+  display: grid;
+  align-items: end;
+  padding: 28px;
+  color: var(--white);
+  background: linear-gradient(90deg, rgba(42,11,3,0.86), rgba(66,19,4,0.48)), var(--guindo);
+  background-size: cover;
+  background-position: center;
+}
+.center-body {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+  gap: 26px;
+  padding: 28px;
+}
+.center-placeholder {
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+  border-radius: 22px;
+  background: linear-gradient(135deg, var(--guindo), var(--guindo-mid));
+  color: var(--gold);
+  font-weight: 900;
+  text-align: center;
+}
+.close-center { margin-top: 18px; }
+.center-info-panel h3 + p { margin-top: 10px; }
+.center-team-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 18px;
+}
+.center-team-card {
+  min-height: 128px;
+  padding: 20px;
+  background: var(--white);
+}
+.center-team-card span {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 12px;
+  border-radius: 14px;
+  background: var(--guindo);
+  color: var(--gold);
+  font-weight: 900;
+}
+.center-team-card strong {
+  display: block;
+  color: var(--guindo);
+  font-weight: 900;
+}
+.center-team-card p { margin: 7px 0 0; font-size: 0.92rem; line-height: 1.5; }
+
+.contact-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.contact-grid span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--gold);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+.contact-grid article p { color: var(--muted); }
+.contact-grid article a { color: var(--guindo); font-weight: 800; overflow-wrap: anywhere; }
+.contact-form-placeholder {
+  max-width: 920px;
+  margin: 34px auto 0;
+  padding: 32px;
+  border: 1px solid rgba(255, 244, 230, 0.18);
+  border-radius: var(--radius);
+  background: rgba(255, 244, 230, 0.1);
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.contact-form-placeholder::before {
+  display: block;
+  width: 82px;
+  height: 6px;
+  margin: 0 auto 18px;
+  content: "";
+  border-radius: 999px;
+  background: var(--gold);
+}
+.mock-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  max-width: 720px;
+  margin: 24px auto 0;
+}
+.mock-form span {
+  display: block;
+  min-height: 52px;
+  padding: 15px 18px;
+  border: 1px solid rgba(255, 244, 230, 0.28);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--cream);
+  text-align: left;
+}
+.mock-form span:nth-child(3),
+.mock-form .btn {
+  grid-column: 1 / -1;
+}
+.mock-form span:nth-child(3) { min-height: 118px; }
+.requirement-grid,
+.benefit-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 22px 0 28px;
+}
+.requirement-grid article,
+.benefit-grid article {
+  min-height: 170px;
+  padding: 22px;
+  background: var(--cream);
+}
+.requirement-grid article span,
+.benefit-grid article span {
+  display: block;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  background: var(--gold);
+}
+.requirement-grid article:nth-child(2) span,
+.benefit-grid article:nth-child(2) span { background: var(--soft-blue); }
+.requirement-grid article:nth-child(3) span,
+.benefit-grid article:nth-child(3) span { background: var(--soft-green); }
+.requirement-grid strong,
+.benefit-grid strong {
+  position: relative;
+  z-index: 1;
+  display: block;
+  color: var(--guindo);
+  font-weight: 900;
+}
+.requirement-grid p,
+.benefit-grid p {
+  position: relative;
+  z-index: 1;
+  margin: 8px 0 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 1100px) {
+  .site-nav { gap: 10px; font-size: 0.84rem; }
+  .team-grid, .values-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .access-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .impact-strip .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 992px) {
+  .nav-toggle { display: block; }
+  .site-nav {
+    position: absolute;
+    top: 78px;
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 10px 22px 22px;
+    background: var(--guindo-dark);
+  }
+  .site-nav.open { display: flex; }
+  .site-nav > a, .nav-link { width: 100%; padding: 14px 0; text-align: left; }
+  .submenu {
+    position: static;
+    min-width: 0;
+    display: none;
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    box-shadow: none;
+    background: rgba(255, 244, 230, 0.08);
+  }
+  .has-submenu.open .submenu { display: block; }
+  .section-shell,
+  .about-layout,
+  .objective-layout,
+  .callout-layout,
+  .callout-layout.reverse,
+  .about-feature-layout,
+  .stats-grid,
+  .mission-grid,
+  .team-grid,
+  .district-grid,
+  .contact-grid,
+  .quick-grid,
+  .home-impact-grid,
+  .access-grid,
+  .requirement-grid,
+  .benefit-grid,
+  .center-team-grid,
+  .center-body {
+    grid-template-columns: 1fr;
+  }
+  .impact-strip .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .about-photo {
+    min-height: 380px;
+  }
+  .about-photo img {
+    min-height: 380px;
+  }
+  .about-tags {
+    grid-template-columns: 1fr;
+    max-width: 430px;
+  }
+}
+@media (max-width: 620px) {
+  .brand span { max-width: 170px; font-size: 0.78rem; }
+  .hero { min-height: 100vh; min-height: 100svh; padding: 112px 16px 74px; }
+  .hero-shell { padding: 8px; border-radius: 24px; }
+  .hero-carousel { min-height: 560px; border-radius: 20px; }
+  .hero-content { padding: 28px 18px; }
+  .hero-dots { margin-top: 14px; }
+  .hero h1 { font-size: clamp(2.2rem, 12vw, 3.6rem); }
+  .hero-subtitle { font-size: 1rem; }
+  .hero-brief { font-size: 0.94rem; }
+  .hero-actions { flex-direction: column; }
+  .btn { width: 100%; }
+  .frequency-bars { left: 8%; right: 8%; bottom: 52px; }
+  .hero-wave-field { height: 170px; }
+  .section { padding-inline: 18px; }
+  .impact-strip .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .impact-strip .stat-card {
+    min-height: 230px;
+  }
+  .about-card {
+    padding: 28px 22px;
+    border-radius: 24px;
+  }
+  .about-card h2 {
+    font-size: clamp(2.1rem, 13vw, 3rem);
+  }
+  .about-card h2::after {
+    width: 78px;
+    margin-top: 14px;
+  }
+  .about-card p:not(.eyebrow):not(.about-subtitle) {
+    font-size: 0.98rem;
+    line-height: 1.72;
+  }
+  .about-tags {
+    grid-template-columns: 1fr;
+  }
+  .about-photo,
+  .about-photo img {
+    min-height: 320px;
+  }
+  .about-photo::before {
+    inset: 24px -12px -12px 24px;
+    border-radius: 28px;
+  }
+  .about-photo::after {
+    width: 72px;
+    height: 72px;
+    left: -8px;
+    bottom: 24px;
+  }
+  .values-grid { grid-template-columns: 1fr; }
+  .mock-form { grid-template-columns: 1fr; }
+}
+
+/* Correccion final: base inferior limpia sin lineas sobre botones */
+.hero-content,
+.hero-actions,
+.hero-buttons {
+  position: relative;
+  z-index: 10;
+}
+.hero-golden-base {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: auto;
+  width: 100%;
+  height: 90px;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.45;
+  background: linear-gradient(
+    180deg,
+    rgba(66,19,4,0) 0%,
+    rgba(66,19,4,0.45) 45%,
+    rgba(42,11,3,0.85) 100%
+  );
+  border: 0;
+  box-shadow: none;
+  filter: none;
+  mask-image: none;
+}
+.hero-golden-base::before,
+.hero-golden-base::after,
+.hero-golden-base.hero-wave-field::before,
+.hero-golden-base.hero-wave-field::after,
+.gold-wave,
+.wave-1,
+.wave-2,
+.frequency-bars,
+.frequency-bars::before,
+.frequency-bars::after,
+.church-silhouette,
+.gold-particles {
+  display: none !important;
+  content: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: none !important;
+  filter: none !important;
+}
+
+/* Ajuste final Mision + Vision con carruseles institucionales */
+body.home-page #mision-vision {
+  position: relative;
+  overflow: hidden;
+  padding: 58px 24px;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(255, 201, 40, 0.16), transparent 24%),
+    radial-gradient(circle at 86% 12%, rgba(255, 224, 138, 0.14), transparent 22%),
+    radial-gradient(circle at 72% 82%, rgba(255, 201, 40, 0.1), transparent 26%),
+    linear-gradient(135deg, #2A0B03 0%, #421304 48%, #5A1A08 100%) !important;
+}
+
+body.home-page #mision-vision::before {
+  content: "";
+  position: absolute;
+  inset: 8% 0 auto 0;
+  height: 70%;
+  pointer-events: none;
+  opacity: 0.72;
+  background:
+    radial-gradient(circle at 8% 18%, rgba(255, 201, 40, 0.55) 0 2px, transparent 6px),
+    radial-gradient(circle at 22% 38%, rgba(255, 244, 230, 0.28) 0 1px, transparent 5px),
+    radial-gradient(circle at 48% 16%, rgba(255, 224, 138, 0.34) 0 2px, transparent 6px),
+    radial-gradient(circle at 76% 32%, rgba(255, 201, 40, 0.36) 0 2px, transparent 7px),
+    radial-gradient(circle at 92% 62%, rgba(255, 244, 230, 0.24) 0 1px, transparent 5px);
+}
+
+body.home-page #mision-vision .mission-vision-grid,
+body.home-page #mision-vision .vision-feature-grid {
+  position: relative;
+  z-index: 1;
+  display: grid !important;
+  grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.72fr) !important;
+  align-items: center;
+  gap: clamp(28px, 6vw, 84px);
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+body.home-page #mision-vision .vision-feature-grid {
+  grid-template-columns: minmax(300px, 0.72fr) minmax(0, 0.95fr) !important;
+  margin-top: clamp(42px, 7vw, 76px);
+}
+
+body.home-page #mision-vision .mission-text-column,
+body.home-page #mision-vision .vision-text-column,
+body.home-page #mision-vision .mission-panel,
+body.home-page #mision-vision .mission-panel-light {
+  display: block !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  min-height: 0 !important;
+  text-align: left !important;
+}
+
+body.home-page #mision-vision .mission-text-column h3,
+body.home-page #mision-vision .vision-text-column h3 {
+  margin: 0;
+  color: #FFC928 !important;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3rem, 6vw, 5.4rem);
+  line-height: 0.95;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: left !important;
+  text-shadow:
+    0 0 24px rgba(255, 201, 40, 0.34),
+    0 8px 26px rgba(0, 0, 0, 0.22);
+}
+
+body.home-page #mision-vision .mission-text-column .gold-rule,
+body.home-page #mision-vision .vision-text-column .gold-rule {
+  display: block;
+  width: 128px;
+  height: 3px;
+  margin: 22px 0 24px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #FFC928, rgba(255, 224, 138, 0.34));
+  box-shadow: 0 0 18px rgba(255, 201, 40, 0.34);
+}
+
+body.home-page #mision-vision .mission-text-column p,
+body.home-page #mision-vision .vision-text-column p {
+  max-width: 640px !important;
+  margin: 0;
+  color: rgba(255, 244, 230, 0.94) !important;
+  font-size: clamp(1.02rem, 1.4vw, 1.16rem);
+  line-height: 1.82;
+  text-align: left !important;
+}
+
+body.home-page #mision-vision .mission-carousel,
+body.home-page #mision-vision .vision-carousel {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 410px);
+  height: clamp(430px, 52vw, 560px);
+  overflow: hidden;
+  border-radius: 34px;
+  background: rgba(255, 244, 230, 0.12);
+  box-shadow:
+    0 24px 54px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(255, 244, 230, 0.18);
+}
+
+body.home-page #mision-vision .mission-carousel::before,
+body.home-page #mision-vision .vision-carousel::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 244, 230, 0.16), transparent 42%, rgba(42, 11, 3, 0.12));
+}
+
+body.home-page #mision-vision .mission-carousel-slide,
+body.home-page #mision-vision .vision-carousel-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transform: scale(1.01);
+  transition:
+    opacity 0.9s ease,
+    transform 5s ease;
+}
+
+body.home-page #mision-vision .mission-carousel-slide.active,
+body.home-page #mision-vision .vision-carousel-slide.active {
+  opacity: 1;
+  transform: scale(1.045);
+}
+
+@media (max-width: 992px) {
+  body.home-page #mision-vision {
+    padding: 50px 20px;
+  }
+
+  body.home-page #mision-vision .mission-vision-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.82fr) !important;
+    gap: 32px;
+  }
+
+  body.home-page #mision-vision .vision-feature-grid {
+    grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1fr) !important;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  body.home-page #mision-vision {
+    padding: 42px 18px;
+  }
+
+  body.home-page #mision-vision .mission-vision-grid,
+  body.home-page #mision-vision .vision-feature-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.home-page #mision-vision .vision-text-column {
+    order: -1;
+  }
+
+  body.home-page #mision-vision .mission-text-column,
+  body.home-page #mision-vision .vision-text-column,
+  body.home-page #mision-vision .mission-text-column h3,
+  body.home-page #mision-vision .vision-text-column h3,
+  body.home-page #mision-vision .mission-text-column p,
+  body.home-page #mision-vision .vision-text-column p {
+    text-align: center !important;
+  }
+
+  body.home-page #mision-vision .mission-text-column .gold-rule,
+  body.home-page #mision-vision .vision-text-column .gold-rule {
+    margin-inline: auto;
+  }
+
+  body.home-page #mision-vision .mission-carousel,
+  body.home-page #mision-vision .vision-carousel {
+    width: min(88vw, 360px);
+    height: 460px;
+  }
+}
+
+@media (max-width: 576px) {
+  body.home-page #mision-vision {
+    padding: 36px 16px;
+  }
+
+  body.home-page #mision-vision .mission-carousel,
+  body.home-page #mision-vision .vision-carousel {
+    width: min(92vw, 330px);
+    height: 420px;
+    border-radius: 28px;
+  }
+}
+
+/* Correccion compacta final de Mision y Vision */
+body.home-page #mision-vision {
+  padding: 42px 24px !important;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 201, 40, 0.12), transparent 20%),
+    radial-gradient(circle at 86% 18%, rgba(255, 244, 230, 0.08), transparent 22%),
+    linear-gradient(135deg, #2A0B03 0%, #421304 48%, #5A1A08 100%) !important;
+}
+
+body.home-page #mision-vision::before,
+body.home-page #mision-vision::after,
+body.home-page .mission-vision-feature::before,
+body.home-page .mission-vision-feature::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+body.home-page #mision-vision .mission-vision-grid,
+body.home-page #mision-vision .vision-feature-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: clamp(22px, 4vw, 46px) !important;
+  align-items: center !important;
+  max-width: 1120px !important;
+}
+
+body.home-page #mision-vision .vision-feature-grid {
+  margin-top: 34px !important;
+}
+
+body.home-page #mision-vision .mission-text-column,
+body.home-page #mision-vision .vision-text-column {
+  position: relative;
+}
+
+body.home-page #mision-vision .mission-text-column::before,
+body.home-page #mision-vision .vision-text-column::before,
+body.home-page #mision-vision .mission-text-column::after,
+body.home-page #mision-vision .vision-text-column::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  width: 18px;
+  height: 9px;
+  opacity: 0.28;
+  border-top: 2px solid #FFC928;
+  border-radius: 50% 50% 0 0;
+  transform: rotate(-12deg);
+}
+
+body.home-page #mision-vision .mission-text-column::before {
+  right: 12%;
+  top: -12px;
+}
+
+body.home-page #mision-vision .mission-text-column::after {
+  right: 3%;
+  top: 34px;
+  width: 13px;
+  opacity: 0.22;
+  border-color: #FFF4E6;
+  transform: rotate(14deg);
+}
+
+body.home-page #mision-vision .vision-text-column::before {
+  left: 7%;
+  top: -10px;
+  transform: rotate(12deg);
+}
+
+body.home-page #mision-vision .vision-text-column::after {
+  left: 22%;
+  top: 38px;
+  width: 13px;
+  opacity: 0.22;
+  border-color: #FFF4E6;
+  transform: rotate(-16deg);
+}
+
+body.home-page #mision-vision .mission-text-column h3,
+body.home-page #mision-vision .vision-text-column h3 {
+  margin-bottom: 0 !important;
+  font-size: clamp(2.6rem, 5vw, 4.6rem) !important;
+}
+
+body.home-page #mision-vision .mission-text-column .gold-rule,
+body.home-page #mision-vision .vision-text-column .gold-rule {
+  margin-top: 16px !important;
+  margin-bottom: 18px !important;
+}
+
+body.home-page #mision-vision .mission-text-column p,
+body.home-page #mision-vision .vision-text-column p {
+  max-width: 600px !important;
+  line-height: 1.68 !important;
+}
+
+body.home-page #mision-vision .mission-carousel,
+body.home-page #mision-vision .vision-carousel {
+  width: 100% !important;
+  max-width: 520px !important;
+  height: clamp(260px, 28vw, 320px) !important;
+  aspect-ratio: 16 / 9;
+  border-radius: 28px !important;
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.24),
+    0 0 22px rgba(255, 201, 40, 0.12) !important;
+}
+
+body.home-page #mision-vision .mission-carousel::before,
+body.home-page #mision-vision .vision-carousel::before {
+  background:
+    radial-gradient(circle at 10% 18%, rgba(255, 201, 40, 0.32) 0 2px, transparent 6px),
+    radial-gradient(circle at 88% 24%, rgba(255, 244, 230, 0.2) 0 1px, transparent 5px),
+    linear-gradient(180deg, rgba(255, 244, 230, 0.08), transparent 48%, rgba(42, 11, 3, 0.12)) !important;
+}
+
+body.home-page #mision-vision .mission-carousel::after {
+  opacity: 0.38 !important;
+}
+
+body.home-page #mision-vision .mission-carousel-slide,
+body.home-page #mision-vision .vision-carousel-slide {
+  border-radius: 28px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+body.home-page #mision-vision .mission-carousel-slide.active,
+body.home-page #mision-vision .vision-carousel-slide.active {
+  transform: scale(1.025) !important;
+}
+
+body.home-page #mision-vision .mission-carousel:hover .mission-carousel-slide.active {
+  transform: scale(1.045) !important;
+}
+
+@media (max-width: 768px) {
+  body.home-page #mision-vision {
+    padding: 36px 18px !important;
+  }
+
+  body.home-page #mision-vision .mission-vision-grid,
+  body.home-page #mision-vision .vision-feature-grid {
+    grid-template-columns: 1fr !important;
+    gap: 22px !important;
+  }
+
+  body.home-page #mision-vision .vision-feature-grid {
+    margin-top: 32px !important;
+  }
+
+  body.home-page #mision-vision .vision-text-column {
+    order: -1;
+  }
+
+  body.home-page #mision-vision .mission-carousel,
+  body.home-page #mision-vision .vision-carousel {
+    max-width: 100% !important;
+    height: clamp(220px, 54vw, 300px) !important;
+  }
+}
+
+/* Seccion Nuestros Aliados */
+body.home-page .allies-section {
+  position: relative;
+  overflow: hidden;
+  padding: 45px 24px;
+  margin: 0;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 201, 40, 0.12), transparent 20%),
+    radial-gradient(circle at 86% 20%, rgba(255, 244, 230, 0.08), transparent 22%),
+    linear-gradient(135deg, #2A0B03 0%, #421304 48%, #5A1A08 100%);
+}
+
+body.home-page .allies-section::before {
+  content: "";
+  position: absolute;
+  inset: 12% 6% auto;
+  height: 66%;
+  pointer-events: none;
+  opacity: 0.28;
+  background:
+    radial-gradient(circle at 8% 24%, rgba(255, 201, 40, 0.6) 0 2px, transparent 6px),
+    radial-gradient(circle at 20% 58%, rgba(255, 244, 230, 0.28) 0 1px, transparent 5px),
+    radial-gradient(circle at 52% 20%, rgba(255, 224, 138, 0.36) 0 2px, transparent 6px),
+    radial-gradient(circle at 76% 64%, rgba(255, 201, 40, 0.34) 0 2px, transparent 7px),
+    radial-gradient(circle at 94% 34%, rgba(255, 244, 230, 0.24) 0 1px, transparent 5px);
+}
+
+body.home-page .allies-section::after {
+  content: "";
+  position: absolute;
+  right: clamp(18px, 8vw, 120px);
+  bottom: 28px;
+  width: clamp(180px, 28vw, 360px);
+  height: clamp(120px, 18vw, 220px);
+  pointer-events: none;
+  opacity: 0.05;
+  background:
+    radial-gradient(circle at 22% 72%, #FFF4E6 0 16px, transparent 17px),
+    radial-gradient(circle at 42% 54%, #FFF4E6 0 18px, transparent 19px),
+    radial-gradient(circle at 64% 70%, #FFF4E6 0 15px, transparent 16px),
+    linear-gradient(20deg, transparent 40%, #FFF4E6 41% 43%, transparent 44%),
+    linear-gradient(-20deg, transparent 40%, #FFF4E6 41% 43%, transparent 44%);
+  filter: blur(0.2px);
+}
+
+body.home-page .allies-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1040px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+body.home-page .allies-heading h2 {
+  margin: 0 0 12px;
+  color: #FFC928;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: min(36px, 6vw);
+  line-height: 1.15;
+  text-shadow:
+    0 0 14px rgba(255, 201, 40, 0.22),
+    0 5px 16px rgba(0, 0, 0, 0.18);
+}
+
+body.home-page .allies-title-line {
+  display: block;
+  width: min(120px, 38vw);
+  height: 3px;
+  margin: 0 auto 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 201, 40, 0), #FFC928, #FFE08A, #FFC928, rgba(255, 201, 40, 0));
+  box-shadow: 0 0 20px rgba(255, 201, 40, 0.42);
+}
+
+body.home-page .allies-image-wrap {
+  width: 25%;
+  max-width: 280px;
+  margin: 0 auto;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.home-page .allies-image-wrap img {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  object-fit: contain;
+}
+
+body.home-page .allies-text {
+  max-width: 680px;
+  margin: 12px auto 0;
+  color: rgba(255, 244, 230, 0.94);
+  font-size: 18px;
+  line-height: 1.55;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  body.home-page .allies-section {
+    padding: 45px 16px;
+  }
+
+  body.home-page .allies-heading h2 {
+    font-size: 28px;
+  }
+
+  body.home-page .allies-title-line {
+    margin-bottom: 10px;
+  }
+
+  body.home-page .allies-image-wrap {
+    width: 35%;
+  }
+}
+
+@media (max-width: 576px) {
+  body.home-page .allies-image-wrap {
+    width: 55%;
+  }
+}
+
+/* Mapa de ubicacion con Google Maps */
+body.home-page .centers-map-section {
+  background:
+    radial-gradient(circle at 84% 14%, rgba(255, 201, 40, 0.14), transparent 22%),
+    linear-gradient(180deg, #FFFFFF, #FFF4E6) !important;
+}
+
+body.home-page .center-map-buttons {
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+body.home-page .map-center-button.pending {
+  opacity: 0.62;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.72);
+  color: rgba(66, 19, 4, 0.64);
+  transform: none;
+}
+
+body.home-page .google-map-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 22px;
+  align-items: stretch;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+body.home-page .google-map-frame {
+  position: relative;
+  overflow: hidden;
+  min-height: 420px;
+  border-radius: 28px;
+  background: #FFF4E6;
+  box-shadow:
+    0 24px 54px rgba(66, 19, 4, 0.16),
+    0 0 0 1px rgba(255, 201, 40, 0.22);
+}
+
+body.home-page .google-map-frame iframe {
+  display: block;
+  width: 100%;
+  height: 420px;
+  border: 0;
+}
+
+body.home-page .map-info-card {
+  align-self: stretch;
+  padding: clamp(22px, 3vw, 30px);
+  border: 1px solid rgba(255, 201, 40, 0.3);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 86% 12%, rgba(255, 201, 40, 0.18), transparent 28%),
+    #FFFFFF;
+  box-shadow: 0 20px 42px rgba(66, 19, 4, 0.12);
+}
+
+body.home-page .map-info-kicker {
+  display: inline-flex;
+  margin-bottom: 12px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(255, 201, 40, 0.18);
+  color: #421304;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+body.home-page .map-info-card h3 {
+  margin: 0 0 18px;
+  color: #421304;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+}
+
+body.home-page .map-info-card p {
+  margin: 0 0 14px;
+  color: #2B2B2B;
+  line-height: 1.55;
+}
+
+body.home-page .map-info-card strong {
+  color: #421304;
+}
+
+@media (max-width: 900px) {
+  body.home-page .google-map-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  body.home-page .google-map-frame,
+  body.home-page .google-map-frame iframe {
+    min-height: 320px;
+    height: 320px;
+  }
+
+  body.home-page .google-map-frame,
+  body.home-page .map-info-card {
+    border-radius: 22px;
+  }
+}
+
+/* Correccion compacta final de Mision y Vision */
+body.home-page #mision-vision {
+  padding: 42px 24px !important;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 201, 40, 0.12), transparent 20%),
+    radial-gradient(circle at 86% 18%, rgba(255, 244, 230, 0.08), transparent 22%),
+    linear-gradient(135deg, #2A0B03 0%, #421304 48%, #5A1A08 100%) !important;
+}
+
+body.home-page #mision-vision::before,
+body.home-page #mision-vision::after,
+body.home-page .mission-vision-feature::before,
+body.home-page .mission-vision-feature::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+body.home-page #mision-vision .mission-vision-grid,
+body.home-page #mision-vision .vision-feature-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: clamp(22px, 4vw, 46px) !important;
+  align-items: center !important;
+  max-width: 1120px !important;
+}
+
+body.home-page #mision-vision .vision-feature-grid {
+  margin-top: 34px !important;
+}
+
+body.home-page #mision-vision .mission-text-column,
+body.home-page #mision-vision .vision-text-column {
+  position: relative;
+}
+
+body.home-page #mision-vision .mission-text-column::before,
+body.home-page #mision-vision .vision-text-column::before,
+body.home-page #mision-vision .mission-text-column::after,
+body.home-page #mision-vision .vision-text-column::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  width: 18px;
+  height: 9px;
+  opacity: 0.28;
+  border-top: 2px solid #FFC928;
+  border-radius: 50% 50% 0 0;
+  transform: rotate(-12deg);
+}
+
+body.home-page #mision-vision .mission-text-column::before {
+  right: 12%;
+  top: -12px;
+}
+
+body.home-page #mision-vision .mission-text-column::after {
+  right: 3%;
+  top: 34px;
+  width: 13px;
+  opacity: 0.22;
+  border-color: #FFF4E6;
+  transform: rotate(14deg);
+}
+
+body.home-page #mision-vision .vision-text-column::before {
+  left: 7%;
+  top: -10px;
+  transform: rotate(12deg);
+}
+
+body.home-page #mision-vision .vision-text-column::after {
+  left: 22%;
+  top: 38px;
+  width: 13px;
+  opacity: 0.22;
+  border-color: #FFF4E6;
+  transform: rotate(-16deg);
+}
+
+body.home-page #mision-vision .mission-text-column h3,
+body.home-page #mision-vision .vision-text-column h3 {
+  margin-bottom: 0 !important;
+  font-size: clamp(2.6rem, 5vw, 4.6rem) !important;
+}
+
+body.home-page #mision-vision .mission-text-column .gold-rule,
+body.home-page #mision-vision .vision-text-column .gold-rule {
+  margin-top: 16px !important;
+  margin-bottom: 18px !important;
+}
+
+body.home-page #mision-vision .mission-text-column p,
+body.home-page #mision-vision .vision-text-column p {
+  max-width: 600px !important;
+  line-height: 1.68 !important;
+}
+
+body.home-page #mision-vision .mission-carousel,
+body.home-page #mision-vision .vision-carousel {
+  width: 100% !important;
+  max-width: 520px !important;
+  height: clamp(260px, 28vw, 320px) !important;
+  aspect-ratio: 16 / 9;
+  border-radius: 28px !important;
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.24),
+    0 0 22px rgba(255, 201, 40, 0.12) !important;
+}
+
+body.home-page #mision-vision .mission-carousel::before,
+body.home-page #mision-vision .vision-carousel::before {
+  background:
+    radial-gradient(circle at 10% 18%, rgba(255, 201, 40, 0.32) 0 2px, transparent 6px),
+    radial-gradient(circle at 88% 24%, rgba(255, 244, 230, 0.2) 0 1px, transparent 5px),
+    linear-gradient(180deg, rgba(255, 244, 230, 0.08), transparent 48%, rgba(42, 11, 3, 0.12)) !important;
+}
+
+body.home-page #mision-vision .mission-carousel::after {
+  opacity: 0.38 !important;
+}
+
+body.home-page #mision-vision .mission-carousel-slide,
+body.home-page #mision-vision .vision-carousel-slide {
+  border-radius: 28px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+body.home-page #mision-vision .mission-carousel-slide.active,
+body.home-page #mision-vision .vision-carousel-slide.active {
+  transform: scale(1.025) !important;
+}
+
+body.home-page #mision-vision .mission-carousel:hover .mission-carousel-slide.active {
+  transform: scale(1.045) !important;
+}
+
+@media (max-width: 768px) {
+  body.home-page #mision-vision {
+    padding: 36px 18px !important;
+  }
+
+  body.home-page #mision-vision .mission-vision-grid,
+  body.home-page #mision-vision .vision-feature-grid {
+    grid-template-columns: 1fr !important;
+    gap: 22px !important;
+  }
+
+  body.home-page #mision-vision .vision-feature-grid {
+    margin-top: 32px !important;
+  }
+
+  body.home-page #mision-vision .vision-text-column {
+    order: -1;
+  }
+
+  body.home-page #mision-vision .mission-carousel,
+  body.home-page #mision-vision .vision-carousel {
+    max-width: 100% !important;
+    height: clamp(220px, 54vw, 300px) !important;
+  }
+}
+
+/* Realce especifico del bloque Mision */
+body.home-page #mision-vision .mission-text-column h3 {
+  position: relative;
+  display: inline-block;
+  color: #FFC928 !important;
+  background: linear-gradient(180deg, #FFF4B8 0%, #FFC928 48%, #D99A10 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow:
+    0 0 16px rgba(255, 201, 40, 0.26),
+    0 8px 22px rgba(0, 0, 0, 0.22);
+  filter: drop-shadow(0 0 9px rgba(255, 201, 40, 0.22));
+}
+
+body.home-page #mision-vision .mission-text-column h3::before,
+body.home-page #mision-vision .mission-text-column h3::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-radius: 999px;
+}
+
+body.home-page #mision-vision .mission-text-column h3::before {
+  width: 7px;
+  height: 7px;
+  right: -22px;
+  top: 10%;
+  background: #FFE08A;
+  box-shadow:
+    -74px -8px 0 rgba(255, 201, 40, 0.46),
+    18px 42px 0 rgba(255, 244, 230, 0.32),
+    -22px 76px 0 rgba(255, 201, 40, 0.34);
+  animation: missionSparkle 3.6s ease-in-out infinite;
+}
+
+body.home-page #mision-vision .mission-text-column h3::after {
+  left: -18px;
+  bottom: 8%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 244, 230, 0.76);
+  box-shadow:
+    42px -56px 0 rgba(255, 201, 40, 0.42),
+    116px -18px 0 rgba(255, 224, 138, 0.36);
+  animation: missionSparkle 4.2s ease-in-out infinite reverse;
+}
+
+body.home-page #mision-vision .mission-text-column .gold-rule {
+  width: 152px;
+  height: 4px;
+  background:
+    radial-gradient(circle at 50% 50%, #FFF4E6 0 4px, transparent 5px),
+    linear-gradient(90deg, rgba(255, 201, 40, 0), #FFC928 18%, #FFE08A 50%, #FFC928 82%, rgba(255, 201, 40, 0));
+  box-shadow:
+    0 0 16px rgba(255, 201, 40, 0.44),
+    0 0 34px rgba(255, 201, 40, 0.18);
+}
+
+body.home-page #mision-vision .mission-carousel {
+  border-radius: 30px;
+  box-shadow:
+    0 24px 54px rgba(0, 0, 0, 0.3),
+    0 0 26px rgba(255, 201, 40, 0.14);
+}
+
+body.home-page #mision-vision .mission-carousel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0.78;
+  background:
+    radial-gradient(circle at 14% 16%, rgba(255, 224, 138, 0.82) 0 2px, transparent 6px),
+    radial-gradient(circle at 86% 24%, rgba(255, 201, 40, 0.72) 0 2px, transparent 6px),
+    radial-gradient(circle at 78% 78%, rgba(255, 244, 230, 0.42) 0 1px, transparent 5px),
+    linear-gradient(180deg, rgba(255, 244, 230, 0.08), transparent 34%, rgba(42, 11, 3, 0.12));
+}
+
+body.home-page #mision-vision .mission-carousel-slide {
+  border-radius: 30px;
+  filter: brightness(1.06) contrast(1.04) saturate(1.04);
+}
+
+body.home-page #mision-vision .mission-carousel:hover .mission-carousel-slide.active {
+  transform: scale(1.075);
+}
+
+body.home-page #mision-vision .mission-carousel-dots {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  bottom: 18px;
+  display: flex;
+  gap: 9px;
+  transform: translateX(-50%);
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(42, 11, 3, 0.34);
+  backdrop-filter: blur(8px);
+}
+
+body.home-page #mision-vision .mission-carousel-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 244, 230, 0.62);
+  box-shadow: 0 0 0 rgba(255, 201, 40, 0);
+  transition: width 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.home-page #mision-vision .mission-carousel-dots span.active {
+  width: 22px;
+  background: #FFC928;
+  box-shadow: 0 0 14px rgba(255, 201, 40, 0.58);
+}
+
+@keyframes missionSparkle {
+  0%, 100% {
+    opacity: 0.42;
+    transform: translateY(0) scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.08);
+  }
+}
+
+/* Ajuste final Mision + Vision con carruseles institucionales */
+body.home-page #mision-vision {
+  position: relative;
+  overflow: hidden;
+  padding: 58px 24px;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(255, 201, 40, 0.16), transparent 24%),
+    radial-gradient(circle at 86% 12%, rgba(255, 224, 138, 0.14), transparent 22%),
+    radial-gradient(circle at 72% 82%, rgba(255, 201, 40, 0.1), transparent 26%),
+    linear-gradient(135deg, #2A0B03 0%, #421304 48%, #5A1A08 100%) !important;
+}
+
+body.home-page #mision-vision::before {
+  content: "";
+  position: absolute;
+  inset: 8% 0 auto 0;
+  height: 70%;
+  pointer-events: none;
+  opacity: 0.72;
+  background:
+    radial-gradient(circle at 8% 18%, rgba(255, 201, 40, 0.55) 0 2px, transparent 6px),
+    radial-gradient(circle at 22% 38%, rgba(255, 244, 230, 0.28) 0 1px, transparent 5px),
+    radial-gradient(circle at 48% 16%, rgba(255, 224, 138, 0.34) 0 2px, transparent 6px),
+    radial-gradient(circle at 76% 32%, rgba(255, 201, 40, 0.36) 0 2px, transparent 7px),
+    radial-gradient(circle at 92% 62%, rgba(255, 244, 230, 0.24) 0 1px, transparent 5px);
+}
+
+body.home-page #mision-vision .mission-vision-grid,
+body.home-page #mision-vision .vision-feature-grid {
+  position: relative;
+  z-index: 1;
+  display: grid !important;
+  grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.72fr) !important;
+  align-items: center;
+  gap: clamp(28px, 6vw, 84px);
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+body.home-page #mision-vision .vision-feature-grid {
+  grid-template-columns: minmax(300px, 0.72fr) minmax(0, 0.95fr) !important;
+  margin-top: clamp(42px, 7vw, 76px);
+}
+
+body.home-page #mision-vision .mission-text-column,
+body.home-page #mision-vision .vision-text-column,
+body.home-page #mision-vision .mission-panel,
+body.home-page #mision-vision .mission-panel-light {
+  display: block !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  min-height: 0 !important;
+  text-align: left !important;
+}
+
+body.home-page #mision-vision .mission-text-column h3,
+body.home-page #mision-vision .vision-text-column h3 {
+  margin: 0;
+  color: #FFC928 !important;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3rem, 6vw, 5.4rem);
+  line-height: 0.95;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: left !important;
+  text-shadow:
+    0 0 24px rgba(255, 201, 40, 0.34),
+    0 8px 26px rgba(0, 0, 0, 0.22);
+}
+
+body.home-page #mision-vision .mission-text-column .gold-rule,
+body.home-page #mision-vision .vision-text-column .gold-rule {
+  display: block;
+  width: 128px;
+  height: 3px;
+  margin: 22px 0 24px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #FFC928, rgba(255, 224, 138, 0.34));
+  box-shadow: 0 0 18px rgba(255, 201, 40, 0.34);
+}
+
+body.home-page #mision-vision .mission-text-column p,
+body.home-page #mision-vision .vision-text-column p {
+  max-width: 640px !important;
+  margin: 0;
+  color: rgba(255, 244, 230, 0.94) !important;
+  font-size: clamp(1.02rem, 1.4vw, 1.16rem);
+  line-height: 1.82;
+  text-align: left !important;
+}
+
+body.home-page #mision-vision .mission-carousel,
+body.home-page #mision-vision .vision-carousel {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 410px);
+  height: clamp(430px, 52vw, 560px);
+  overflow: hidden;
+  border-radius: 34px;
+  background: rgba(255, 244, 230, 0.12);
+  box-shadow:
+    0 24px 54px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(255, 244, 230, 0.18);
+}
+
+body.home-page #mision-vision .mission-carousel::before,
+body.home-page #mision-vision .vision-carousel::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 244, 230, 0.16), transparent 42%, rgba(42, 11, 3, 0.12));
+}
+
+body.home-page #mision-vision .mission-carousel-slide,
+body.home-page #mision-vision .vision-carousel-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transform: scale(1.01);
+  transition:
+    opacity 0.9s ease,
+    transform 5s ease;
+}
+
+body.home-page #mision-vision .mission-carousel-slide.active,
+body.home-page #mision-vision .vision-carousel-slide.active {
+  opacity: 1;
+  transform: scale(1.045);
+}
+
+@media (max-width: 992px) {
+  body.home-page #mision-vision {
+    padding: 50px 20px;
+  }
+
+  body.home-page #mision-vision .mission-vision-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.82fr) !important;
+    gap: 32px;
+  }
+
+  body.home-page #mision-vision .vision-feature-grid {
+    grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1fr) !important;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  body.home-page #mision-vision {
+    padding: 42px 18px;
+  }
+
+  body.home-page #mision-vision .mission-vision-grid,
+  body.home-page #mision-vision .vision-feature-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.home-page #mision-vision .vision-text-column {
+    order: -1;
+  }
+
+  body.home-page #mision-vision .mission-text-column,
+  body.home-page #mision-vision .vision-text-column,
+  body.home-page #mision-vision .mission-text-column h3,
+  body.home-page #mision-vision .vision-text-column h3,
+  body.home-page #mision-vision .mission-text-column p,
+  body.home-page #mision-vision .vision-text-column p {
+    text-align: center !important;
+  }
+
+  body.home-page #mision-vision .mission-text-column .gold-rule,
+  body.home-page #mision-vision .vision-text-column .gold-rule {
+    margin-inline: auto;
+  }
+
+  body.home-page #mision-vision .mission-carousel,
+  body.home-page #mision-vision .vision-carousel {
+    width: min(88vw, 360px);
+    height: 460px;
+  }
+}
+
+@media (max-width: 576px) {
+  body.home-page #mision-vision {
+    padding: 36px 16px;
+  }
+
+  body.home-page #mision-vision .mission-carousel,
+  body.home-page #mision-vision .vision-carousel {
+    width: min(92vw, 330px);
+    height: 420px;
+    border-radius: 28px;
+  }
+}
+
+/* Ajuste final Mision + Vision con carruseles institucionales */
+body.home-page #mision-vision {
+  position: relative;
+  overflow: hidden;
+  padding: 58px 24px;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(255, 201, 40, 0.16), transparent 24%),
+    radial-gradient(circle at 86% 12%, rgba(255, 224, 138, 0.14), transparent 22%),
+    radial-gradient(circle at 72% 82%, rgba(255, 201, 40, 0.1), transparent 26%),
+    linear-gradient(135deg, #2A0B03 0%, #421304 48%, #5A1A08 100%) !important;
+}
+
+body.home-page #mision-vision::before {
+  content: "";
+  position: absolute;
+  inset: 8% 0 auto 0;
+  height: 70%;
+  pointer-events: none;
+  opacity: 0.72;
+  background:
+    radial-gradient(circle at 8% 18%, rgba(255, 201, 40, 0.55) 0 2px, transparent 6px),
+    radial-gradient(circle at 22% 38%, rgba(255, 244, 230, 0.28) 0 1px, transparent 5px),
+    radial-gradient(circle at 48% 16%, rgba(255, 224, 138, 0.34) 0 2px, transparent 6px),
+    radial-gradient(circle at 76% 32%, rgba(255, 201, 40, 0.36) 0 2px, transparent 7px),
+    radial-gradient(circle at 92% 62%, rgba(255, 244, 230, 0.24) 0 1px, transparent 5px);
+}
+
+body.home-page #mision-vision .mission-vision-grid,
+body.home-page #mision-vision .vision-feature-grid {
+  position: relative;
+  z-index: 1;
+  display: grid !important;
+  grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.72fr) !important;
+  align-items: center;
+  gap: clamp(28px, 6vw, 84px);
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+body.home-page #mision-vision .vision-feature-grid {
+  grid-template-columns: minmax(300px, 0.72fr) minmax(0, 0.95fr) !important;
+  margin-top: clamp(42px, 7vw, 76px);
+}
+
+body.home-page #mision-vision .mission-text-column,
+body.home-page #mision-vision .vision-text-column,
+body.home-page #mision-vision .mission-panel,
+body.home-page #mision-vision .mission-panel-light {
+  display: block !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  min-height: 0 !important;
+  text-align: left !important;
+}
+
+body.home-page #mision-vision .mission-text-column h3,
+body.home-page #mision-vision .vision-text-column h3 {
+  margin: 0;
+  color: #FFC928 !important;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3rem, 6vw, 5.4rem);
+  line-height: 0.95;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: left !important;
+  text-shadow:
+    0 0 24px rgba(255, 201, 40, 0.34),
+    0 8px 26px rgba(0, 0, 0, 0.22);
+}
+
+body.home-page #mision-vision .mission-text-column .gold-rule,
+body.home-page #mision-vision .vision-text-column .gold-rule {
+  display: block;
+  width: 128px;
+  height: 3px;
+  margin: 22px 0 24px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #FFC928, rgba(255, 224, 138, 0.34));
+  box-shadow: 0 0 18px rgba(255, 201, 40, 0.34);
+}
+
+body.home-page #mision-vision .mission-text-column p,
+body.home-page #mision-vision .vision-text-column p {
+  max-width: 640px !important;
+  margin: 0;
+  color: rgba(255, 244, 230, 0.94) !important;
+  font-size: clamp(1.02rem, 1.4vw, 1.16rem);
+  line-height: 1.82;
+  text-align: left !important;
+}
+
+body.home-page #mision-vision .mission-carousel,
+body.home-page #mision-vision .vision-carousel {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 410px);
+  height: clamp(430px, 52vw, 560px);
+  overflow: hidden;
+  border-radius: 34px;
+  background: rgba(255, 244, 230, 0.12);
+  box-shadow:
+    0 24px 54px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(255, 244, 230, 0.18);
+}
+
+body.home-page #mision-vision .mission-carousel::before,
+body.home-page #mision-vision .vision-carousel::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 244, 230, 0.16), transparent 42%, rgba(42, 11, 3, 0.12));
+}
+
+body.home-page #mision-vision .mission-carousel-slide,
+body.home-page #mision-vision .vision-carousel-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transform: scale(1.01);
+  transition:
+    opacity 0.9s ease,
+    transform 5s ease;
+}
+
+body.home-page #mision-vision .mission-carousel-slide.active,
+body.home-page #mision-vision .vision-carousel-slide.active {
+  opacity: 1;
+  transform: scale(1.045);
+}
+
+@media (max-width: 992px) {
+  body.home-page #mision-vision {
+    padding: 50px 20px;
+  }
+
+  body.home-page #mision-vision .mission-vision-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.82fr) !important;
+    gap: 32px;
+  }
+
+  body.home-page #mision-vision .vision-feature-grid {
+    grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1fr) !important;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  body.home-page #mision-vision {
+    padding: 42px 18px;
+  }
+
+  body.home-page #mision-vision .mission-vision-grid,
+  body.home-page #mision-vision .vision-feature-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.home-page #mision-vision .vision-text-column {
+    order: -1;
+  }
+
+  body.home-page #mision-vision .mission-text-column,
+  body.home-page #mision-vision .vision-text-column,
+  body.home-page #mision-vision .mission-text-column h3,
+  body.home-page #mision-vision .vision-text-column h3,
+  body.home-page #mision-vision .mission-text-column p,
+  body.home-page #mision-vision .vision-text-column p {
+    text-align: center !important;
+  }
+
+  body.home-page #mision-vision .mission-text-column .gold-rule,
+  body.home-page #mision-vision .vision-text-column .gold-rule {
+    margin-inline: auto;
+  }
+
+  body.home-page #mision-vision .mission-carousel,
+  body.home-page #mision-vision .vision-carousel {
+    width: min(88vw, 360px);
+    height: 460px;
+  }
+}
+
+@media (max-width: 576px) {
+  body.home-page #mision-vision {
+    padding: 36px 16px;
+  }
+
+  body.home-page #mision-vision .mission-carousel,
+  body.home-page #mision-vision .vision-carousel {
+    width: min(92vw, 330px);
+    height: 420px;
+    border-radius: 28px;
+  }
+}
+
+/* Mision en inicio: texto institucional + carrusel limpio */
+body.home-page #mision-vision {
+  position: relative;
+  overflow: hidden;
+  padding: 56px 24px;
+  background:
+    radial-gradient(circle at 14% 24%, rgba(255, 201, 40, 0.16), transparent 24%),
+    radial-gradient(circle at 84% 18%, rgba(255, 224, 138, 0.14), transparent 22%),
+    radial-gradient(circle at 72% 82%, rgba(255, 201, 40, 0.1), transparent 26%),
+    linear-gradient(135deg, #2A0B03 0%, #421304 48%, #5A1A08 100%);
+}
+
+body.home-page #mision-vision::before,
+body.home-page #mision-vision::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-radius: 999px;
+}
+
+body.home-page #mision-vision::before {
+  inset: 14% auto auto 7%;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 201, 40, 0.68);
+  box-shadow:
+    78px 42px 0 rgba(255, 224, 138, 0.35),
+    230px 10px 0 rgba(255, 201, 40, 0.28),
+    620px 68px 0 rgba(255, 244, 230, 0.22),
+    830px 4px 0 rgba(255, 201, 40, 0.32),
+    1020px 94px 0 rgba(255, 224, 138, 0.24);
+}
+
+body.home-page #mision-vision::after {
+  right: -120px;
+  bottom: -120px;
+  width: 330px;
+  height: 330px;
+  background: radial-gradient(circle, rgba(255, 201, 40, 0.18), transparent 66%);
+}
+
+body.home-page #mision-vision .mission-vision-grid {
+  position: relative;
+  z-index: 1;
+  display: grid !important;
+  grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.72fr) !important;
+  align-items: center;
+  gap: clamp(28px, 6vw, 84px);
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+body.home-page #mision-vision .mission-text-column,
+body.home-page #mision-vision .mission-panel,
+body.home-page #mision-vision .mission-panel-light {
+  display: block !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-align: left !important;
+}
+
+body.home-page #mision-vision .mission-text-column h3 {
+  margin: 0;
+  color: #FFC928 !important;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3rem, 6vw, 5.4rem);
+  line-height: 0.95;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: left !important;
+  text-shadow:
+    0 0 24px rgba(255, 201, 40, 0.32),
+    0 8px 26px rgba(0, 0, 0, 0.22);
+}
+
+body.home-page #mision-vision .mission-text-column .gold-rule {
+  width: 128px;
+  height: 3px;
+  margin: 22px 0 24px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #FFC928, rgba(255, 224, 138, 0.34));
+  box-shadow: 0 0 18px rgba(255, 201, 40, 0.34);
+}
+
+body.home-page #mision-vision .mission-text-column p {
+  max-width: 640px !important;
+  margin: 0;
+  color: rgba(255, 244, 230, 0.94) !important;
+  font-size: clamp(1.02rem, 1.4vw, 1.16rem);
+  line-height: 1.82;
+  text-align: left !important;
+}
+
+body.home-page #mision-vision .mission-carousel {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 410px);
+  height: clamp(430px, 52vw, 560px);
+  overflow: hidden;
+  border-radius: 34px;
+  background: rgba(255, 244, 230, 0.12);
+  box-shadow:
+    0 24px 54px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(255, 244, 230, 0.18);
+}
+
+body.home-page #mision-vision .mission-carousel::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 244, 230, 0.16), transparent 42%, rgba(42, 11, 3, 0.12));
+}
+
+body.home-page #mision-vision .mission-carousel-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transform: scale(1.01);
+  transition:
+    opacity 0.9s ease,
+    transform 5s ease;
+}
+
+body.home-page #mision-vision .mission-carousel-slide.active {
+  opacity: 1;
+  transform: scale(1.045);
+}
+
+@media (max-width: 992px) {
+  body.home-page #mision-vision {
+    padding: 50px 20px;
+  }
+
+  body.home-page #mision-vision .mission-vision-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.82fr) !important;
+    gap: 32px;
+  }
+
+  body.home-page #mision-vision .mission-text-column h3 {
+    font-size: clamp(2.6rem, 7vw, 4.1rem);
+  }
+}
+
+@media (max-width: 768px) {
+  body.home-page #mision-vision {
+    padding: 42px 18px;
+  }
+
+  body.home-page #mision-vision .mission-vision-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.home-page #mision-vision .mission-text-column,
+  body.home-page #mision-vision .mission-text-column h3,
+  body.home-page #mision-vision .mission-text-column p {
+    text-align: center !important;
+  }
+
+  body.home-page #mision-vision .mission-text-column .gold-rule {
+    margin-inline: auto;
+  }
+
+  body.home-page #mision-vision .mission-carousel {
+    width: min(88vw, 360px);
+    height: 460px;
+  }
+}
+
+@media (max-width: 576px) {
+  body.home-page #mision-vision {
+    padding: 36px 16px;
+  }
+
+  body.home-page #mision-vision .mission-carousel {
+    width: min(92vw, 330px);
+    height: 420px;
+    border-radius: 28px;
+  }
+}
+
+/* Correccion final Mision/Vision: sin cards, solo fotos enmarcadas */
+body.home-page #mision-vision .mission-panel,
+body.home-page #mision-vision .mission-panel-light,
+body.home-page #mision-vision .mission-panel-dark {
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-align: center;
+}
+body.home-page #mision-vision .mission-panel::before,
+body.home-page #mision-vision .mission-panel::after {
+  display: none !important;
+}
+body.home-page #mision-vision .mission-panel-light h3 {
+  color: #421304 !important;
+}
+body.home-page #mision-vision .mission-panel-dark h3 {
+  color: #FFC928 !important;
+  text-shadow: 0 0 22px rgba(255, 201, 40, 0.45), 0 5px 18px rgba(0, 0, 0, 0.2);
+}
+body.home-page #mision-vision .mission-panel p {
+  max-width: 90%;
+  margin-inline: auto;
+  color: rgba(255, 244, 230, 0.94) !important;
+  line-height: 1.8;
+  text-align: center;
+}
+body.home-page #mision-vision .mission-card-image img {
+  height: 360px !important;
+  border: 4px solid rgba(255,255,255,.7) !important;
+  border-radius: 30px !important;
+  box-shadow: 0 15px 40px rgba(0,0,0,.15) !important;
+}
+body.home-page #mision-vision .mission-image {
+  margin-top: 24px !important;
+}
+body.home-page #mision-vision .vision-image {
+  margin-top: 55px !important;
+}
+
+@media (max-width: 992px) {
+  body.home-page #mision-vision .mission-vision-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  body.home-page #mision-vision .mission-card-image img {
+    height: 330px !important;
+  }
+}
+
+@media (max-width: 680px) {
+  body.home-page #mision-vision .mission-vision-grid {
+    grid-template-columns: 1fr !important;
+  }
+  body.home-page #mision-vision .vision-image {
+    margin-top: 28px !important;
+  }
+}
+
+/* Ajuste final de proporcion en Valores */
+body.home-page #valores .values-grid {
+  grid-template-columns: repeat(5, minmax(185px, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+}
+body.home-page #valores .value-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 315px;
+  height: auto;
+  padding: 26px 22px 28px;
+  border-radius: 34px;
+  transition: all .3s ease;
+}
+body.home-page #valores .value-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.9);
+}
+body.home-page #valores .value-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 auto;
+  width: 92px;
+  height: 92px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+}
+body.home-page #valores .value-icon svg {
+  width: 48px;
+  height: 48px;
+}
+body.home-page #valores .value-card h3 {
+  margin: 0 auto 10px;
+  text-align: center;
+}
+body.home-page #valores .value-card h3::after {
+  display: block;
+  width: 56px;
+  height: 3px;
+  margin: 10px auto 0;
+  content: "";
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(66, 19, 4, 0), rgba(66, 19, 4, 0.48), rgba(66, 19, 4, 0));
+}
+body.home-page #valores .value-card p {
+  max-width: 235px;
+  margin: 0 auto;
+  line-height: 1.55;
+  text-align: center;
+}
+
+@media (max-width: 1200px) {
+  body.home-page #valores .values-grid {
+    grid-template-columns: repeat(3, minmax(185px, 1fr));
+  }
+}
+
+@media (max-width: 576px) {
+  body.home-page #valores .values-grid {
+    grid-template-columns: 1fr;
+  }
+  body.home-page #valores .value-card {
+    min-height: 0;
+    padding: 24px 22px 26px;
+  }
+  body.home-page #valores .value-icon {
+    width: 88px;
+    height: 88px;
+    margin-bottom: 16px;
+  }
+}
+
+/* Responsive polish general */
+@media (max-width: 1200px) {
+  .section {
+    padding-block: clamp(72px, 8vw, 108px);
+  }
+  .about-feature-layout,
+  .section-shell,
+  .mission-grid,
+  .values-grid,
+  .stats-grid {
+    gap: clamp(22px, 4vw, 46px);
+  }
+}
+
+@media (max-width: 992px) {
+  .site-header {
+    min-height: 76px;
+  }
+  .site-nav {
+    max-height: calc(100vh - 76px);
+    overflow-y: auto;
+  }
+  .hero {
+    min-height: 92vh;
+    min-height: 92svh;
+  }
+  .hero-content {
+    width: min(650px, calc(100% - 48px));
+  }
+  .about-feature-layout,
+  .section-shell,
+  .mission-grid,
+  .values-grid,
+  .quick-grid,
+  .access-grid,
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+  .about-card,
+  .objective-card,
+  .callout-card,
+  .image-card {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: clamp(64px, 12vw, 86px) clamp(18px, 5vw, 46px);
+  }
+  .hero-content {
+    left: 50%;
+    align-items: center;
+    width: min(620px, calc(100% - 36px));
+    text-align: center;
+    transform: translateX(-50%);
+  }
+  .hero-actions {
+    justify-content: center;
+  }
+  .about-photo,
+  .about-photo img,
+  .section-image img {
+    min-height: clamp(300px, 56vw, 420px);
+  }
+  .impact-strip .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .values-grid,
+  .team-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 576px) {
+  .site-header {
+    padding-inline: 16px;
+  }
+  .brand span {
+    max-width: 158px;
+    font-size: 0.76rem;
+  }
+  .hero {
+    min-height: 100vh;
+    min-height: 100svh;
+    padding-inline: 18px;
+  }
+  .hero-slide:nth-child(1) {
+    object-position: 40% center;
+  }
+  .hero-slide:nth-child(2),
+  .hero-slide:nth-child(3),
+  .hero-slide:nth-child(4),
+  .hero-slide:nth-child(6) {
+    object-position: center 38%;
+  }
+  .hero-slide:nth-child(5) {
+    object-position: center 32%;
+  }
+  .hero-content {
+    bottom: 88px;
+    width: calc(100% - 36px);
+  }
+  .hero-actions {
+    width: min(100%, 310px);
+    margin-inline: auto;
+  }
+  .btn,
+  .center-button,
+  .nav-toggle {
+    min-height: 44px;
+  }
+  .hero-actions .btn {
+    width: 100%;
+  }
+  .about-tags,
+  .impact-strip .stats-grid,
+  .values-grid,
+  .team-grid,
+  .mission-grid,
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+  .impact-strip .section-heading h2 {
+    font-size: clamp(2.35rem, 13vw, 3.4rem);
+  }
+  .impact-strip .stat-card strong {
+    font-size: clamp(3.3rem, 18vw, 4.8rem);
+  }
+  h1,
+  h2 {
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Bloque institucional de inicio */
+.title-heart-line {
+  display: flex;
+  align-items: center;
+  width: min(260px, 72%);
+  margin: 18px 0 18px;
+  color: var(--gold);
+}
+.title-heart-line::before,
+.title-heart-line::after {
+  flex: 1;
+  height: 3px;
+  content: "";
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 201, 40, 0), var(--gold));
+  box-shadow: 0 0 18px rgba(255, 201, 40, 0.4);
+}
+.title-heart-line::after {
+  background: linear-gradient(90deg, var(--gold), rgba(255, 201, 40, 0));
+}
+.title-heart-line span {
+  position: relative;
+  width: 17px;
+  height: 17px;
+  margin-inline: 12px;
+  transform: rotate(45deg);
+  border-radius: 4px;
+  background: var(--gold);
+  box-shadow: 0 0 18px rgba(255, 201, 40, 0.5);
+}
+.title-heart-line span::before,
+.title-heart-line span::after {
+  position: absolute;
+  width: 17px;
+  height: 17px;
+  content: "";
+  border-radius: 50%;
+  background: var(--gold);
+}
+.title-heart-line span::before { left: -8px; top: 0; }
+.title-heart-line span::after { left: 0; top: -8px; }
+
+.impact-strip .section-heading p {
+  max-width: 560px;
+  margin: 16px auto 0;
+  color: rgba(255, 244, 230, 0.88);
+  font-weight: 800;
+}
+.impact-strip .stat-card p {
+  position: relative;
+  z-index: 1;
+  max-width: 260px;
+  margin: 14px auto 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.55;
+  text-transform: none;
+}
+.impact-strip .stat-card strong {
+  color: var(--guindo);
+}
+
+.objective-feature {
+  background:
+    radial-gradient(circle at 88% 18%, rgba(255, 201, 40, 0.14), transparent 24%),
+    linear-gradient(180deg, var(--white), #fffaf3);
+}
+.objective-feature .section-heading h2,
+.values-feature .section-heading h2,
+.centers-map-section .section-heading h2 {
+  color: var(--guindo);
+}
+.objective-feature .section-heading h2::after,
+.values-feature .section-heading h2::after,
+.centers-map-section .section-heading h2::after {
+  display: block;
+  width: 112px;
+  height: 4px;
+  margin: 18px auto 0;
+  content: "";
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 201, 40, 0), var(--gold), rgba(255, 201, 40, 0));
+  box-shadow: 0 0 18px rgba(255, 201, 40, 0.38);
+}
+.objective-feature-layout {
+  grid-template-columns: minmax(320px, 0.92fr) minmax(0, 1fr);
+}
+.objective-photo {
+  position: relative;
+  margin: 0;
+}
+.objective-photo::before {
+  position: absolute;
+  inset: 28px 28px -20px -20px;
+  content: "";
+  border-radius: 34px;
+  background: linear-gradient(135deg, rgba(66, 19, 4, 0.16), rgba(255, 201, 40, 0.4));
+}
+.objective-photo img {
+  position: relative;
+  width: 100%;
+  min-height: 420px;
+  object-fit: cover;
+  object-position: center;
+  border: 8px solid rgba(255, 255, 255, 0.82);
+  border-radius: 34px;
+  box-shadow: var(--shadow);
+}
+.objective-copy {
+  position: relative;
+  padding: clamp(18px, 3vw, 34px);
+}
+.gold-rule {
+  width: 90px;
+  height: 4px;
+  margin-bottom: 24px;
+  border-radius: 999px;
+  background: var(--gold);
+  box-shadow: 0 0 18px rgba(255, 201, 40, 0.38);
+}
+.objective-copy p {
+  max-width: 710px;
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.05rem, 1.5vw, 1.24rem);
+  line-height: 1.9;
+}
+
+.mission-vision-feature {
+  background:
+    radial-gradient(circle at 16% 14%, rgba(255, 201, 40, 0.2), transparent 24%),
+    radial-gradient(circle at 88% 84%, rgba(66, 19, 4, 0.08), transparent 24%),
+    var(--cream);
+}
+.mission-vision-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(22px, 4vw, 42px);
+  max-width: 1160px;
+  margin: 0 auto;
+}
+.mission-panel {
+  position: relative;
+  overflow: hidden;
+  min-height: 350px;
+  padding: clamp(30px, 4vw, 46px);
+  border-radius: 32px;
+  box-shadow: var(--soft-shadow);
+}
+.mission-panel::after {
+  position: absolute;
+  right: -54px;
+  bottom: -54px;
+  width: 170px;
+  height: 170px;
+  content: "";
+  border-radius: 50%;
+  background: rgba(255, 201, 40, 0.16);
+}
+.mission-panel-light {
+  border: 1px solid rgba(255, 201, 40, 0.34);
+  background: linear-gradient(135deg, rgba(255, 244, 230, 0.96), rgba(255, 255, 255, 0.92));
+}
+.mission-panel-dark {
+  color: var(--white);
+  border: 1px solid rgba(255, 201, 40, 0.3);
+  background:
+    radial-gradient(circle at 82% 16%, rgba(255, 201, 40, 0.2), transparent 28%),
+    linear-gradient(135deg, var(--guindo), var(--guindo-dark));
+}
+.mission-panel-dark p,
+.mission-panel-dark h3 {
+  color: var(--white);
+}
+.mission-panel .panel-icon {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  margin-bottom: 22px;
+  border-radius: 22px;
+  background: var(--gold);
+  box-shadow: 0 0 0 9px rgba(255, 201, 40, 0.16), 0 16px 30px rgba(66, 19, 4, 0.16);
+}
+.mission-panel .panel-icon::after {
+  width: 24px;
+  height: 24px;
+  content: "";
+  border-radius: 50% 50% 48% 48%;
+  background: var(--guindo);
+}
+.mission-panel h3 {
+  margin: 0 0 14px;
+  color: var(--guindo);
+  font-size: clamp(2rem, 3vw, 3rem);
+}
+.mission-panel p {
+  position: relative;
+  z-index: 1;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+.mission-vision-photo {
+  max-width: 1160px;
+  margin: clamp(28px, 4vw, 44px) auto 0;
+}
+.mission-vision-photo img {
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  object-position: center;
+  border: 8px solid rgba(255, 255, 255, 0.76);
+  border-radius: 34px;
+  box-shadow: var(--shadow);
+}
+
+.values-feature {
+  background:
+    radial-gradient(circle at 12% 20%, rgba(255, 201, 40, 0.12), transparent 22%),
+    linear-gradient(180deg, var(--white), #fffaf3);
+}
+.values-feature .values-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: stretch;
+}
+.value-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  padding: 28px 22px;
+  border: 1px solid rgba(66, 19, 4, 0.1);
+  border-radius: 28px;
+  box-shadow: 0 18px 38px rgba(66, 19, 4, 0.1);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.value-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 24px 48px rgba(66, 19, 4, 0.16);
+}
+.value-card::after {
+  position: absolute;
+  right: -34px;
+  top: -34px;
+  width: 112px;
+  height: 112px;
+  content: "";
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.52);
+}
+.value-green { background: linear-gradient(135deg, #e8f7dc, #ffffff); }
+.value-blue { background: linear-gradient(135deg, #dff3ff, #ffffff); }
+.value-pink { background: linear-gradient(135deg, #ffe2ed, #ffffff); }
+.value-yellow { background: linear-gradient(135deg, #fff0b8, #ffffff); }
+.value-orange { background: linear-gradient(135deg, #ffe0c2, #ffffff); }
+.value-icon {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  margin: 0 0 22px;
+  border-radius: 20px;
+  background: var(--guindo);
+  box-shadow: 0 0 0 8px rgba(255, 201, 40, 0.14);
+}
+.value-icon::before,
+.value-icon::after {
+  content: "";
+  display: block;
+  background: var(--gold);
+}
+.value-scale::before { width: 28px; height: 4px; border-radius: 999px; box-shadow: 0 12px 0 var(--gold); }
+.value-scale::after { position: absolute; width: 4px; height: 28px; border-radius: 999px; }
+.value-hands::before { width: 28px; height: 18px; border-radius: 12px 12px 8px 8px; }
+.value-hands::after { position: absolute; width: 12px; height: 12px; border-radius: 50%; top: 15px; }
+.value-care::before { width: 28px; height: 18px; border-radius: 12px; box-shadow: -11px 8px 0 -4px var(--gold), 11px 8px 0 -4px var(--gold); }
+.value-team::before { width: 24px; height: 24px; border-radius: 7px; box-shadow: 13px 13px 0 -5px var(--gold), -13px 13px 0 -5px var(--gold); }
+.value-heart::before { width: 18px; height: 18px; border-radius: 5px; transform: rotate(45deg); }
+.value-heart::after { position: absolute; width: 24px; height: 8px; border-radius: 999px; bottom: 16px; }
+.value-card h3 {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 12px;
+  color: var(--guindo);
+}
+.value-card p {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.65;
+}
+
+.centers-map-section {
+  background:
+    radial-gradient(circle at 84% 14%, rgba(255, 201, 40, 0.16), transparent 22%),
+    linear-gradient(180deg, #fffaf3, var(--cream));
+}
+.centers-map-shell {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.center-map-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.map-center-button {
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid rgba(66, 19, 4, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  color: var(--guindo);
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 12px 22px rgba(66, 19, 4, 0.08);
+  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+.map-center-button:hover,
+.map-center-button.active {
+  transform: translateY(-2px);
+  border-color: rgba(255, 201, 40, 0.62);
+  background: var(--gold);
+  color: var(--guindo);
+}
+.alto-map {
+  position: relative;
+  overflow: hidden;
+  min-height: 520px;
+  border: 1px solid rgba(66, 19, 4, 0.12);
+  border-radius: 36px;
+  background:
+    radial-gradient(circle at 20% 24%, rgba(255, 201, 40, 0.24), transparent 18%),
+    radial-gradient(circle at 82% 76%, rgba(66, 19, 4, 0.1), transparent 20%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 244, 230, 0.92));
+  box-shadow: var(--soft-shadow);
+}
+.map-district {
+  position: absolute;
+  border: 2px solid rgba(66, 19, 4, 0.12);
+  border-radius: 42% 58% 54% 46%;
+  background: rgba(255, 255, 255, 0.42);
+}
+.map-district-one { left: 7%; top: 16%; width: 42%; height: 46%; transform: rotate(-8deg); }
+.map-district-two { right: 8%; top: 12%; width: 43%; height: 42%; transform: rotate(9deg); }
+.map-district-three { left: 25%; bottom: 8%; width: 54%; height: 36%; transform: rotate(3deg); }
+.map-routes {
+  position: absolute;
+  inset: 12%;
+  opacity: 0.38;
+  background:
+    linear-gradient(28deg, transparent 48%, rgba(66, 19, 4, 0.18) 49%, rgba(66, 19, 4, 0.18) 50%, transparent 51%),
+    linear-gradient(148deg, transparent 48%, rgba(255, 201, 40, 0.48) 49%, rgba(255, 201, 40, 0.48) 50%, transparent 51%);
+}
+.map-pin {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  z-index: 2;
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--white);
+  border-radius: 50% 50% 50% 0;
+  background: var(--guindo);
+  box-shadow: 0 10px 22px rgba(66, 19, 4, 0.3);
+  cursor: pointer;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  transition: background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+.map-pin::after {
+  position: absolute;
+  inset: 5px;
+  content: "";
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.86);
+}
+.map-pin:hover,
+.map-pin.active {
+  background: var(--gold);
+  box-shadow: 0 0 0 10px rgba(255, 201, 40, 0.18), 0 18px 34px rgba(66, 19, 4, 0.28);
+  transform: translate(-50%, -50%) rotate(-45deg) scale(1.18);
+}
+.map-selected-label {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  z-index: 3;
+  min-width: min(420px, calc(100% - 48px));
+  padding: 16px 22px;
+  border: 1px solid rgba(255, 201, 40, 0.38);
+  border-radius: 999px;
+  background: rgba(66, 19, 4, 0.94);
+  color: var(--white);
+  font-weight: 900;
+  text-align: center;
+  box-shadow: 0 18px 34px rgba(42, 11, 3, 0.24);
+  transform: translateX(-50%);
+}
+
+.stat-card,
+.value-card,
+.mission-panel,
+.map-center-button {
+  opacity: 0;
+  transform: translateY(18px);
+}
+.stat-card.is-visible,
+.value-card.is-visible,
+.mission-panel.is-visible,
+.map-center-button.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 520ms ease, transform 520ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease;
+}
+
+@media (max-width: 1200px) {
+  .values-feature .values-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-card,
+  .value-card,
+  .mission-panel,
+  .map-center-button {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Compactacion vertical de index.html */
+body.home-page main > .section {
+  padding-top: 70px;
+  padding-bottom: 70px;
+}
+body.home-page .section-heading {
+  margin-bottom: 26px;
+}
+body.home-page .section-heading h2::after,
+body.home-page .impact-strip .section-heading h2::after,
+body.home-page .objective-feature .section-heading h2::after,
+body.home-page .values-feature .section-heading h2::after,
+body.home-page .centers-map-section .section-heading h2::after {
+  margin-top: 12px;
+}
+body.home-page .about-feature-layout,
+body.home-page .objective-feature-layout,
+body.home-page .mission-vision-grid,
+body.home-page .values-grid,
+body.home-page .stats-grid {
+  gap: clamp(18px, 3vw, 34px);
+}
+body.home-page main > .mission-vision-feature {
+  padding-bottom: 48px;
+}
+body.home-page main > .values-feature {
+  padding-top: 48px;
+}
+body.home-page .mission-panel {
+  min-height: 0;
+  padding: clamp(26px, 3vw, 36px);
+}
+body.home-page .mission-panel .panel-icon {
+  margin-bottom: 16px;
+}
+body.home-page .mission-panel h3 {
+  margin-bottom: 10px;
+}
+body.home-page .mission-panel p {
+  line-height: 1.65;
+}
+body.home-page .mission-vision-photo {
+  margin-top: 24px;
+}
+body.home-page .mission-vision-photo img {
+  max-height: 280px;
+}
+body.home-page .value-card {
+  min-height: 0;
+  padding: 24px 20px;
+}
+body.home-page .value-icon {
+  margin-bottom: 16px;
+}
+body.home-page .value-card h3 {
+  margin-bottom: 8px;
+}
+body.home-page .value-card p {
+  line-height: 1.55;
+}
+body.home-page .impact-strip .stat-card {
+  min-height: 0;
+  padding: 28px 20px;
+}
+body.home-page .objective-photo img,
+body.home-page .about-photo,
+body.home-page .about-photo img {
+  min-height: 380px;
+}
+body.home-page .alto-map {
+  min-height: 460px;
+}
+
+@media (max-width: 992px) {
+  body.home-page main > .section {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+  body.home-page .section-heading {
+    margin-bottom: 22px;
+  }
+  body.home-page main > .mission-vision-feature {
+    padding-bottom: 40px;
+  }
+  body.home-page main > .values-feature {
+    padding-top: 40px;
+  }
+  body.home-page .objective-photo img,
+  body.home-page .about-photo,
+  body.home-page .about-photo img {
+    min-height: 330px;
+  }
+}
+
+@media (max-width: 576px) {
+  body.home-page main > .section {
+    padding-top: 36px;
+    padding-bottom: 36px;
+  }
+  body.home-page .section-heading {
+    margin-bottom: 18px;
+  }
+  body.home-page main > .mission-vision-feature {
+    padding-bottom: 34px;
+  }
+  body.home-page main > .values-feature {
+    padding-top: 34px;
+  }
+  body.home-page .mission-vision-photo {
+    margin-top: 18px;
+  }
+  body.home-page .objective-photo img,
+  body.home-page .about-photo,
+  body.home-page .about-photo img {
+    min-height: 280px;
+  }
+  body.home-page .alto-map {
+    min-height: 390px;
+  }
+}
+
+/* Alcances con tres indicadores */
+body.home-page .impact-strip .stats-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 1080px;
+  margin-inline: auto;
+}
+
+@media (max-width: 992px) {
+  body.home-page .impact-strip .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 576px) {
+  body.home-page .impact-strip .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Titulo refinado de Nuestro Objetivo */
+body.home-page .objective-heading {
+  position: relative;
+  isolation: isolate;
+  margin-bottom: 14px;
+}
+body.home-page .objective-heading h2 {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  color: var(--guindo);
+  font-family: "Lora", Georgia, serif;
+  font-size: clamp(2.45rem, 4.4vw, 4.35rem);
+  font-weight: 700;
+  line-height: 1.04;
+  text-shadow:
+    0 0 16px rgba(255, 201, 40, 0.18),
+    0 4px 18px rgba(66, 19, 4, 0.08);
+  animation: objectiveTitleIn 0.8s ease both;
+}
+body.home-page .objective-heading h2::before {
+  position: absolute;
+  left: 50%;
+  bottom: -18px;
+  width: min(230px, 78vw);
+  height: 4px;
+  content: "";
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 201, 40, 0), var(--gold), rgba(255, 201, 40, 0));
+  box-shadow: 0 0 18px rgba(255, 201, 40, 0.38);
+  transform: translateX(-50%);
+}
+body.home-page .objective-heading h2::after {
+  position: absolute;
+  left: 50%;
+  bottom: -25px;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  content: "";
+  border-radius: 4px;
+  background: var(--gold);
+  box-shadow: 0 0 16px rgba(255, 201, 40, 0.55);
+  transform: translateX(-50%) rotate(45deg);
+}
+body.home-page .objective-title-particles {
+  position: absolute;
+  inset: -22px 8% -18px;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.75;
+}
+body.home-page .objective-title-particles::before {
+  position: absolute;
+  left: 14%;
+  top: 18%;
+  width: 9px;
+  height: 9px;
+  content: "";
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow:
+    52px -12px 0 -2px rgba(255, 201, 40, 0.65),
+    118px 32px 0 -3px rgba(255, 224, 138, 0.7),
+    72vw 10px 0 -2px rgba(255, 201, 40, 0.45),
+    61vw 44px 0 -3px rgba(255, 224, 138, 0.62);
+  filter: drop-shadow(0 0 10px rgba(255, 201, 40, 0.55));
+}
+body.home-page .objective-title-particles::after {
+  position: absolute;
+  right: 18%;
+  top: -10px;
+  width: 72px;
+  height: 72px;
+  content: "";
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 201, 40, 0.18), transparent 68%);
+  box-shadow: -62vw 52px 0 18px rgba(255, 244, 230, 0.42);
+}
+body.home-page .objective-centered .gold-rule {
+  display: none;
+}
+body.home-page .objective-centered p {
+  margin-top: 26px;
+}
+
+@media (max-width: 576px) {
+  body.home-page .objective-heading {
+    margin-bottom: 10px;
+  }
+  body.home-page .objective-heading h2 {
+    font-size: clamp(2.1rem, 12vw, 3rem);
+  }
+  body.home-page .objective-centered p {
+    margin-top: 22px;
+  }
+}
+
+/* Mision y Vision con fondo guindo oscuro */
+body.home-page .mission-vision-feature {
+  position: relative;
+  overflow: hidden;
+  color: var(--cream);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 201, 40, 0.18), transparent 24%),
+    radial-gradient(circle at 86% 14%, rgba(255, 224, 138, 0.12), transparent 18%),
+    radial-gradient(circle at 72% 88%, rgba(90, 26, 8, 0.62), transparent 30%),
+    linear-gradient(135deg, #2A0B03 0%, #421304 52%, #5A1A08 100%);
+}
+body.home-page .mission-vision-feature::before,
+body.home-page .mission-vision-feature::after {
+  position: absolute;
+  z-index: 0;
+  content: "";
+  pointer-events: none;
+}
+body.home-page .mission-vision-feature::before {
+  inset: 12% 8% auto;
+  height: 140px;
+  opacity: 0.55;
+  background:
+    radial-gradient(circle at 8% 32%, rgba(255, 201, 40, 0.7) 0 4px, transparent 5px),
+    radial-gradient(circle at 28% 18%, rgba(255, 224, 138, 0.48) 0 3px, transparent 4px),
+    radial-gradient(circle at 74% 42%, rgba(255, 201, 40, 0.55) 0 4px, transparent 5px),
+    radial-gradient(circle at 92% 24%, rgba(255, 244, 230, 0.34) 0 3px, transparent 4px);
+  filter: drop-shadow(0 0 12px rgba(255, 201, 40, 0.4));
+}
+body.home-page .mission-vision-feature::after {
+  right: -80px;
+  bottom: -80px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 201, 40, 0.16), transparent 62%);
+}
+body.home-page .mission-vision-feature .section-heading,
+body.home-page .mission-vision-grid {
+  position: relative;
+  z-index: 1;
+}
+body.home-page .mission-vision-feature .section-heading h2 {
+  color: var(--gold);
+  text-shadow:
+    0 0 22px rgba(255, 201, 40, 0.3),
+    0 6px 24px rgba(0, 0, 0, 0.22);
+}
+body.home-page .mission-vision-feature .section-heading h2::after {
+  display: block;
+  width: 148px;
+  height: 4px;
+  margin: 14px auto 0;
+  content: "";
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 201, 40, 0), var(--gold), rgba(255, 201, 40, 0));
+  box-shadow: 0 0 18px rgba(255, 201, 40, 0.5);
+}
+body.home-page .mission-vision-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(18px, 2.4vw, 30px);
+}
+body.home-page .mission-panel,
+body.home-page .mission-panel-light,
+body.home-page .mission-panel-dark {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border: 1px solid rgba(255, 201, 40, 0.28);
+  background:
+    radial-gradient(circle at 86% 10%, rgba(255, 201, 40, 0.16), transparent 28%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(255, 244, 230, 0.9));
+  color: var(--text);
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.28),
+    0 0 26px rgba(255, 201, 40, 0.1);
+}
+body.home-page .mission-panel h3,
+body.home-page .mission-panel p,
+body.home-page .mission-panel-dark h3,
+body.home-page .mission-panel-dark p {
+  color: var(--guindo);
+}
+body.home-page .mission-panel p {
+  margin-bottom: 18px;
+}
+body.home-page .mission-card-image {
+  position: relative;
+  z-index: 1;
+  margin: auto 0 0;
+}
+body.home-page .mission-card-image img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  object-position: center;
+  border: 4px solid rgba(255, 201, 40, 0.38);
+  border-radius: 22px;
+  box-shadow: 0 16px 32px rgba(66, 19, 4, 0.18);
+}
+
+@media (max-width: 992px) {
+  body.home-page .mission-vision-grid {
+    grid-template-columns: 1fr;
+  }
+  body.home-page .mission-card-image img {
+    height: 240px;
+  }
+}
+
+@media (max-width: 576px) {
+  body.home-page .mission-card-image img {
+    height: 210px;
+  }
+}
+
+/* Ajuste fino de tarjetas Mision y Vision */
+body.home-page .mission-panel .panel-icon {
+  display: none !important;
+}
+
+/* Valores estilo tarjetas premium infantiles */
+body.home-page .values-feature {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 10% 14%, rgba(255, 201, 40, 0.16), transparent 18%),
+    radial-gradient(circle at 88% 18%, rgba(255, 220, 232, 0.45), transparent 20%),
+    radial-gradient(circle at 18% 86%, rgba(221, 242, 255, 0.48), transparent 22%),
+    linear-gradient(180deg, #fffaf3, #fff4e6);
+}
+body.home-page .values-feature::before,
+body.home-page .values-feature::after {
+  position: absolute;
+  z-index: 0;
+  content: "";
+  pointer-events: none;
+}
+body.home-page .values-feature::before {
+  left: -48px;
+  top: 70px;
+  width: 180px;
+  height: 180px;
+  border: 2px solid rgba(255, 201, 40, 0.18);
+  border-radius: 48% 52% 55% 45%;
+  background:
+    radial-gradient(circle at 38% 34%, rgba(255, 201, 40, 0.14), transparent 35%),
+    rgba(255, 255, 255, 0.28);
+}
+body.home-page .values-feature::after {
+  right: -34px;
+  bottom: 48px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.55), transparent 20%),
+    rgba(66, 19, 4, 0.05);
+  box-shadow:
+    -72vw -80px 0 -52px rgba(255, 201, 40, 0.16),
+    -16vw -18px 0 -42px rgba(255, 220, 232, 0.5);
+}
+body.home-page .values-feature .section-heading,
+body.home-page .values-feature .values-grid,
+body.home-page .values-closing {
+  position: relative;
+  z-index: 1;
+}
+body.home-page .values-feature .section-heading h2 {
+  color: var(--guindo);
+  text-shadow: 0 0 16px rgba(255, 201, 40, 0.18);
+}
+body.home-page .values-feature .values-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(14px, 1.6vw, 22px);
+  align-items: stretch;
+}
+body.home-page .value-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 430px;
+  padding: 34px 20px 30px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 34px;
+  text-align: center;
+  box-shadow:
+    0 20px 42px rgba(66, 19, 4, 0.11),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+body.home-page .value-card:hover {
+  transform: translateY(-8px);
+  box-shadow:
+    0 30px 58px rgba(66, 19, 4, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+body.home-page .value-card::before,
+body.home-page .value-card::after {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+}
+body.home-page .value-card::before {
+  top: 22px;
+  right: 22px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: rgba(66, 19, 4, 0.18);
+  box-shadow:
+    -128px 42px 0 -4px rgba(255, 201, 40, 0.42),
+    -18px 236px 0 -3px rgba(66, 19, 4, 0.14);
+}
+body.home-page .value-card::after {
+  left: 22px;
+  bottom: 24px;
+  width: 54px;
+  height: 22px;
+  border: solid rgba(66, 19, 4, 0.1);
+  border-width: 0 0 2px 2px;
+  border-radius: 0 0 0 22px;
+  background: transparent;
+}
+body.home-page .value-equity {
+  background: linear-gradient(180deg, #fff2ba, #fff8dc);
+}
+body.home-page .value-solidarity {
+  background: linear-gradient(180deg, #ffddeb, #fff2f7);
+}
+body.home-page .value-respect {
+  background: linear-gradient(180deg, #daf5d7, #f0fbeb);
+}
+body.home-page .value-teamwork {
+  background: linear-gradient(180deg, #dff3ff, #f1fbff);
+}
+body.home-page .value-honesty {
+  background: linear-gradient(180deg, #ffdcbc, #fff0df);
+}
+body.home-page .value-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 108px;
+  height: 108px;
+  margin: 0 auto 28px;
+  border: 2px solid rgba(255, 255, 255, 0.96);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.9), transparent 22%),
+    rgba(255, 255, 255, 0.62);
+  box-shadow:
+    0 0 0 9px rgba(255, 255, 255, 0.34),
+    0 0 0 18px rgba(66, 19, 4, 0.05),
+    0 16px 30px rgba(66, 19, 4, 0.12);
+}
+body.home-page .value-icon::before,
+body.home-page .value-icon::after {
+  display: none;
+}
+body.home-page .value-icon svg {
+  width: 58px;
+  height: 58px;
+  fill: none;
+  stroke: var(--guindo);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+body.home-page .value-card h3 {
+  max-width: 190px;
+  margin: 0 auto 16px;
+  color: var(--guindo);
+  font-family: "Lora", Georgia, serif;
+  font-size: clamp(1.42rem, 1.9vw, 1.9rem);
+  line-height: 1.08;
+  text-align: center;
+}
+body.home-page .value-card p {
+  max-width: 210px;
+  margin: 0 auto;
+  color: rgba(43, 43, 43, 0.78);
+  font-size: 0.94rem;
+  line-height: 1.68;
+  text-align: center;
+}
+body.home-page .value-card.is-visible {
+  transition: opacity 0.8s ease, transform 0.8s ease, box-shadow 0.28s ease;
+}
+body.home-page .values-closing {
+  max-width: 760px;
+  margin: 34px auto 0;
+  color: var(--guindo);
+  font-family: "Lora", Georgia, serif;
+  font-size: clamp(1.35rem, 2.4vw, 2.2rem);
+  font-style: italic;
+  font-weight: 700;
+  text-align: center;
+}
+body.home-page .values-closing span {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-left: 12px;
+  border-radius: 4px;
+  background: var(--gold);
+  box-shadow: 0 0 16px rgba(255, 201, 40, 0.48);
+  transform: rotate(45deg);
+}
+
+@media (max-width: 1200px) {
+  body.home-page .values-feature .values-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 576px) {
+  body.home-page .values-feature .values-grid {
+    grid-template-columns: 1fr;
+  }
+  body.home-page .value-card {
+    min-height: 360px;
+    padding: 30px 22px;
+    border-radius: 32px;
+  }
+  body.home-page .value-icon {
+    width: 96px;
+    height: 96px;
+    margin-bottom: 22px;
+  }
+  body.home-page .value-icon svg {
+    width: 52px;
+    height: 52px;
+  }
+  body.home-page .values-closing {
+    margin-top: 26px;
+  }
+}
+
+body.home-page .values-feature .value-card {
+  border-radius: 34px;
+}
+
+/* Mision y Vision sin tarjetas contenedoras */
+body.home-page .mission-vision-feature {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 201, 40, 0.18), transparent 22%),
+    radial-gradient(circle at 88% 18%, rgba(255, 224, 138, 0.12), transparent 20%),
+    radial-gradient(circle at 50% 100%, rgba(90, 26, 8, 0.55), transparent 34%),
+    linear-gradient(135deg, #2A0B03 0%, #421304 48%, #5A1A08 100%);
+}
+body.home-page .mission-vision-feature::before {
+  opacity: 0.7;
+}
+body.home-page .mission-vision-grid {
+  max-width: 1120px;
+  align-items: start;
+  gap: clamp(30px, 6vw, 82px);
+}
+body.home-page .mission-panel,
+body.home-page .mission-panel-light,
+body.home-page .mission-panel-dark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+}
+body.home-page .mission-panel::before,
+body.home-page .mission-panel::after {
+  display: none;
+}
+body.home-page .mission-panel h3 {
+  margin: 0 0 14px;
+  font-family: "Lora", Georgia, serif;
+  font-size: clamp(2.4rem, 4vw, 4.2rem);
+  font-weight: 700;
+  line-height: 1;
+}
+body.home-page .mission-panel-light h3 {
+  color: var(--guindo);
+  text-shadow:
+    0 0 16px rgba(255, 201, 40, 0.28),
+    0 2px 0 rgba(255, 244, 230, 0.36);
+}
+body.home-page .mission-panel-dark h3 {
+  color: var(--gold);
+  text-shadow:
+    0 0 22px rgba(255, 201, 40, 0.45),
+    0 5px 18px rgba(0, 0, 0, 0.2);
+}
+body.home-page .mission-panel .gold-rule {
+  width: 96px;
+  height: 3px;
+  margin: 0 auto 18px;
+  background: linear-gradient(90deg, rgba(255, 201, 40, 0), var(--gold), rgba(255, 201, 40, 0));
+}
+body.home-page .mission-panel p,
+body.home-page .mission-panel-dark p {
+  max-width: 90%;
+  margin: 0 auto;
+  color: rgba(255, 244, 230, 0.94);
+  font-size: clamp(1rem, 1.25vw, 1.1rem);
+  line-height: 1.8;
+  text-align: center;
+}
+body.home-page .mission-card-image {
+  width: min(82%, 360px);
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+}
+body.home-page .mission-image {
+  margin-top: 24px;
+}
+body.home-page .vision-image {
+  margin-top: 55px;
+}
+body.home-page .mission-card-image img {
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+  object-position: center;
+  border: 4px solid rgba(255,255,255,.7);
+  border-radius: 30px;
+  box-shadow: 0 15px 40px rgba(0,0,0,.15);
+}
+
+@media (max-width: 992px) {
+  body.home-page .mission-vision-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(22px, 4vw, 34px);
+  }
+  body.home-page .mission-card-image {
+    width: min(88%, 330px);
+  }
+  body.home-page .mission-card-image img {
+    height: 330px;
+  }
+}
+
+@media (max-width: 680px) {
+  body.home-page .mission-vision-grid {
+    grid-template-columns: 1fr;
+  }
+  body.home-page .mission-panel p,
+  body.home-page .mission-panel-dark p {
+    max-width: 94%;
+  }
+  body.home-page .vision-image {
+    margin-top: 28px;
+  }
+}
+
+@media (max-width: 576px) {
+  body.home-page .mission-card-image {
+    width: min(88%, 310px);
+  }
+  body.home-page .mission-card-image img {
+    height: 320px;
+  }
+}
+body.home-page .mission-panel,
+body.home-page .mission-panel-light,
+body.home-page .mission-panel-dark {
+  align-items: center;
+  text-align: center;
+}
+body.home-page .mission-panel-light {
+  background:
+    radial-gradient(circle at 18% 18%, rgba(66, 19, 4, 0.08), transparent 22%),
+    radial-gradient(circle at 86% 12%, rgba(255, 201, 40, 0.16), transparent 18%),
+    linear-gradient(145deg, #FFF4E6, #fffaf3);
+  border-color: rgba(66, 19, 4, 0.14);
+}
+body.home-page .mission-panel-dark {
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255, 244, 230, 0.32), transparent 22%),
+    radial-gradient(circle at 88% 16%, rgba(255, 255, 255, 0.22), transparent 18%),
+    linear-gradient(145deg, #FFC928, #ffe7a0 58%, #FFF4E6);
+  border-color: rgba(255, 244, 230, 0.7);
+}
+body.home-page .mission-panel::after {
+  opacity: 0.38;
+}
+body.home-page .mission-panel h3,
+body.home-page .mission-panel p,
+body.home-page .mission-panel-dark h3,
+body.home-page .mission-panel-dark p {
+  text-align: center;
+  color: var(--guindo);
+}
+body.home-page .mission-panel .gold-rule {
+  margin-left: auto;
+  margin-right: auto;
+  width: 86px;
+  height: 3px;
+}
+body.home-page .mission-card-image {
+  width: 78%;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+body.home-page .mission-card-image img {
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+  object-position: center;
+  border: 0;
+  border-radius: 24px;
+  box-shadow: 0 16px 30px rgba(66, 19, 4, 0.16);
+}
+body.home-page .mission-image {
+  margin-top: 24px;
+}
+body.home-page .vision-image {
+  margin-top: 55px;
+}
+
+@media (max-width: 992px) {
+  body.home-page .mission-card-image img {
+    height: 350px;
+  }
+  body.home-page .vision-image {
+    margin-top: 32px;
+  }
+}
+
+@media (max-width: 576px) {
+  body.home-page .mission-card-image {
+    width: min(86%, 300px);
+  }
+  body.home-page .mission-card-image img {
+    height: 330px;
+  }
+  body.home-page .vision-image {
+    margin-top: 26px;
+  }
+}
+
+body.home-page .mission-panel .panel-icon {
+  display: none !important;
+}
+
+/* Optimizacion de densidad visual institucional */
+body.home-page main > .section {
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+body.home-page .section-heading {
+  margin-bottom: 20px;
+}
+body.home-page .objective-feature {
+  text-align: center;
+}
+body.home-page .objective-centered {
+  position: relative;
+  z-index: 1;
+  max-width: 980px;
+  margin: 0 auto;
+}
+body.home-page .objective-centered .gold-rule {
+  margin: 0 auto 18px;
+}
+body.home-page .objective-centered p {
+  max-width: 800px;
+  margin: 0 auto;
+  color: var(--text);
+  font-size: clamp(1.05rem, 1.45vw, 1.22rem);
+  line-height: 1.78;
+  text-align: center;
+}
+body.home-page .objective-panorama {
+  width: min(80%, 920px);
+  margin: 28px auto 0;
+}
+body.home-page .objective-panorama img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  object-position: center;
+  border: 5px solid rgba(255, 201, 40, 0.55);
+  border-radius: 28px;
+  box-shadow: var(--soft-shadow);
+}
+body.home-page .objective-feature-layout,
+body.home-page .objective-copy,
+body.home-page .objective-photo {
+  display: contents;
+}
+body.home-page main > .mission-vision-feature {
+  padding-top: 52px;
+  padding-bottom: 36px;
+}
+body.home-page .mission-vision-grid {
+  gap: clamp(16px, 2.2vw, 26px);
+}
+body.home-page .mission-panel {
+  padding: clamp(22px, 2.4vw, 30px);
+  border-radius: 26px;
+}
+body.home-page .mission-panel .panel-icon {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 12px;
+  border-radius: 18px;
+}
+body.home-page .mission-panel h3 {
+  font-size: clamp(1.7rem, 2.6vw, 2.45rem);
+}
+body.home-page .mission-panel .gold-rule {
+  margin-bottom: 16px;
+}
+body.home-page .mission-panel p {
+  font-size: 0.97rem;
+  line-height: 1.58;
+}
+body.home-page .mission-vision-photo {
+  margin-top: 16px;
+}
+body.home-page .mission-vision-photo img {
+  max-height: 235px;
+  border-width: 5px;
+  border-radius: 26px;
+}
+body.home-page main > .values-feature {
+  padding-top: 36px;
+  padding-bottom: 56px;
+}
+body.home-page .values-feature .section-heading {
+  margin-bottom: 16px;
+}
+body.home-page .values-feature .section-heading h2::after {
+  margin-top: 9px;
+}
+body.home-page .values-feature .values-grid {
+  gap: 16px;
+}
+body.home-page .value-card {
+  padding: 20px 18px;
+  border-radius: 24px;
+}
+body.home-page .value-icon {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 12px;
+  border-radius: 18px;
+}
+body.home-page .value-card h3 {
+  margin-bottom: 7px;
+  font-size: clamp(1.16rem, 1.6vw, 1.46rem);
+}
+body.home-page .value-card p {
+  font-size: 0.9rem;
+  line-height: 1.48;
+}
+body.home-page .impact-strip .section-heading {
+  margin-bottom: 22px;
+}
+body.home-page .about-feature {
+  padding-bottom: 58px;
+}
+body.home-page .centers-map-section {
+  padding-top: 56px;
+}
+
+@media (max-width: 992px) {
+  body.home-page main > .section {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+  body.home-page main > .mission-vision-feature {
+    padding-top: 46px;
+    padding-bottom: 30px;
+  }
+  body.home-page main > .values-feature {
+    padding-top: 30px;
+    padding-bottom: 46px;
+  }
+  body.home-page .objective-panorama {
+    width: min(86%, 760px);
+  }
+  body.home-page .mission-vision-photo img {
+    max-height: 260px;
+  }
+}
+
+@media (max-width: 576px) {
+  body.home-page main > .section {
+    padding-top: 35px;
+    padding-bottom: 35px;
+  }
+  body.home-page .section-heading {
+    margin-bottom: 14px;
+  }
+  body.home-page .objective-centered p {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+  body.home-page .objective-panorama {
+    width: 100%;
+    margin-top: 20px;
+  }
+  body.home-page .objective-panorama img {
+    max-height: 230px;
+    border-radius: 22px;
+  }
+  body.home-page main > .mission-vision-feature {
+    padding-top: 34px;
+    padding-bottom: 24px;
+  }
+  body.home-page main > .values-feature {
+    padding-top: 24px;
+    padding-bottom: 34px;
+  }
+  body.home-page .mission-panel {
+    padding: 20px 18px;
+  }
+  body.home-page .mission-vision-photo {
+    margin-top: 12px;
+  }
+  body.home-page .mission-vision-photo img {
+    max-height: 220px;
+    min-height: 0;
+  }
+  body.home-page .values-feature .values-grid {
+    gap: 12px;
+  }
+  body.home-page .value-card {
+    padding: 18px 16px;
+  }
+}
+
+@media (max-width: 992px) {
+  .objective-feature-layout,
+  .mission-vision-grid {
+    grid-template-columns: 1fr;
+  }
+  .objective-photo {
+    order: -1;
+  }
+  .mission-panel {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .values-feature .values-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .alto-map {
+    min-height: 470px;
+  }
+}
+
+@media (max-width: 576px) {
+  .title-heart-line {
+    width: 100%;
+  }
+  .objective-photo img,
+  .mission-vision-photo img {
+    min-height: 300px;
+  }
+  .values-feature .values-grid {
+    grid-template-columns: 1fr;
+  }
+  .center-map-buttons {
+    justify-content: flex-start;
+  }
+  .map-center-button {
+    flex: 1 1 100%;
+  }
+  .alto-map {
+    min-height: 430px;
+    border-radius: 26px;
+  }
+  .map-pin {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* HERO PROFESIONAL INSTITUCIONAL */
+.site-header,
+.site-header:not(.scrolled):not(.open) {
+  z-index: 10;
+  color: var(--white);
+  background: rgba(66, 19, 4, 0.85);
+  box-shadow: 0 12px 34px rgba(42, 11, 3, 0.18);
+  backdrop-filter: blur(16px);
+}
+.site-header:not(.scrolled):not(.open) .site-nav > a,
+.site-header:not(.scrolled):not(.open) .nav-link {
+  color: var(--white);
+}
+.site-header:not(.scrolled):not(.open) .nav-toggle {
+  border-color: rgba(255, 255, 255, 0.42);
+  background: rgba(255, 255, 255, 0.1);
+}
+.site-header:not(.scrolled):not(.open) .nav-toggle span {
+  background: var(--white);
+}
+.hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 128px clamp(22px, 7vw, 96px) clamp(138px, 20vh, 178px);
+  isolation: isolate;
+  color: var(--white);
+  background: var(--guindo-dark);
+}
+.hero::before {
+  z-index: 3;
+  right: 8%;
+  top: 20%;
+  width: 180px;
+  height: 180px;
+  border: 1px solid rgba(255, 201, 40, 0.28);
+  background: radial-gradient(circle, rgba(255, 201, 40, 0.08), transparent 68%);
+}
+.hero::after {
+  z-index: 3;
+  left: 9%;
+  top: 24%;
+  width: 110px;
+  height: 110px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.13), transparent 65%);
+}
+.hero-carousel {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  min-height: 100%;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.hero-slide {
+  object-position: center center;
+  opacity: 0;
+  z-index: 0;
+  filter: saturate(1.08) contrast(1.02) brightness(1.1);
+}
+.hero-slide.active {
+  opacity: 1 !important;
+  z-index: 1;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    180deg,
+    rgba(42, 11, 3, 0.10) 0%,
+    rgba(66, 19, 4, 0.20) 45%,
+    rgba(42, 11, 3, 0.55) 100%
+  );
+}
+.hero-content {
+  position: relative;
+  inset: auto;
+  z-index: 5;
+  width: min(650px, 100%);
+  min-height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  transform: translateY(0);
+}
+.hero-content::before {
+  display: none;
+}
+.hero h1 {
+  max-width: 650px;
+  margin: 0;
+  color: var(--white);
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  line-height: 1.08;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+}
+.hero-subtitle {
+  max-width: 560px;
+  margin: 0;
+  color: rgba(255, 244, 230, 0.96);
+  font-size: clamp(0.95rem, 1.25vw, 1.12rem);
+  font-weight: 700;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+}
+.hero.first-slide-active h1,
+.hero.first-slide-active .hero-subtitle {
+  display: none;
+}
+.hero.first-slide-active .hero-content {
+  width: min(650px, 100%);
+  align-items: flex-start;
+  align-self: flex-end;
+  margin: 0;
+  text-align: left;
+  transform: translateY(0);
+}
+.hero .btn-primary {
+  min-height: 48px;
+  padding-inline: 24px;
+  background: var(--gold);
+  color: var(--guindo);
+  box-shadow: 0 14px 30px rgba(42, 11, 3, 0.18), 0 10px 24px rgba(255, 201, 40, 0.18);
+}
+.hero .btn-primary::after {
+  content: "→";
+  margin-left: 10px;
+  font-size: 1.05rem;
+  line-height: 1;
+  transition: transform 180ms ease;
+}
+.hero .btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 38px rgba(42, 11, 3, 0.22), 0 12px 28px rgba(255, 201, 40, 0.28);
+}
+.hero .btn-primary:hover::after {
+  transform: translateX(3px);
+}
+.hero .hero-actions {
+  position: relative;
+  z-index: 6;
+  margin-top: 8px;
+  margin-bottom: 26px;
+  gap: 16px;
+}
+.hero.first-slide-active .hero-actions {
+  justify-content: flex-start;
+}
+.hero .btn-secondary {
+  min-height: 48px;
+  padding-inline: 24px;
+  border-color: var(--gold);
+  background: rgba(66, 19, 4, 0.34);
+  color: var(--white);
+  box-shadow: 0 14px 30px rgba(42, 11, 3, 0.24);
+}
+.hero .btn-secondary::before {
+  content: "♡";
+  margin-right: 10px;
+  color: var(--gold);
+  font-size: 1.05rem;
+  line-height: 1;
+}
+.hero .btn-secondary:hover {
+  background: var(--gold);
+  color: var(--guindo);
+  box-shadow: 0 18px 38px rgba(42, 11, 3, 0.22);
+}
+.hero .btn-secondary:hover::before {
+  color: var(--guindo);
+}
+.hero-sparkles {
+  z-index: 4;
+  background:
+    radial-gradient(circle at 16% 32%, rgba(255, 201, 40, 0.75) 0 1px, transparent 3px),
+    radial-gradient(circle at 28% 58%, rgba(255, 255, 255, 0.62) 0 1px, transparent 3px),
+    radial-gradient(circle at 68% 28%, rgba(255, 201, 40, 0.58) 0 2px, transparent 4px),
+    radial-gradient(circle at 84% 48%, rgba(255, 244, 230, 0.55) 0 1px, transparent 3px),
+    radial-gradient(circle at 74% 76%, rgba(255, 201, 40, 0.42) 0 2px, transparent 4px);
+  opacity: 0.26;
+}
+.hero-wave-field {
+  left: -6%;
+  right: -6%;
+  bottom: 0;
+  z-index: 3;
+  height: clamp(150px, 24vh, 210px);
+  opacity: 0.4;
+  background:
+    radial-gradient(circle at 12% 62%, rgba(255, 201, 40, 0.58) 0 2px, transparent 5px),
+    radial-gradient(circle at 22% 82%, rgba(255, 244, 230, 0.36) 0 1px, transparent 4px),
+    radial-gradient(circle at 72% 58%, rgba(255, 201, 40, 0.52) 0 2px, transparent 5px),
+    radial-gradient(circle at 86% 78%, rgba(255, 244, 230, 0.32) 0 1px, transparent 4px),
+    linear-gradient(180deg, transparent 0%, rgba(66, 19, 4, 0.18) 38%, rgba(42, 11, 3, 0.58) 100%),
+    radial-gradient(90% 92% at 50% 112%, rgba(255, 201, 40, 0.48), transparent 64%);
+  mask-image: linear-gradient(180deg, transparent 0%, black 24%, black 100%);
+}
+.hero-wave-field::before {
+  bottom: -22px;
+  height: 154px;
+  border-top: 2px solid rgba(255, 201, 40, 0.98);
+  box-shadow:
+    0 0 18px rgba(255, 201, 40, 0.24),
+    0 -18px 0 -16px rgba(255, 244, 230, 0.28),
+    0 -42px 0 -40px rgba(255, 201, 40, 0.62),
+    0 -66px 0 -64px rgba(66, 19, 4, 0.42),
+    0 -92px 0 -90px rgba(255, 201, 40, 0.32);
+}
+.hero-wave-field::after {
+  bottom: -46px;
+  height: 170px;
+  border-top: 2px solid rgba(66, 19, 4, 0.66);
+  box-shadow:
+    0 -26px 0 -24px rgba(255, 201, 40, 0.62),
+    0 -50px 0 -48px rgba(255, 244, 230, 0.24),
+    0 -76px 0 -74px rgba(255, 201, 40, 0.28);
+}
+.frequency-bars {
+  left: 7%;
+  right: 7%;
+  bottom: 26px;
+  height: 42px;
+  opacity: 0.24;
+}
+.frequency-bars::before {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  width: 176px;
+  height: 92px;
+  content: "";
+  opacity: 0.58;
+  transform: translateX(-50%);
+  background:
+    linear-gradient(var(--gold), var(--gold)) 50% 0 / 4px 34px no-repeat,
+    radial-gradient(circle at 50% 0, transparent 0 14px, rgba(255, 201, 40, 0.88) 15px 17px, transparent 18px),
+    linear-gradient(rgba(255, 201, 40, 0.82), rgba(255, 201, 40, 0.82)) 50% 34px / 82px 2px no-repeat,
+    linear-gradient(rgba(255, 244, 230, 0.34), rgba(255, 244, 230, 0.34)) 32% 68px / 34px 38px no-repeat,
+    linear-gradient(rgba(255, 244, 230, 0.34), rgba(255, 244, 230, 0.34)) 68% 68px / 34px 38px no-repeat,
+    linear-gradient(rgba(255, 201, 40, 0.7), rgba(255, 201, 40, 0.7)) 50% 86px / 148px 2px no-repeat,
+    radial-gradient(circle at 38% 50%, rgba(255, 201, 40, 0.7) 0 2px, transparent 4px),
+    radial-gradient(circle at 62% 50%, rgba(255, 201, 40, 0.7) 0 2px, transparent 4px);
+}
+.frequency-bars span {
+  width: clamp(4px, 0.55vw, 8px);
+  background: rgba(255, 201, 40, 0.92);
+  box-shadow: 0 12px 24px rgba(42, 11, 3, 0.22);
+}
+.frequency-bars span:nth-child(2n) {
+  background: rgba(66, 19, 4, 0.9);
+}
+.hero-golden-base {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: clamp(80px, 13vh, 118px);
+  opacity: 0.52;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 42%, rgba(255, 224, 138, 0.28) 0 2px, transparent 6px),
+    radial-gradient(circle at 28% 64%, rgba(255, 201, 40, 0.36) 0 2px, transparent 7px),
+    radial-gradient(circle at 72% 34%, rgba(255, 224, 138, 0.34) 0 2px, transparent 7px),
+    radial-gradient(circle at 88% 62%, rgba(255, 244, 230, 0.26) 0 1px, transparent 5px),
+    linear-gradient(180deg, transparent 0%, rgba(66, 19, 4, 0.34) 42%, rgba(42, 11, 3, 0.92) 100%),
+    radial-gradient(90% 88% at 50% 112%, rgba(255, 201, 40, 0.5), transparent 64%);
+  filter: drop-shadow(0 -12px 34px rgba(255, 201, 40, 0.16));
+  mask-image: linear-gradient(180deg, transparent 0%, black 42%, black 100%);
+}
+.hero-golden-base::before {
+  bottom: -74px;
+  height: 96px;
+  border-top: 2px solid rgba(255, 224, 138, 0.78);
+  filter: drop-shadow(0 0 8px rgba(255, 201, 40, 0.42));
+  box-shadow:
+    0 -24px 0 -21px rgba(255, 201, 40, 0.72),
+    0 -50px 0 -48px rgba(255, 244, 230, 0.34),
+    0 -76px 0 -74px rgba(255, 201, 40, 0.42),
+    0 -104px 0 -102px rgba(66, 19, 4, 0.48);
+}
+.hero-golden-base::after {
+  bottom: -86px;
+  height: 112px;
+  border-top: 2px solid rgba(255, 201, 40, 0.48);
+  filter: drop-shadow(0 0 6px rgba(255, 201, 40, 0.32));
+  box-shadow:
+    0 -30px 0 -27px rgba(66, 19, 4, 0.72),
+    0 -58px 0 -55px rgba(255, 224, 138, 0.56),
+    0 -88px 0 -86px rgba(255, 201, 40, 0.36);
+}
+.hero-golden-base.hero-wave-field::before,
+.hero-golden-base.hero-wave-field::after {
+  max-height: 112px;
+}
+.gold-wave {
+  position: absolute;
+  left: -8%;
+  right: -8%;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: drop-shadow(0 0 16px rgba(255, 201, 40, 0.58));
+}
+.wave-1 {
+  bottom: -38px;
+  height: 82px;
+  border-top: 2px solid rgba(255, 201, 40, 0.58);
+}
+.wave-2 {
+  bottom: -56px;
+  height: 92px;
+  border-top: 2px solid rgba(255, 224, 138, 0.44);
+  opacity: 0.48;
+}
+.gold-particles {
+  position: absolute;
+  inset: 0 0 18px;
+  pointer-events: none;
+  opacity: 0.72;
+  background:
+    radial-gradient(circle at 10% 62%, rgba(255, 224, 138, 0.9) 0 1px, transparent 4px),
+    radial-gradient(circle at 18% 38%, rgba(255, 201, 40, 0.8) 0 2px, transparent 5px),
+    radial-gradient(circle at 36% 70%, rgba(255, 244, 230, 0.68) 0 1px, transparent 4px),
+    radial-gradient(circle at 56% 44%, rgba(255, 224, 138, 0.78) 0 1px, transparent 4px),
+    radial-gradient(circle at 78% 66%, rgba(255, 201, 40, 0.84) 0 2px, transparent 5px),
+    radial-gradient(circle at 92% 48%, rgba(255, 244, 230, 0.62) 0 1px, transparent 4px);
+}
+.church-silhouette {
+  position: absolute;
+  right: clamp(34px, 8vw, 130px);
+  bottom: 8px;
+  width: 160px;
+  height: 80px;
+  opacity: 0.26;
+  filter: drop-shadow(0 0 12px rgba(255, 201, 40, 0.5));
+  background:
+    linear-gradient(#FFE08A, #FFE08A) 50% 0 / 4px 40px no-repeat,
+    radial-gradient(circle at 50% 0, transparent 0 15px, rgba(255, 224, 138, 0.92) 16px 18px, transparent 19px),
+    linear-gradient(rgba(255, 224, 138, 0.88), rgba(255, 224, 138, 0.88)) 50% 40px / 92px 3px no-repeat,
+    linear-gradient(rgba(255, 244, 230, 0.36), rgba(255, 244, 230, 0.36)) 28% 78px / 42px 44px no-repeat,
+    linear-gradient(rgba(255, 244, 230, 0.36), rgba(255, 244, 230, 0.36)) 50% 68px / 48px 54px no-repeat,
+    linear-gradient(rgba(255, 244, 230, 0.36), rgba(255, 244, 230, 0.36)) 72% 78px / 42px 44px no-repeat,
+    linear-gradient(rgba(255, 224, 138, 0.76), rgba(255, 224, 138, 0.76)) 50% 118px / 180px 3px no-repeat;
+}
+.hero-dots {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: 18px;
+  width: auto;
+  margin: 0;
+  transform: translateX(-50%);
+  background: rgba(66, 19, 4, 0.44);
+}
+
+@media (max-width: 760px) {
+  .hero {
+    min-height: 100vh;
+    min-height: 100svh;
+    align-items: flex-end;
+    padding: 116px 18px 88px;
+  }
+  .hero-content,
+  .hero.first-slide-active .hero-content {
+    width: min(340px, 100%);
+    align-items: center;
+    margin-inline: auto;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: clamp(1.7rem, 7vw, 2.25rem);
+  }
+  .hero-subtitle {
+    font-size: 0.92rem;
+  }
+  .hero-content,
+  .hero.first-slide-active .hero-content {
+    transform: translateY(0);
+  }
+  .hero.first-slide-active .hero-content {
+    width: min(340px, 100%);
+    margin-inline: auto;
+    align-items: center;
+    text-align: center;
+  }
+  .hero.first-slide-active .hero-actions {
+    justify-content: center;
+  }
+  .hero-wave-field {
+    bottom: 0;
+    height: 130px;
+    opacity: 0.3;
+  }
+  .hero-golden-base {
+    height: 92px;
+    opacity: 0.48;
+  }
+  .church-silhouette {
+    right: 18px;
+    bottom: 6px;
+    width: 112px;
+    height: 62px;
+    opacity: 0.24;
+  }
+  .gold-particles {
+    opacity: 0.58;
+  }
+  .frequency-bars {
+    left: 5%;
+    right: 5%;
+    bottom: 12px;
+    height: 28px;
+  }
+  .hero-dots {
+    bottom: 22px;
+  }
+}
+
+/* Correccion final: base inferior limpia sin lineas sobre botones */
+.hero-content,
+.hero-actions,
+.hero-buttons {
+  position: relative;
+  z-index: 10;
+}
+.hero-golden-base {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: auto;
+  width: 100%;
+  height: 90px;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.45;
+  background: linear-gradient(
+    180deg,
+    rgba(66,19,4,0) 0%,
+    rgba(66,19,4,0.45) 45%,
+    rgba(42,11,3,0.85) 100%
+  );
+  border: 0;
+  box-shadow: none;
+  filter: none;
+  mask-image: none;
+}
+.hero-golden-base::before,
+.hero-golden-base::after,
+.hero-golden-base.hero-wave-field::before,
+.hero-golden-base.hero-wave-field::after,
+.gold-wave,
+.wave-1,
+.wave-2,
+.frequency-bars,
+.frequency-bars::before,
+.frequency-bars::after,
+.church-silhouette,
+.gold-particles {
+  display: none !important;
+  content: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: none !important;
+  filter: none !important;
+}
+
+/* Ajuste final Mision + Vision con carruseles institucionales */
+body.home-page #mision-vision {
+  position: relative;
+  overflow: hidden;
+  padding: 58px 24px;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(255, 201, 40, 0.16), transparent 24%),
+    radial-gradient(circle at 86% 12%, rgba(255, 224, 138, 0.14), transparent 22%),
+    radial-gradient(circle at 72% 82%, rgba(255, 201, 40, 0.1), transparent 26%),
+    linear-gradient(135deg, #2A0B03 0%, #421304 48%, #5A1A08 100%) !important;
+}
+
+body.home-page #mision-vision::before {
+  content: "";
+  position: absolute;
+  inset: 8% 0 auto 0;
+  height: 70%;
+  pointer-events: none;
+  opacity: 0.72;
+  background:
+    radial-gradient(circle at 8% 18%, rgba(255, 201, 40, 0.55) 0 2px, transparent 6px),
+    radial-gradient(circle at 22% 38%, rgba(255, 244, 230, 0.28) 0 1px, transparent 5px),
+    radial-gradient(circle at 48% 16%, rgba(255, 224, 138, 0.34) 0 2px, transparent 6px),
+    radial-gradient(circle at 76% 32%, rgba(255, 201, 40, 0.36) 0 2px, transparent 7px),
+    radial-gradient(circle at 92% 62%, rgba(255, 244, 230, 0.24) 0 1px, transparent 5px);
+}
+
+body.home-page #mision-vision .mission-vision-grid,
+body.home-page #mision-vision .vision-feature-grid {
+  position: relative;
+  z-index: 1;
+  display: grid !important;
+  grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.72fr) !important;
+  align-items: center;
+  gap: clamp(28px, 6vw, 84px);
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+body.home-page #mision-vision .vision-feature-grid {
+  grid-template-columns: minmax(300px, 0.72fr) minmax(0, 0.95fr) !important;
+  margin-top: clamp(42px, 7vw, 76px);
+}
+
+body.home-page #mision-vision .mission-text-column,
+body.home-page #mision-vision .vision-text-column,
+body.home-page #mision-vision .mission-panel,
+body.home-page #mision-vision .mission-panel-light {
+  display: block !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  min-height: 0 !important;
+  text-align: left !important;
+}
+
+body.home-page #mision-vision .mission-text-column h3,
+body.home-page #mision-vision .vision-text-column h3 {
+  margin: 0;
+  color: #FFC928 !important;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3rem, 6vw, 5.4rem);
+  line-height: 0.95;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: left !important;
+  text-shadow:
+    0 0 24px rgba(255, 201, 40, 0.34),
+    0 8px 26px rgba(0, 0, 0, 0.22);
+}
+
+body.home-page #mision-vision .mission-text-column .gold-rule,
+body.home-page #mision-vision .vision-text-column .gold-rule {
+  display: block;
+  width: 128px;
+  height: 3px;
+  margin: 22px 0 24px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #FFC928, rgba(255, 224, 138, 0.34));
+  box-shadow: 0 0 18px rgba(255, 201, 40, 0.34);
+}
+
+body.home-page #mision-vision .mission-text-column p,
+body.home-page #mision-vision .vision-text-column p {
+  max-width: 640px !important;
+  margin: 0;
+  color: rgba(255, 244, 230, 0.94) !important;
+  font-size: clamp(1.02rem, 1.4vw, 1.16rem);
+  line-height: 1.82;
+  text-align: left !important;
+}
+
+body.home-page #mision-vision .mission-carousel,
+body.home-page #mision-vision .vision-carousel {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 410px);
+  height: clamp(430px, 52vw, 560px);
+  overflow: hidden;
+  border-radius: 34px;
+  background: rgba(255, 244, 230, 0.12);
+  box-shadow:
+    0 24px 54px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(255, 244, 230, 0.18);
+}
+
+body.home-page #mision-vision .mission-carousel::before,
+body.home-page #mision-vision .vision-carousel::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 244, 230, 0.16), transparent 42%, rgba(42, 11, 3, 0.12));
+}
+
+body.home-page #mision-vision .mission-carousel-slide,
+body.home-page #mision-vision .vision-carousel-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transform: scale(1.01);
+  transition:
+    opacity 0.9s ease,
+    transform 5s ease;
+}
+
+body.home-page #mision-vision .mission-carousel-slide.active,
+body.home-page #mision-vision .vision-carousel-slide.active {
+  opacity: 1;
+  transform: scale(1.045);
+}
+
+@media (max-width: 992px) {
+  body.home-page #mision-vision {
+    padding: 50px 20px;
+  }
+
+  body.home-page #mision-vision .mission-vision-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.82fr) !important;
+    gap: 32px;
+  }
+
+  body.home-page #mision-vision .vision-feature-grid {
+    grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1fr) !important;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  body.home-page #mision-vision {
+    padding: 42px 18px;
+  }
+
+  body.home-page #mision-vision .mission-vision-grid,
+  body.home-page #mision-vision .vision-feature-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.home-page #mision-vision .vision-text-column {
+    order: -1;
+  }
+
+  body.home-page #mision-vision .mission-text-column,
+  body.home-page #mision-vision .vision-text-column,
+  body.home-page #mision-vision .mission-text-column h3,
+  body.home-page #mision-vision .vision-text-column h3,
+  body.home-page #mision-vision .mission-text-column p,
+  body.home-page #mision-vision .vision-text-column p {
+    text-align: center !important;
+  }
+
+  body.home-page #mision-vision .mission-text-column .gold-rule,
+  body.home-page #mision-vision .vision-text-column .gold-rule {
+    margin-inline: auto;
+  }
+
+  body.home-page #mision-vision .mission-carousel,
+  body.home-page #mision-vision .vision-carousel {
+    width: min(88vw, 360px);
+    height: 460px;
+  }
+}
+
+@media (max-width: 576px) {
+  body.home-page #mision-vision {
+    padding: 36px 16px;
+  }
+
+  body.home-page #mision-vision .mission-carousel,
+  body.home-page #mision-vision .vision-carousel {
+    width: min(92vw, 330px);
+    height: 420px;
+    border-radius: 28px;
+  }
+}
+
+
+/* Correccion compacta final de Mision y Vision */
+body.home-page #mision-vision {
+  padding: 42px 24px !important;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 201, 40, 0.12), transparent 20%),
+    radial-gradient(circle at 86% 18%, rgba(255, 244, 230, 0.08), transparent 22%),
+    linear-gradient(135deg, #2A0B03 0%, #421304 48%, #5A1A08 100%) !important;
+}
+
+body.home-page #mision-vision::before,
+body.home-page #mision-vision::after,
+body.home-page .mission-vision-feature::before,
+body.home-page .mission-vision-feature::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+body.home-page #mision-vision .mission-vision-grid,
+body.home-page #mision-vision .vision-feature-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: clamp(22px, 4vw, 46px) !important;
+  align-items: center !important;
+  max-width: 1120px !important;
+}
+
+body.home-page #mision-vision .vision-feature-grid {
+  margin-top: 34px !important;
+}
+
+body.home-page #mision-vision .mission-text-column,
+body.home-page #mision-vision .vision-text-column {
+  position: relative;
+}
+
+body.home-page #mision-vision .mission-text-column::before,
+body.home-page #mision-vision .vision-text-column::before,
+body.home-page #mision-vision .mission-text-column::after,
+body.home-page #mision-vision .vision-text-column::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  width: 18px;
+  height: 9px;
+  opacity: 0.28;
+  border-top: 2px solid #FFC928;
+  border-radius: 50% 50% 0 0;
+  transform: rotate(-12deg);
+}
+
+body.home-page #mision-vision .mission-text-column::before {
+  right: 12%;
+  top: -12px;
+}
+
+body.home-page #mision-vision .mission-text-column::after {
+  right: 3%;
+  top: 34px;
+  width: 13px;
+  opacity: 0.22;
+  border-color: #FFF4E6;
+  transform: rotate(14deg);
+}
+
+body.home-page #mision-vision .vision-text-column::before {
+  left: 7%;
+  top: -10px;
+  transform: rotate(12deg);
+}
+
+body.home-page #mision-vision .vision-text-column::after {
+  left: 22%;
+  top: 38px;
+  width: 13px;
+  opacity: 0.22;
+  border-color: #FFF4E6;
+  transform: rotate(-16deg);
+}
+
+body.home-page #mision-vision .mission-text-column h3,
+body.home-page #mision-vision .vision-text-column h3 {
+  margin-bottom: 0 !important;
+  font-size: clamp(2.6rem, 5vw, 4.6rem) !important;
+}
+
+body.home-page #mision-vision .mission-text-column .gold-rule,
+body.home-page #mision-vision .vision-text-column .gold-rule {
+  margin-top: 16px !important;
+  margin-bottom: 18px !important;
+}
+
+body.home-page #mision-vision .mission-text-column p,
+body.home-page #mision-vision .vision-text-column p {
+  max-width: 600px !important;
+  line-height: 1.68 !important;
+}
+
+body.home-page #mision-vision .mission-carousel,
+body.home-page #mision-vision .vision-carousel {
+  width: 100% !important;
+  max-width: 520px !important;
+  height: clamp(260px, 28vw, 320px) !important;
+  aspect-ratio: 16 / 9;
+  border-radius: 28px !important;
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.24),
+    0 0 22px rgba(255, 201, 40, 0.12) !important;
+}
+
+body.home-page #mision-vision .mission-carousel::before,
+body.home-page #mision-vision .vision-carousel::before {
+  background:
+    radial-gradient(circle at 10% 18%, rgba(255, 201, 40, 0.32) 0 2px, transparent 6px),
+    radial-gradient(circle at 88% 24%, rgba(255, 244, 230, 0.2) 0 1px, transparent 5px),
+    linear-gradient(180deg, rgba(255, 244, 230, 0.08), transparent 48%, rgba(42, 11, 3, 0.12)) !important;
+}
+
+body.home-page #mision-vision .mission-carousel::after {
+  opacity: 0.38 !important;
+}
+
+body.home-page #mision-vision .mission-carousel-slide,
+body.home-page #mision-vision .vision-carousel-slide {
+  border-radius: 28px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+body.home-page #mision-vision .mission-carousel-slide.active,
+body.home-page #mision-vision .vision-carousel-slide.active {
+  transform: scale(1.025) !important;
+}
+
+body.home-page #mision-vision .mission-carousel:hover .mission-carousel-slide.active {
+  transform: scale(1.045) !important;
+}
+
+@media (max-width: 768px) {
+  body.home-page #mision-vision {
+    padding: 36px 18px !important;
+  }
+
+  body.home-page #mision-vision .mission-vision-grid,
+  body.home-page #mision-vision .vision-feature-grid {
+    grid-template-columns: 1fr !important;
+    gap: 22px !important;
+  }
+
+  body.home-page #mision-vision .vision-feature-grid {
+    margin-top: 32px !important;
+  }
+
+  body.home-page #mision-vision .vision-text-column {
+    order: -1;
+  }
+
+  body.home-page #mision-vision .mission-carousel,
+  body.home-page #mision-vision .vision-carousel {
+    max-width: 100% !important;
+    height: clamp(220px, 54vw, 300px) !important;
+  }
+}

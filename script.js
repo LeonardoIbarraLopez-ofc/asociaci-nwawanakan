@@ -340,6 +340,8 @@ function setActiveMapCenter(index) {
 function closeMobileMenu() {
   siteNav.classList.remove("open");
   header.classList.remove("open");
+  document.body.classList.remove("menu-open");
+  navToggle.classList.remove("active");
   navToggle.setAttribute("aria-expanded", "false");
   submenuItems.forEach((item) => {
     item.classList.remove("open");
@@ -524,12 +526,23 @@ function openCenter(districtIndex, centerIndex) {
 navToggle.addEventListener("click", () => {
   const isOpen = siteNav.classList.toggle("open");
   header.classList.toggle("open", isOpen);
+  document.body.classList.toggle("menu-open", isOpen);
+  navToggle.classList.toggle("active", isOpen);
   navToggle.setAttribute("aria-expanded", String(isOpen));
 });
 
 submenuItems.forEach((item) => {
   const button = item.querySelector(".nav-link");
   button.addEventListener("click", () => {
+    const isMobileMenu = window.innerWidth <= 992;
+    if (isMobileMenu) {
+      submenuItems.forEach((otherItem) => {
+        if (otherItem === item) return;
+        otherItem.classList.remove("open");
+        otherItem.querySelector(".nav-link").setAttribute("aria-expanded", "false");
+      });
+    }
+
     const isOpen = item.classList.toggle("open");
     button.setAttribute("aria-expanded", String(isOpen));
   });
@@ -669,6 +682,9 @@ if (statNumbers.length && statsSection) {
 }
 
 window.addEventListener("scroll", setHeaderState);
+window.addEventListener("resize", () => {
+  if (window.innerWidth > 992) closeMobileMenu();
+});
 
 renderDistricts();
 setHeaderState();

@@ -33,6 +33,16 @@ body {
   color: var(--text);
   font-family: "Manrope", Arial, sans-serif;
 }
+
+body.menu-open {
+  overflow: hidden;
+}
+
+main,
+.main-content {
+  position: relative;
+  z-index: 1;
+}
 img {
   display: block;
   max-width: 100%;
@@ -43,7 +53,7 @@ a { color: inherit; text-decoration: none; }
 .site-header {
   position: fixed;
   inset: 0 0 auto;
-  z-index: 50;
+  z-index: 1000;
   min-height: 78px;
   display: flex;
   align-items: center;
@@ -156,19 +166,39 @@ a { color: inherit; text-decoration: none; }
 
 .nav-toggle {
   display: none;
-  width: 44px;
-  height: 44px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 12px;
+  width: 58px;
+  height: 58px;
+  border: 1px solid rgba(255, 244, 230, 0.35);
+  border-radius: 18px;
   background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 .nav-toggle span {
   display: block;
-  width: 21px;
-  height: 2px;
-  margin: 5px auto;
-  background: var(--white);
+  width: 24px;
+  height: 2.5px;
+  margin: 6px auto;
+  border-radius: 999px;
+  background: var(--cream);
+  transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease;
+}
+.nav-toggle:hover {
+  border-color: var(--gold);
+  background: rgba(255, 201, 40, 0.14);
+  box-shadow: 0 12px 28px rgba(42, 11, 3, 0.22);
+  transform: scale(1.04);
+}
+.nav-toggle.active span:nth-child(1) {
+  transform: translateY(8.5px) rotate(45deg);
+}
+.nav-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+.nav-toggle.active span:nth-child(3) {
+  transform: translateY(-8.5px) rotate(-45deg);
 }
 
 .hero {
@@ -1433,29 +1463,89 @@ p { color: var(--muted); font-size: 1.03rem; line-height: 1.75; }
   .nav-toggle { display: block; }
   .site-nav {
     position: absolute;
-    top: 78px;
+    top: 100%;
     left: 0;
     right: 0;
+    width: 100%;
     display: none;
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    padding: 10px 22px 22px;
-    background: var(--guindo-dark);
+    max-height: calc(100vh - 78px);
+    max-height: calc(100svh - 78px);
+    padding: 12px 22px 18px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: rgba(42, 11, 3, 0.98);
+    box-shadow: 0 20px 42px rgba(42, 11, 3, 0.34);
+    z-index: 999;
   }
   .site-nav.open { display: flex; }
-  .site-nav > a, .nav-link { width: 100%; padding: 14px 0; text-align: left; }
+  .site-nav > a,
+  .nav-link {
+    width: 100%;
+    padding: 12px 0;
+    color: var(--cream);
+    text-align: left;
+  }
+  .nav-item {
+    width: 100%;
+  }
+  .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-link::after {
+    position: static;
+    width: auto;
+    height: auto;
+    content: "\2304";
+    color: var(--gold);
+    background: transparent;
+    transition: transform 0.25s ease;
+  }
+  .has-submenu.open .nav-link::after {
+    width: auto;
+    transform: rotate(180deg);
+  }
   .submenu {
     position: static;
     min-width: 0;
     display: none;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    margin: 4px 0 8px 10px;
+    padding: 10px 14px;
+    border: 1px solid rgba(255, 201, 40, 0.18);
+    border-left: 3px solid var(--gold);
+    border-radius: 14px;
     transform: none;
     opacity: 1;
     visibility: visible;
     box-shadow: none;
     background: rgba(255, 244, 230, 0.08);
   }
-  .has-submenu.open .submenu { display: block; }
+  .has-submenu:hover .submenu {
+    display: none;
+  }
+  .has-submenu.open .submenu {
+    display: flex;
+  }
+  .submenu a {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 10px;
+    color: var(--cream);
+    font-size: 0.96rem;
+    font-weight: 750;
+    line-height: 1.25;
+  }
+  .submenu a:hover {
+    color: var(--gold);
+    background: rgba(255, 201, 40, 0.12);
+  }
   .section-shell,
   .about-layout,
   .objective-layout,
@@ -5366,7 +5456,7 @@ body.home-page .centers-map-section {
   background: rgba(255, 255, 255, 0.1);
 }
 .site-header:not(.scrolled):not(.open) .nav-toggle span {
-  background: var(--white);
+  background: var(--cream);
 }
 .hero {
   min-height: 100vh;
@@ -5481,7 +5571,7 @@ body.home-page .centers-map-section {
   box-shadow: 0 14px 30px rgba(42, 11, 3, 0.18), 0 10px 24px rgba(255, 201, 40, 0.18);
 }
 .hero .btn-primary::after {
-  content: "â†’";
+  content: "\2192";
   margin-left: 10px;
   font-size: 1.05rem;
   line-height: 1;
@@ -5513,7 +5603,7 @@ body.home-page .centers-map-section {
   box-shadow: 0 14px 30px rgba(42, 11, 3, 0.24);
 }
 .hero .btn-secondary::before {
-  content: "â™¡";
+  content: "\2661";
   margin-right: 10px;
   color: var(--gold);
   font-size: 1.05rem;
@@ -7584,7 +7674,7 @@ body.home-page #quienes-somos .eyebrow {
   right: -29px;
   width: 24px;
   height: 24px;
-  content: "âžœ";
+  content: "\279C";
   display: grid;
   place-items: center;
   color: #421304;

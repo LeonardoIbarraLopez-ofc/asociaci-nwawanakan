@@ -20,6 +20,8 @@ const mapInfoDistrict = document.querySelector("#map-info-district");
 const mapInfoAddress = document.querySelector("#map-info-address");
 const mapDirectionsLink = document.querySelector("#map-directions-link");
 const directoryCards = document.querySelectorAll(".directory-card");
+const voluntariadoFlipCards = document.querySelectorAll(".voluntariado-flip-card");
+const voluntariadoHelpCards = document.querySelectorAll(".voluntariado-help-content");
 
 let currentSlide = 0;
 let carouselTimer;
@@ -339,6 +341,37 @@ directoryCards.forEach((card) => {
     if (event.key !== "Enter" && event.key !== " ") return;
     event.preventDefault();
     card.classList.toggle("is-flipped");
+  });
+});
+
+voluntariadoFlipCards.forEach((card) => {
+  card.addEventListener("click", () => {
+    card.classList.toggle("is-flipped");
+  });
+
+  card.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    card.classList.toggle("is-flipped");
+  });
+});
+
+voluntariadoHelpCards.forEach((card) => {
+  const toggleHelpCard = () => {
+    card.classList.toggle("is-flipped");
+  };
+
+  card.addEventListener("click", toggleHelpCard);
+
+  card.addEventListener("touchend", (event) => {
+    event.preventDefault();
+    toggleHelpCard();
+  }, { passive: false });
+
+  card.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    toggleHelpCard();
   });
 });
 

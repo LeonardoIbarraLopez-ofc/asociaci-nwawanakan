@@ -22,6 +22,7 @@ const mapDirectionsLink = document.querySelector("#map-directions-link");
 const directoryCards = document.querySelectorAll(".flip-card.directory-card");
 const voluntariadoFlipCards = document.querySelectorAll(".voluntariado-flip-card");
 const voluntariadoHelpCards = document.querySelectorAll(".voluntariado-help-content");
+const pasantiaProcessCards = document.querySelectorAll(".pasantia-process-card");
 
 let currentSlide = 0;
 let carouselTimer;
@@ -587,6 +588,18 @@ directoryCards.forEach((card) => {
 });
 
 voluntariadoFlipCards.forEach((card) => {
+  card.addEventListener("click", () => {
+    card.classList.toggle("is-flipped");
+  });
+
+  card.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    card.classList.toggle("is-flipped");
+  });
+});
+
+pasantiaProcessCards.forEach((card) => {
   card.addEventListener("click", () => {
     card.classList.toggle("is-flipped");
   });

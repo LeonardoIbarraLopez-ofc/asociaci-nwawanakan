@@ -9594,3 +9594,613 @@ body.home-page #quienes-somos .eyebrow {
     height: 118px !important;
   }
 }
+
+/* Centros: fichas institucionales premium */
+.centros-page {
+  background: #421304;
+}
+
+.centros-premium-section {
+  position: relative;
+  min-height: 100svh;
+  padding: clamp(104px, 10vw, 124px) 20px clamp(40px, 6vw, 72px);
+  background-image: url("assets/fondo equipo.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.centros-premium-section::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    radial-gradient(circle at 14% 16%, rgba(255, 201, 40, 0.18), transparent 20%),
+    radial-gradient(circle at 86% 20%, rgba(255, 244, 230, 0.12), transparent 22%),
+    linear-gradient(135deg, rgba(66, 19, 4, 0.7), rgba(42, 11, 3, 0.52)),
+    rgba(66, 19, 4, 0.55);
+  pointer-events: none;
+}
+
+.centros-shell {
+  position: relative;
+  z-index: 1;
+  width: min(1220px, 100%);
+  margin: 0 auto;
+  padding: clamp(20px, 3vw, 34px);
+  border: 1px solid rgba(255, 201, 40, 0.35);
+  border-radius: 32px;
+  background:
+    linear-gradient(135deg, rgba(255, 244, 230, 0.16), rgba(255, 255, 255, 0.08)),
+    rgba(255, 244, 230, 0.14);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.centros-heading {
+  max-width: 780px;
+  margin: 0 auto 26px;
+  text-align: center;
+}
+
+.centros-heading .eyebrow {
+  color: #ffc928;
+}
+
+.centros-heading h1 {
+  margin: 0;
+  color: #ffffff;
+  font-family: "Lora", Georgia, serif;
+  font-size: clamp(2.45rem, 5vw, 4.6rem);
+  line-height: 1.02;
+}
+
+.centros-heading p:last-child {
+  margin: 12px 0 0;
+  color: #fff4e6;
+  font-weight: 800;
+  line-height: 1.55;
+}
+
+.centros-page .district-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(14px, 2vw, 22px);
+}
+
+.centros-page .district-card {
+  border: 1px solid rgba(255, 201, 40, 0.3);
+  border-radius: 24px;
+  background: rgba(66, 19, 4, 0.42);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.centros-page .district-card::before {
+  background: rgba(255, 201, 40, 0.18);
+}
+
+.centros-page .district-card h3 {
+  margin: 0;
+  color: #ffc928;
+  font-family: "Lora", Georgia, serif;
+}
+
+.centros-page .center-button {
+  border-color: rgba(255, 201, 40, 0.35);
+  color: #421304;
+  background: rgba(255, 244, 230, 0.94);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.centros-page .center-button:hover {
+  color: #421304;
+  background: #ffc928;
+}
+
+.centros-page .center-detail {
+  margin-top: clamp(24px, 4vw, 44px);
+  border: 0;
+  border-radius: 32px;
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+}
+
+.center-profile {
+  overflow: hidden;
+  border: 1px solid rgba(255, 201, 40, 0.35);
+  border-radius: 32px;
+  background: rgba(255, 244, 230, 0.14);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.centros-page .center-hero {
+  min-height: 440px;
+  display: grid;
+  align-content: space-between;
+  gap: 24px;
+  padding: clamp(22px, 4vw, 42px);
+  border-radius: 0;
+  color: #ffffff;
+  background-size: cover;
+  background-position: center;
+}
+
+.center-back {
+  width: max-content;
+  border: 1px solid rgba(255, 201, 40, 0.5);
+  border-radius: 999px;
+  padding: 10px 16px;
+  color: #fff4e6;
+  background: rgba(66, 19, 4, 0.48);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.center-hero-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: end;
+}
+
+.center-hero-content .eyebrow {
+  color: #ffc928;
+}
+
+.center-hero-content h2 {
+  margin: 0;
+  max-width: 820px;
+  color: #ffffff;
+  font-family: "Lora", Georgia, serif;
+  font-size: clamp(2.3rem, 5vw, 4.4rem);
+  line-height: 1.02;
+}
+
+.center-hero-content p {
+  max-width: 680px;
+  margin: 12px 0 16px;
+  color: #fff4e6;
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.center-address-pill {
+  display: inline-flex;
+  max-width: 100%;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 201, 40, 0.42);
+  border-radius: 999px;
+  color: #fff4e6;
+  background: rgba(66, 19, 4, 0.58);
+  font-size: 0.92rem;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.center-hero-logos {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.center-hero-logos img {
+  width: 76px;
+  height: 76px;
+  padding: 8px;
+  border: 1px solid rgba(255, 201, 40, 0.45);
+  border-radius: 20px;
+  object-fit: cover;
+  background: rgba(255, 244, 230, 0.92);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
+}
+
+.center-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.center-hero-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 20px;
+  border: 1px solid rgba(255, 201, 40, 0.58);
+  border-radius: 999px;
+  color: #fff4e6;
+  background: rgba(66, 19, 4, 0.58);
+  font-weight: 900;
+}
+
+.centros-page .center-body {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.88fr) minmax(0, 1.12fr);
+  gap: clamp(16px, 2.2vw, 26px);
+  padding: clamp(18px, 3vw, 30px);
+}
+
+.center-main-photo img,
+.center-gallery img {
+  width: 100%;
+  border: 1px solid rgba(255, 201, 40, 0.35);
+  border-radius: 22px;
+  object-fit: cover;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22);
+}
+
+.center-main-photo img {
+  height: 100%;
+  min-height: 420px;
+}
+
+.center-info-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.center-glass-block,
+.center-history-card,
+.center-address-card,
+.center-activities,
+.center-director,
+.center-gallery,
+.center-identity {
+  border: 1px solid rgba(255, 201, 40, 0.24);
+  border-radius: 22px;
+  background: rgba(66, 19, 4, 0.42);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.center-glass-block,
+.center-history-card,
+.center-address-card,
+.center-activities,
+.center-director,
+.center-gallery,
+.center-identity {
+  padding: 18px;
+}
+
+.center-glass-block h3,
+.center-history-card h3,
+.center-address-card h3,
+.center-activities h3,
+.center-director h3,
+.center-gallery h3,
+.center-identity h3 {
+  margin: 0 0 12px;
+  color: #ffc928;
+  font-family: "Lora", Georgia, serif;
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+}
+
+.center-glass-block p,
+.center-history-card p,
+.center-address-card p,
+.center-director p {
+  margin: 0;
+  color: #fff4e6;
+  font-weight: 750;
+  line-height: 1.55;
+}
+
+.center-address-card p + p {
+  margin-top: 8px;
+}
+
+.center-history-card {
+  display: flex;
+  gap: 14px;
+  border-color: rgba(255, 201, 40, 0.42);
+}
+
+.center-history-card > span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  color: #421304;
+  background: #ffc928;
+  font-size: 1.15rem;
+}
+
+.center-history-card button,
+.center-gallery button {
+  margin-top: 14px;
+  border: 1px solid rgba(255, 201, 40, 0.45);
+  border-radius: 999px;
+  padding: 9px 14px;
+  color: #421304;
+  background: #ffc928;
+  font-weight: 900;
+}
+
+.center-activities,
+.center-director,
+.center-gallery,
+.center-identity,
+.center-closing,
+.center-bottom-actions {
+  grid-column: 1 / -1;
+}
+
+.center-activities > div {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.center-activities article {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 70px;
+  padding: 12px;
+  border-radius: 16px;
+  color: #421304;
+  background: rgba(255, 244, 230, 0.92);
+  font-weight: 900;
+}
+
+.center-activities article span {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  color: #421304;
+  background: #ffc928;
+}
+
+.center-director article {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+}
+
+.center-director img {
+  width: 120px;
+  height: 120px;
+  aspect-ratio: 1 / 1;
+  border: 3px solid rgba(255, 201, 40, 0.6);
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 58%;
+  background: #fff4e6;
+}
+
+.center-director h4 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+}
+
+.center-director strong {
+  display: inline-flex;
+  margin: 8px 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: #421304;
+  background: #ffc928;
+}
+
+.center-gallery > div {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.center-gallery img {
+  height: 150px;
+}
+
+.center-identity > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.center-identity article {
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  min-height: 150px;
+  padding: 16px;
+  border: 1px solid rgba(255, 201, 40, 0.35);
+  border-radius: 18px;
+  color: #421304;
+  background: rgba(255, 244, 230, 0.94);
+  font-weight: 900;
+  text-align: center;
+}
+
+.center-identity img {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+}
+
+.center-closing {
+  margin: 0;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 201, 40, 0.35);
+  color: #ffc928;
+  font-family: "Lora", Georgia, serif;
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  font-weight: 700;
+  text-align: center;
+}
+
+.center-bottom-actions {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 980px) {
+  .centros-page .district-grid,
+  .center-activities > div,
+  .center-gallery > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .center-hero-content,
+  .centros-page .center-body {
+    grid-template-columns: 1fr;
+  }
+
+  .center-main-photo img {
+    min-height: 320px;
+  }
+}
+
+@media (max-width: 620px) {
+  .centros-premium-section {
+    padding: 94px 12px 28px;
+  }
+
+  .centros-shell,
+  .center-profile {
+    border-radius: 24px;
+  }
+
+  .centros-page .district-grid,
+  .center-activities > div,
+  .center-gallery > div,
+  .center-identity > div,
+  .center-director article {
+    grid-template-columns: 1fr;
+  }
+
+  .centros-page .center-hero {
+    min-height: 390px;
+  }
+
+  .center-hero-logos {
+    flex-wrap: wrap;
+  }
+
+  .center-address-pill {
+    border-radius: 18px;
+  }
+
+  .center-director article {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .center-hero-actions a,
+  .center-back {
+    width: 100%;
+  }
+}
+
+/* Pasantias: correccion obligatoria de fondo y vidrio */
+.pasantia-page .pasantia-glass-section {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  padding: clamp(104px, 10vw, 124px) clamp(16px, 4vw, 5%) clamp(36px, 6vw, 72px);
+  overflow: hidden;
+  background-image: url("./assets/fondo pasantia.jpg") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+.pasantia-page .pasantia-glass-section::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  content: "";
+  background:
+    radial-gradient(circle at 18% 16%, rgba(255, 201, 40, 0.16), transparent 22%),
+    radial-gradient(circle at 82% 18%, rgba(255, 244, 230, 0.12), transparent 24%),
+    linear-gradient(135deg, rgba(66, 19, 4, 0.82), rgba(66, 19, 4, 0.55), rgba(20, 8, 3, 0.78)) !important;
+  pointer-events: none;
+}
+
+.pasantia-page .pasantia-glass-section > * {
+  position: relative;
+  z-index: 1;
+}
+
+.pasantia-page .pasantia-glass-card {
+  width: min(1180px, 94%);
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 48px);
+  border: 1px solid rgba(255, 201, 40, 0.42) !important;
+  border-radius: 34px;
+  background: rgba(255, 244, 230, 0.12) !important;
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(18px) saturate(1.15) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.15) !important;
+}
+
+.pasantia-page .pasantia-glass-card::before {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent 42%),
+    radial-gradient(circle at 12% 10%, rgba(255, 201, 40, 0.18), transparent 26%),
+    radial-gradient(circle at 90% 86%, rgba(255, 244, 230, 0.16), transparent 28%);
+}
+
+.pasantia-page .pasantia-glass-card::after {
+  right: clamp(18px, 4vw, 46px);
+  bottom: clamp(20px, 4vw, 48px);
+  width: min(390px, 36vw);
+  border: 1px solid rgba(255, 201, 40, 0.45);
+  border-radius: 24px;
+  background:
+    linear-gradient(rgba(66, 19, 4, 0.08), rgba(66, 19, 4, 0.28)),
+    url("./assets/pasantia foto.jpg") center / cover no-repeat !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  opacity: 0.38;
+}
+
+.pasantia-page .pasantia-intro,
+.pasantia-page .pasantia-requirements,
+.pasantia-page .pasantia-benefits,
+.pasantia-page .pasantia-process {
+  border: 1px solid rgba(255, 201, 40, 0.3);
+  background: rgba(66, 19, 4, 0.52);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.pasantia-page .pasantia-feature-card {
+  border: 1px solid rgba(255, 201, 40, 0.55);
+  background: rgba(255, 244, 230, 0.9);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+}
+
+.pasantia-page .pasantia-benefit-cards article {
+  border: 1px solid rgba(255, 201, 40, 0.32);
+  background: rgba(255, 244, 230, 0.12);
+}
+
+@media (max-width: 820px) {
+  .pasantia-page .pasantia-glass-card {
+    width: min(100%, calc(100vw - 28px));
+    border-radius: 26px;
+  }
+
+  .pasantia-page .pasantia-glass-card::after {
+    width: min(280px, 64vw);
+    opacity: 0.18;
+  }
+}

@@ -116,6 +116,112 @@ const centers = [
   }
 ];
 
+const centerDetails = {
+  "Don Bosquito": {
+    subtitulo: "Centro infantil con acompanamiento, cuidado y formacion integral",
+    address: "Zona Santa Rosa, Calle E N° 46A, El Alto",
+    image: "don-bosquito.jpg"
+  },
+  "Maria Auxiliadora": {
+    name: "Maria Auxiliadora",
+    subtitulo: "Centro infantil con acompanamiento, cuidado y formacion integral",
+    address: "Zona 12 de Octubre, Av. Raul Salmon entre calles 7 y 8 N° 100, El Alto",
+    image: "maria-auxiliadora.jpg"
+  },
+  "San Francisco de Asis": {
+    subtitulo: "Centro infantil orientado al cuidado, aprendizaje y bienestar comunitario",
+    address: "Zona Cupilupaca, Calle Rio Bermejo N° 1064, El Alto",
+    image: "san-francisco-asis.jpg"
+  },
+  "Cristo del Consuelo": {
+    subtitulo: "Espacio de proteccion y desarrollo para ninas y ninos",
+    address: "Zona Las Delicias, entre Calle Camellas y Pensamiento, El Alto",
+    image: "cristo-del-consuelo.jpg"
+  },
+  Palliri: {
+    name: "Fundacion Palliri",
+    subtitulo: "Centro infantil comprometido con la formacion y el cuidado diario",
+    address: "Villa Elizardo Perez, Calle Heroes del Acre entre Calle 16 de Octubre, El Alto",
+    image: "palliri.jpg"
+  },
+  "Virgen de la Fuensanta": {
+    subtitulo: "Centro de acompanamiento integral para la primera infancia",
+    address: "Zona La Primera, Calle Sopocachuy, El Alto",
+    image: "virgen-fuensanta.jpg"
+  },
+  "Beata Piedad de la Cruz": {
+    name: "Madre Piedad de la Cruz",
+    subtitulo: "Centro infantil con enfoque humano, educativo y familiar",
+    address: "Villa Dolores, Calle D, El Alto",
+    image: "beata-piedad.jpg"
+  },
+  "Sagrado Corazon de Jesus": {
+    subtitulo: "Centro de cuidado, valores y participacion comunitaria",
+    address: "Plaza Primero de Mayo, El Alto",
+    image: "sagrado-corazon.jpg"
+  },
+  Burgosmarka: {
+    subtitulo: "Centro infantil al servicio del desarrollo integral de la ninez",
+    address: "Zona 7 de Septiembre, Calle 31 de Octubre N° 24, El Alto",
+    image: "burgosmarka.jpg"
+  },
+  "Nueva Marka": {
+    subtitulo: "Centro infantil de acompanamiento, proteccion y apoyo familiar",
+    address: "Zona Nueva Marka, Calle Eliodoro Camacho y Plaza 10 de Febrero, frente al modulo policial Nueva Marka, El Alto",
+    image: "nueva-marka.jpg"
+  },
+  Rinconcito: {
+    name: "Mi Rinconcito",
+    subtitulo: "Centro calido de aprendizaje, juego y cuidado integral",
+    address: "Zona Norte Huayna Potosi, Calle 24 N° 575, El Alto",
+    image: "rinconcito.jpg"
+  },
+  "Menesiano Yurinani": {
+    subtitulo: "Centro infantil que promueve cuidado, valores y desarrollo temprano",
+    address: "Zona Alto Villa Victoria, El Alto",
+    image: "menesiano-yurinani.jpg"
+  }
+};
+
+const centerActivities = [
+  ["📘", "Desarrollo educativo"],
+  ["💛", "Acompanamiento emocional"],
+  ["🍲", "Nutricion"],
+  ["🎲", "Juego"],
+  ["✨", "Valores"],
+  ["👨‍👩‍👧", "Participacion familiar"],
+  ["🤸", "Psicomotricidad"],
+  ["🤝", "Apoyo a familias"]
+];
+
+function getCenterProfile(district, name, image) {
+  const detail = centerDetails[name] || {};
+  const displayName = detail.name || name;
+  const imageFile = detail.image || image;
+  const imagePath = `assets/centros/${imageFile}`;
+  const address = detail.address || "Direccion institucional por actualizar, El Alto";
+  return {
+    name: displayName,
+    district: district.name,
+    subtitulo: detail.subtitulo || "Centro infantil con acompanamiento, cuidado y formacion integral",
+    address,
+    portada: imagePath,
+    imagenPrincipal: imagePath,
+    logoCentro: imagePath,
+    logoWawanakan: "assets/logotipo.png",
+    resena: `${displayName} forma parte de la red de centros infantiles acompanados por Wawanakan, fortaleciendo espacios de cuidado, aprendizaje y buen trato para la ninez.`,
+    informacionGeneral: `El centro brinda acompanamiento integral a ninas y ninos, promoviendo experiencias educativas, juego, cuidado diario y relacion cercana con las familias y la comunidad.`,
+    directora: {
+      nombre: "Lic. Tania Loyola Acarapi Mamani",
+      cargo: "Directora",
+      foto: "assets/presidenta1.png",
+      descripcion: "Lidera la gestion del centro con compromiso, vocacion de servicio y enfoque en el bienestar integral de la ninez y sus familias."
+    },
+    galeria: [imagePath, imagePath, imagePath, imagePath],
+    actividades: centerActivities
+  };
+}
+
 function getDirectionsFromCurrentLocation(center) {
   if (center.mapsLink) return center.mapsLink;
   return `https://www.google.com/maps/dir/?api=1&origin=Current%20Location&destination=${encodeURIComponent(center.address)}`;
@@ -247,33 +353,100 @@ function renderDistricts() {
 function openCenter(districtIndex, centerIndex) {
   const district = districts[districtIndex];
   const [name, image] = district.centers[centerIndex];
-  const imagePath = `assets/centros/${image}`;
+  const center = getCenterProfile(district, name, image);
 
   centerDetail.hidden = false;
   centerDetail.innerHTML = `
-    <div class="center-hero" style="background-image: linear-gradient(90deg, rgba(42,11,3,0.86), rgba(66,19,4,0.48)), url('${imagePath}')">
-      <div>
-        <p class="eyebrow">${district.name}</p>
-        <h2>${name}</h2>
-      </div>
-    </div>
-    <div class="center-body">
-      <div class="center-placeholder">Imagen del centro<br>${name}</div>
-      <div class="center-info-panel">
-        <h3>Informacion general</h3>
-        <p>Informacion por actualizar sobre el centro infantil, su comunidad y servicios principales.</p>
-        <h3>Actividades principales</h3>
-        <p>Desarrollo educativo, acompanamiento emocional, nutricion, juego, valores y participacion familiar.</p>
-        <h3>Equipo del centro</h3>
-        <div class="center-team-grid">
-          <article class="center-team-card accent-yellow"><span>01</span><strong>Directora o responsable</strong><p>Nombre por actualizar</p></article>
-          <article class="center-team-card accent-pink"><span>02</span><strong>Educadoras</strong><p>Informacion por actualizar</p></article>
-          <article class="center-team-card accent-blue"><span>03</span><strong>Personal de apoyo</strong><p>Informacion por actualizar</p></article>
-          <article class="center-team-card accent-green"><span>04</span><strong>Personal de limpieza</strong><p>Informacion por actualizar</p></article>
+    <article class="center-profile">
+      <div class="center-hero" style="background-image: linear-gradient(110deg, rgba(42,11,3,0.88), rgba(66,19,4,0.5)), url('${center.portada}')">
+        <button class="center-back close-center" type="button">← Volver a centros</button>
+        <div class="center-hero-content">
+          <div>
+            <p class="eyebrow">${center.district}</p>
+            <h2>${center.name}</h2>
+            <p>${center.subtitulo}</p>
+            <span class="center-address-pill">📍 ${center.address}</span>
+          </div>
+          <div class="center-hero-logos" aria-label="Logotipos del centro">
+            <img src="${center.logoCentro}" alt="Logo o imagen de ${center.name}">
+            <img src="${center.logoWawanakan}" alt="Logo Wawanakan">
+          </div>
         </div>
-        <button class="btn btn-primary close-center" type="button">Cerrar informacion</button>
+        <div class="center-hero-actions">
+          <a href="voluntariado.html">🤝 Voluntariado</a>
+          <a href="pasantia.html">🎓 Pasantia</a>
+        </div>
       </div>
-    </div>
+
+      <div class="center-body">
+        <div class="center-main-photo">
+          <img src="${center.imagenPrincipal}" alt="Imagen principal de ${center.name}">
+        </div>
+
+        <div class="center-info-panel">
+          <section class="center-glass-block">
+            <h3>Informacion general</h3>
+            <p>${center.informacionGeneral}</p>
+          </section>
+
+          <section class="center-history-card">
+            <span aria-hidden="true">📖</span>
+            <div>
+              <h3>Resena historica</h3>
+              <p>${center.resena}</p>
+              <button type="button">Conocer historia</button>
+            </div>
+          </section>
+
+          <section class="center-address-card">
+            <h3>Direccion</h3>
+            <p>${center.address}</p>
+            <p><strong>Distrito:</strong> ${center.district.replace("Distrito ", "")}</p>
+            <p><strong>Enfoque de servicio:</strong> Atencion integral a la primera infancia.</p>
+          </section>
+        </div>
+
+        <section class="center-activities">
+          <h3>Actividades que realizan</h3>
+          <div>
+            ${center.actividades.map(([icon, activity]) => `<article><span>${icon}</span><strong>${activity}</strong></article>`).join("")}
+          </div>
+        </section>
+
+        <section class="center-director">
+          <h3>Directora del centro</h3>
+          <article>
+            <img src="${center.directora.foto}" alt="${center.directora.nombre}">
+            <div>
+              <h4>${center.directora.nombre}</h4>
+              <strong>${center.directora.cargo}</strong>
+              <p>${center.directora.descripcion}</p>
+            </div>
+          </article>
+        </section>
+
+        <section class="center-gallery">
+          <h3>Galeria del centro</h3>
+          <div>
+            ${center.galeria.map((photo, index) => `<img src="${photo}" alt="Galeria de ${center.name} ${index + 1}">`).join("")}
+          </div>
+          <button type="button">Ver mas fotos</button>
+        </section>
+
+        <section class="center-identity">
+          <h3>Logotipos e identidad</h3>
+          <div>
+            <article><img src="${center.logoCentro}" alt="Identidad de ${center.name}"><strong>${center.name}</strong></article>
+            <article><img src="${center.logoWawanakan}" alt="Logo Wawanakan"><strong>Wawanakan</strong></article>
+          </div>
+        </section>
+
+        <p class="center-closing">Acompanamos hoy, transformamos el manana.</p>
+        <div class="center-bottom-actions">
+          <button class="center-back close-center" type="button">Volver a centros</button>
+        </div>
+      </div>
+    </article>
   `;
   centerDetail.scrollIntoView({ behavior: "smooth", block: "start" });
 }

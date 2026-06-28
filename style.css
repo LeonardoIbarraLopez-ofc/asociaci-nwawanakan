@@ -14372,3 +14372,223 @@ footer {
     min-width: 140px !important;
   }
 }
+
+/* Alcances en movil: tres cifras en una sola fila */
+@media (max-width: 768px) {
+  body.home-page #alcances,
+  body.home-page .impact-strip,
+  .stats-section,
+  .impact-section,
+  .logros-section,
+  .cifras-section {
+    padding: 10px 8px !important;
+  }
+
+  body.home-page #alcances .section-heading,
+  body.home-page .impact-strip .section-heading {
+    margin-bottom: 10px !important;
+  }
+
+  body.home-page #alcances .section-heading h2,
+  body.home-page .impact-strip .section-heading h2,
+  .stats-section h2,
+  .impact-section h2,
+  .logros-section h2,
+  .cifras-section h2 {
+    font-size: 1.05rem !important;
+    line-height: 1.15 !important;
+    text-align: center !important;
+    margin-bottom: 8px !important;
+  }
+
+  body.home-page #alcances .section-heading h2::after,
+  body.home-page .impact-strip .section-heading h2::after {
+    width: 58px !important;
+    height: 3px !important;
+    margin-top: 7px !important;
+  }
+
+  body.home-page #alcances .section-heading p,
+  body.home-page .impact-strip .section-heading p {
+    margin: 0 !important;
+    font-size: 0.78rem !important;
+    line-height: 1.2 !important;
+  }
+
+  body.home-page #alcances .stats-grid,
+  body.home-page .impact-strip .stats-grid,
+  .stats-grid,
+  .impact-grid,
+  .logros-grid,
+  .cifras-grid,
+  .stats-wrapper {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body.home-page #alcances .stat-card,
+  body.home-page .impact-strip .stat-card,
+  .stat-card,
+  .impact-card,
+  .logro-card,
+  .cifra-card {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 4px !important;
+    min-width: 0 !important;
+    min-height: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 12px 8px !important;
+    border-radius: 18px !important;
+    text-align: center !important;
+  }
+
+  body.home-page #alcances .stat-card::before,
+  body.home-page .impact-strip .stat-card::before {
+    top: -26px !important;
+    right: -24px !important;
+    width: 64px !important;
+    height: 64px !important;
+  }
+
+  body.home-page #alcances .stat-card::after,
+  body.home-page .impact-strip .stat-card::after {
+    width: 0 !important;
+    height: 0 !important;
+    opacity: 0 !important;
+  }
+
+  body.home-page #alcances .stat-icon,
+  body.home-page .impact-strip .stat-icon,
+  .stat-card .icon,
+  .impact-card .icon,
+  .logro-card .icon,
+  .cifra-card .icon {
+    width: 38px !important;
+    height: 38px !important;
+    margin: 0 auto 4px !important;
+    border-radius: 14px !important;
+    box-shadow: 0 8px 16px rgba(66, 19, 4, 0.16), 0 0 0 4px rgba(255, 201, 40, 0.12) !important;
+  }
+
+  body.home-page #alcances .stat-icon::after,
+  body.home-page .impact-strip .stat-icon::after {
+    width: 14px !important;
+    height: 14px !important;
+  }
+
+  body.home-page #alcances .stat-card strong,
+  body.home-page #alcances .stat-number,
+  body.home-page .impact-strip .stat-card strong,
+  .stat-card .number,
+  .impact-card .number,
+  .logro-card .number,
+  .cifra-card .number {
+    font-size: 1.8rem !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+  }
+
+  body.home-page #alcances .stat-card h3,
+  body.home-page .impact-strip .stat-card h3,
+  .stat-card .title,
+  .impact-card .title,
+  .logro-card .title,
+  .cifra-card .title,
+  .stat-card h4,
+  .cifra-card h4 {
+    max-width: 100% !important;
+    font-size: 0.72rem !important;
+    line-height: 1.1 !important;
+    margin: 0 !important;
+    text-align: center !important;
+  }
+
+  body.home-page #alcances .stat-card p,
+  body.home-page .impact-strip .stat-card p,
+  .stat-card p,
+  .impact-card p,
+  .logro-card p,
+  .cifra-card p {
+    max-width: 100% !important;
+    font-size: 0.68rem !important;
+    line-height: 1.15 !important;
+    margin: 0 !important;
+    text-align: center !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body.home-page #alcances .stats-grid,
+  body.home-page .impact-strip .stats-grid,
+  .stats-grid,
+  .impact-grid,
+  .logros-grid,
+  .cifras-grid,
+  .stats-wrapper {
+    gap: 6px !important;
+  }
+
+  body.home-page #alcances .stat-card,
+  body.home-page .impact-strip .stat-card,
+  .stat-card,
+  .impact-card,
+  .logro-card,
+  .cifra-card {
+    gap: 3px !important;
+    padding: 10px 6px !important;
+    border-radius: 16px !important;
+  }
+
+  body.home-page #alcances .stat-icon,
+  body.home-page .impact-strip .stat-icon,
+  .stat-card .icon,
+  .impact-card .icon,
+  .logro-card .icon,
+  .cifra-card .icon {
+    width: 34px !important;
+    height: 34px !important;
+    margin-bottom: 3px !important;
+  }
+
+  body.home-page #alcances .stat-card strong,
+  body.home-page #alcances .stat-number,
+  body.home-page .impact-strip .stat-card strong,
+  .stat-card .number,
+  .impact-card .number,
+  .logro-card .number,
+  .cifra-card .number {
+    font-size: 1.55rem !important;
+  }
+
+  body.home-page #alcances .stat-card h3,
+  body.home-page .impact-strip .stat-card h3,
+  .stat-card .title,
+  .impact-card .title,
+  .logro-card .title,
+  .cifra-card .title,
+  .stat-card h4,
+  .cifra-card h4 {
+    font-size: 0.64rem !important;
+    line-height: 1.05 !important;
+  }
+
+  body.home-page #alcances .stat-card p,
+  body.home-page .impact-strip .stat-card p,
+  .stat-card p,
+  .impact-card p,
+  .logro-card p,
+  .cifra-card p {
+    font-size: 0.6rem !important;
+    line-height: 1.08 !important;
+  }
+}

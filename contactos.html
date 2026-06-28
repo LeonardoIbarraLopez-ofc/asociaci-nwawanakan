@@ -11,29 +11,79 @@
 </head>
 <body>
   <header class="site-header scrolled" id="site-header"><a class="brand" href="index.html"><img src="assets/logotipo.png" alt="Logotipo"><span>ASOCIACION WAWANAKAN</span></a><button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="site-nav"><a href="index.html">Inicio</a><div class="nav-item has-submenu"><button class="nav-link" type="button" aria-expanded="false">Quienes somos</button><div class="submenu"><a href="quienes-somos.html">Resumen</a><a href="alcances.html">Alcances</a><a href="objetivos.html">Objetivos</a><a href="valores.html">Valores</a><a href="mision-vision.html">Mision y Vision</a></div></div><div class="nav-item has-submenu"><button class="nav-link" type="button" aria-expanded="false">Nosotros</button><div class="submenu"><a href="nuestro-equipo.html">Nuestro Equipo</a><a href="voluntariado.html">Voluntariado</a><a href="pasantia.html">Pasantia</a></div></div><a href="centros.html">Centros</a><a href="contactos.html">Contactos</a></nav></header>
-  <main class="page-main">
-    <section class="page-hero">
-      <p class="eyebrow">Contactos</p>
-      <h1>Estamos para escucharte</h1>
-    </section>
-    <section class="section section-mid">
-      <div class="contact-grid">
-        <article><span>Ubicacion</span><p>El Alto - Bolivia</p></article>
-        <article><span>Correo</span><p>Correo electr&oacute;nico: <a href="mailto:presidencia.wawanakan@gmail.com">presidencia.wawanakan@gmail.com</a></p></article>
-        <article><span>Telefono</span><p>+591 XXXXXXX</p></article>
-        <article><span>Horario</span><p>Lunes a viernes, 08:00 - 16:00 hrs.</p></article>
-        <article><span>Facebook</span><p>Asociacion Wawanakan Kusisinapa</p></article>
-        <article><span>Instagram</span><p>@wawanakan_oficial</p></article>
-      </div>
-      <div class="contact-form-placeholder">
-        <h3>Formulario de contacto</h3>
-        <p>Espacio preparado para integrar un formulario o mensaje de contacto.</p>
-        <div class="mock-form">
-          <span>Nombre completo</span>
-          <span>Correo o telefono</span>
-          <span>Mensaje</span>
-          <a class="btn btn-primary" href="mailto:presidencia.wawanakan@gmail.com">Enviar mensaje</a>
+  <main class="page-main contact-page">
+    <section class="contact-hero-section" aria-labelledby="contact-title">
+      <div class="contact-shell">
+        <div class="contact-heading">
+          <p class="contact-eyebrow">Contactos</p>
+          <h1 id="contact-title">Cont&aacute;ctanos</h1>
+          <p>Estamos para escucharte</p>
         </div>
+
+        <div class="contact-card-grid" aria-label="Datos de contacto de Wawanakan">
+          <article class="contact-info-card">
+            <span class="contact-icon" aria-hidden="true">⌖</span>
+            <h2>UBICACI&Oacute;N</h2>
+            <p>Calle 6, Villa Dolores</p>
+            <p>El Alto, La Paz - Bolivia</p>
+          </article>
+
+          <article class="contact-info-card">
+            <span class="contact-icon" aria-hidden="true">@</span>
+            <h2>CORREO</h2>
+            <p><a href="mailto:presidencia.wawanakan@gmail.com">presidencia.wawanakan@gmail.com</a></p>
+          </article>
+
+          <article class="contact-info-card">
+            <span class="contact-icon" aria-hidden="true">☎</span>
+            <h2>TEL&Eacute;FONO / WHATSAPP</h2>
+            <p><a href="https://wa.me/59179164334" target="_blank" rel="noopener noreferrer">(+591) 79164334</a></p>
+          </article>
+
+          <article class="contact-info-card">
+            <span class="contact-icon" aria-hidden="true">◷</span>
+            <h2>HORARIO</h2>
+            <p>Lunes a viernes</p>
+            <p>08:00 - 16:00 hrs.</p>
+          </article>
+
+          <article class="contact-info-card">
+            <span class="contact-icon" aria-hidden="true">f</span>
+            <h2>FACEBOOK</h2>
+            <p><a href="https://www.facebook.com/profile.php?id=61590971327508&amp;locale=es_LA" target="_blank" rel="noopener noreferrer">Asociaci&oacute;n Wawanakan</a></p>
+          </article>
+
+          <article class="contact-info-card">
+            <span class="contact-icon" aria-hidden="true">♪</span>
+            <h2>TIKTOK</h2>
+            <p><a href="https://www.tiktok.com/@asociacionwawanakan?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer">@asociacionwawanakan</a></p>
+          </article>
+        </div>
+
+        <form class="contact-message-form" id="contact-form" action="mailto:presidencia.wawanakan@gmail.com" method="post" novalidate>
+          <div class="contact-form-copy">
+            <h2>Formulario de contacto</h2>
+            <p>Escr&iacute;benos y nos pondremos en contacto contigo.</p>
+          </div>
+
+          <label>
+            <span>Nombre completo</span>
+            <input type="text" name="name" placeholder="Nombre completo de la persona u organizaci&oacute;n" required>
+          </label>
+
+          <label>
+            <span>Correo o tel&eacute;fono</span>
+            <input type="text" name="contact" placeholder="Correo o tel&eacute;fono de contacto" required>
+          </label>
+
+          <label class="contact-message-field">
+            <span>Mensaje</span>
+            <textarea name="message" rows="5" placeholder="Escribe tu mensaje o consulta" required></textarea>
+          </label>
+
+          <button class="contact-submit-button" type="submit">Enviar mensaje a Presidencia</button>
+          <p class="contact-form-status" id="contact-form-status" role="status" aria-live="polite"></p>
+        </form>
       </div>
     </section>
   </main>

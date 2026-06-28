@@ -26,6 +26,8 @@ const voluntariadoHelpCards = document.querySelectorAll(".voluntariado-help-cont
 const pasantiaProcessCards = document.querySelectorAll(".pasantia-process-card");
 const valueFlipCards = document.querySelectorAll(".values-feature .flip-card.value-card");
 const applyFlipCards = document.querySelectorAll(".apply-flip-card");
+const contactForm = document.querySelector("#contact-form");
+const contactFormStatus = document.querySelector("#contact-form-status");
 
 let currentSlide = 0;
 let carouselTimer;
@@ -770,6 +772,38 @@ valueFlipCards.forEach((card) => {
     card.classList.toggle("flipped");
   });
 });
+
+if (contactForm) {
+  contactForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const name = contactForm.elements["name"]?.value.trim() || "";
+    const contact = contactForm.elements["contact"]?.value.trim() || "";
+    const message = contactForm.elements["message"]?.value.trim() || "";
+
+    if (!name || !contact || !message) {
+      if (contactFormStatus) {
+        contactFormStatus.textContent = "Por favor completa nombre, correo o tel\u00e9fono y mensaje.";
+        contactFormStatus.classList.add("is-error");
+        contactFormStatus.classList.remove("is-success");
+      }
+      return;
+    }
+
+    const subject = encodeURIComponent("Nuevo mensaje desde la p\u00e1gina web Wawanakan");
+    const body = encodeURIComponent(
+      `Nombre completo de la persona u organizaci\u00f3n: ${name}\nCorreo o tel\u00e9fono de contacto: ${contact}\n\nMensaje:\n${message}`
+    );
+
+    if (contactFormStatus) {
+      contactFormStatus.textContent = "Gracias por contactarnos. Tu mensaje fue preparado para Presidencia Wawanakan.";
+      contactFormStatus.classList.add("is-success");
+      contactFormStatus.classList.remove("is-error");
+    }
+
+    window.location.href = `mailto:presidencia.wawanakan@gmail.com?subject=${subject}&body=${body}`;
+  });
+}
 
 voluntariadoHelpCards.forEach((card) => {
   const toggleHelpCard = () => {

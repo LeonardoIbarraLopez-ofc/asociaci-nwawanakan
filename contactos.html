@@ -64,7 +64,7 @@
           </a>
         </div>
 
-        <form class="contact-message-form" id="contact-form" action="mailto:presidencia.wawanakan@gmail.com" method="post" novalidate>
+        <form class="contact-message-form contact-form" id="contact-form" action="https://formsubmit.co/presidencia.wawanakan@gmail.com" method="POST">
           <div class="contact-form-copy">
             <h2>Formulario de contacto</h2>
             <p>Escr&iacute;benos y nos pondremos en contacto contigo.</p>
@@ -76,14 +76,19 @@
           </label>
 
           <label>
-            <span>Correo o tel&eacute;fono</span>
-            <input type="text" name="contact" placeholder="Correo o tel&eacute;fono de contacto" required>
+            <span>Correo electr&oacute;nico</span>
+            <input type="email" name="email" placeholder="Escribe tu correo electr&oacute;nico" required>
           </label>
 
           <label class="contact-message-field">
             <span>Mensaje</span>
             <textarea name="message" rows="5" placeholder="Escribe tu mensaje o consulta" required></textarea>
           </label>
+
+          <input type="hidden" name="_subject" value="Nuevo mensaje desde la p&aacute;gina web Wawanakan">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_next" value="https://asociacionwawanakan-eng.github.io/#contacto">
 
           <button class="contact-submit-button" type="submit">Enviar mensaje a Presidencia</button>
           <p class="contact-form-status" id="contact-form-status" role="status" aria-live="polite"></p>

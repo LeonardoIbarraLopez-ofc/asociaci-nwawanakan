@@ -19,10 +19,13 @@ const mapInfoCenter = document.querySelector("#map-info-center");
 const mapInfoDistrict = document.querySelector("#map-info-district");
 const mapInfoAddress = document.querySelector("#map-info-address");
 const mapDirectionsLink = document.querySelector("#map-directions-link");
+const centersInteractiveMap = document.querySelector("#centers-map");
 const directoryCards = document.querySelectorAll(".flip-card.directory-card");
 const voluntariadoFlipCards = document.querySelectorAll(".voluntariado-flip-card");
 const voluntariadoHelpCards = document.querySelectorAll(".voluntariado-help-content");
 const pasantiaProcessCards = document.querySelectorAll(".pasantia-process-card");
+const valueFlipCards = document.querySelectorAll(".values-feature .flip-card.value-card");
+const applyFlipCards = document.querySelectorAll(".apply-flip-card");
 
 let currentSlide = 0;
 let carouselTimer;
@@ -31,6 +34,8 @@ let missionCarouselTimer;
 let currentVisionSlide = 0;
 let visionCarouselTimer;
 let selectedCenterIndex = 0;
+let centersMap;
+let centersMapMarker;
 
 const districts = [
   { name: "Distrito 1", centers: [
@@ -55,67 +60,108 @@ const districts = [
 
 const centers = [
   {
+    id: "san-francisco",
     name: "San Francisco de As\u00eds",
     district: "Distrito 2",
     address: "Zona Cupilupaca, Calle R\u00edo Bermejo N\u00b0 1064, El Alto",
+    lat: -16.521,
+    lng: -68.176,
     mapsLink: "https://www.google.com/maps/dir/?api=1&origin=Current%20Location&destination=San%20Francisco%20de%20As%C3%ADs%2C%20Zona%20Cupilupaca%2C%20Calle%20R%C3%ADo%20Bermejo%20N%C2%B01064%2C%20El%20Alto%2C%20Bolivia"
   },
   {
+    id: "nueva-marka",
     name: "Nueva Marka",
     district: "Distrito 4",
-    address: "Zona Nueva Marka, Calle Eliodoro Camacho y Plaza 10 de Febrero, frente al m\u00f3dulo policial Nueva Marka, El Alto"
+    address: "Zona Nueva Marka, Calle Eliodoro Camacho y Plaza 10 de Febrero, frente al m\u00f3dulo policial Nueva Marka, El Alto",
+    lat: -16.565,
+    lng: -68.206
   },
   {
+    id: "maria-auxiliadora",
     name: "Mar\u00eda Auxiliadora",
     district: "Distrito 1",
-    address: "Zona 12 de Octubre, Av. Ra\u00fal Salm\u00f3n entre calles 7 y 8 N\u00b0 100, El Alto"
+    address: "Zona 12 de Octubre, Av. Ra\u00fal Salm\u00f3n entre calles 7 y 8 N\u00b0 100, El Alto",
+    lat: -16.503,
+    lng: -68.163
   },
   {
+    id: "mi-rinconcito",
     name: "Mi Rinconcito",
     district: "Distrito 5",
-    address: "Zona Norte Huayna Potos\u00ed, Calle 24 N\u00b0 575, El Alto"
+    address: "Zona Norte Huayna Potos\u00ed, Calle 24 N\u00b0 575, El Alto",
+    lat: -16.469,
+    lng: -68.19
   },
   {
+    id: "sagrado-corazon",
     name: "Sagrado Coraz\u00f3n de Jes\u00fas",
     district: "Distrito 3",
-    address: "Plaza Primero de Mayo, El Alto"
+    address: "Plaza Primero de Mayo, El Alto",
+    lat: -16.506,
+    lng: -68.166
   },
   {
+    id: "madre-piedad",
     name: "Madre Piedad de la Cruz",
     district: "Distrito 3",
-    address: "Villa Dolores, Calle D, El Alto"
+    address: "Villa Dolores, Calle D, El Alto",
+    lat: -16.507,
+    lng: -68.163
   },
   {
+    id: "virgen-fuensanta",
     name: "Virgen de la Fuensanta",
     district: "Distrito 3",
-    address: "Zona La Primera, Calle Sopocachuy, El Alto"
+    address: "Zona La Primera, Calle Sopocachuy, El Alto",
+    lat: -16.526,
+    lng: -68.183
   },
   {
+    id: "cristo-consuelo",
     name: "Cristo del Consuelo",
     district: "Distrito 2",
-    address: "Zona Las Delicias, entre Calle Camellas y Pensamiento, El Alto"
+    address: "Zona Las Delicias, entre Calle Camellas y Pensamiento, El Alto",
+    lat: -16.515,
+    lng: -68.188
   },
   {
+    id: "menesiano-yurinani",
     name: "Menesiano Yuri\u00f1ani",
     district: "Distrito 6",
-    address: "Zona Alto Villa Victoria, El Alto"
+    address: "Zona Alto Villa Victoria, El Alto",
+    lat: -16.477,
+    lng: -68.17
   },
   {
+    id: "don-bosquito",
     name: "Don Bosquito",
     district: "Distrito 2",
-    address: "Zona Santa Rosa, Calle E N\u00b0 46A, El Alto"
+    address: "Zona Santa Rosa, Calle E N\u00b0 46A, El Alto",
+    lat: -16.499,
+    lng: -68.186
   },
   {
+    id: "fundacion-palliri",
     name: "Fundaci\u00f3n Palliri",
     district: "Distrito 2",
-    address: "Villa Elizardo P\u00e9rez, Calle H\u00e9roes del Acre entre Calle 16 de Octubre, El Alto"
+    address: "Villa Elizardo P\u00e9rez, Calle H\u00e9roes del Acre entre Calle 16 de Octubre, El Alto",
+    lat: -16.528,
+    lng: -68.179
   },
   {
+    id: "burgosmarka",
     name: "Burgosmarka",
     district: "Distrito 3",
-    address: "Zona 7 de Septiembre, Calle 31 de Octubre N\u00b0 24, El Alto"
+    address: "Zona 7 de Septiembre, Calle 31 de Octubre N\u00b0 24, El Alto",
+    lat: -16.535,
+    lng: -68.187
   }
 ];
+
+const centersById = centers.reduce((accumulator, center, index) => {
+  accumulator[center.id] = { ...center, index };
+  return accumulator;
+}, {});
 
 const centerDirectionsLink = "https://www.google.com/maps/dir/?api=1&destination=Zona%20Cupilupaca%2C%20Calle%20Rio%20Bermejo%20N%C2%B0%201064%2C%20El%20Alto%2C%20Bolivia";
 const centerFormLink = "https://docs.google.com/forms/d/e/1FAIpQLSff0HB9Bk4NkzAGlJEjGz90EJTxngUOCM3u4kDIBKY1dydNCw/viewform?usp=sharing&ouid=111170788783476830138";
@@ -236,8 +282,69 @@ function getCenterProfile(district, name, image) {
 }
 
 function getDirectionsFromCurrentLocation(center) {
+  if (typeof center.lat === "number" && typeof center.lng === "number") {
+    return `https://www.google.com/maps/dir/?api=1&origin=Current%20Location&destination=${center.lat},${center.lng}`;
+  }
   if (center.mapsLink) return center.mapsLink;
   return `https://www.google.com/maps/dir/?api=1&origin=Current%20Location&destination=${encodeURIComponent(center.address)}`;
+}
+
+function getRedMarkerIcon() {
+  if (!window.L) return null;
+  return L.divIcon({
+    className: "",
+    html: '<div class="custom-red-marker"></div>',
+    iconSize: [28, 28],
+    iconAnchor: [14, 28],
+    popupAnchor: [0, -28]
+  });
+}
+
+function initCentersMap() {
+  const firstCenter = centers[0];
+  if (!centersInteractiveMap || centersMap || !window.L || !firstCenter) return;
+
+  const firstPosition = [firstCenter.lat, firstCenter.lng];
+  centersMap = L.map("centers-map", {
+    center: firstPosition,
+    zoom: 16,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap contributors"
+  }).addTo(centersMap);
+
+  centersMapMarker = L.marker(firstPosition, {
+    icon: getRedMarkerIcon()
+  }).addTo(centersMap);
+
+  centersMapMarker.bindPopup(firstCenter.name).openPopup();
+
+  setTimeout(() => {
+    centersMap.invalidateSize(true);
+    centersMap.setView(firstPosition, 16);
+  }, 500);
+}
+
+function updateCentersMap(center) {
+  if (!centersInteractiveMap || !window.L || typeof center.lat !== "number" || typeof center.lng !== "number") return;
+
+  if (!centersMap || !centersMapMarker) {
+    initCentersMap();
+  }
+
+  if (!centersMap || !centersMapMarker) return;
+
+  const position = [center.lat, center.lng];
+  centersMapMarker.setLatLng(position);
+  centersMapMarker.bindPopup(center.name).openPopup();
+  centersMap.setView(position, 16);
+
+  setTimeout(() => centersMap.invalidateSize(true), 200);
+  setTimeout(() => centersMap.invalidateSize(true), 500);
 }
 
 function setHeaderState() {
@@ -325,13 +432,16 @@ function updateMapInfo(center) {
   if (mapInfoDistrict) mapInfoDistrict.textContent = center.district;
   if (mapInfoAddress) mapInfoAddress.textContent = center.address;
   if (mapDirectionsLink) mapDirectionsLink.href = getDirectionsFromCurrentLocation(center);
+  updateCentersMap(center);
 }
 
-function setActiveMapCenter(index) {
-  const center = centers[index] || centers[0];
-  selectedCenterIndex = centers[index] ? index : 0;
+function setActiveMapCenter(centerReference) {
+  const referencedCenter = typeof centerReference === "string" ? centersById[centerReference] : centers[centerReference];
+  const center = referencedCenter || centers[0];
+  selectedCenterIndex = center.index ?? centers.indexOf(center);
   mapCenterButtons.forEach((button) => {
-    button.classList.toggle("active", Number(button.dataset.centerMap) === selectedCenterIndex);
+    const isActive = button.dataset.center === center.id || Number(button.dataset.centerMap) === selectedCenterIndex;
+    button.classList.toggle("active", isActive);
   });
 
   updateMapInfo(center);
@@ -583,9 +693,18 @@ if (centerDetail) {
 if (mapCenterButtons.length) {
   mapCenterButtons.forEach((button) => {
     if (button.disabled) return;
-    button.addEventListener("click", () => setActiveMapCenter(Number(button.dataset.centerMap)));
+    button.addEventListener("click", () => setActiveMapCenter(button.dataset.center || Number(button.dataset.centerMap)));
   });
-  setActiveMapCenter(0);
+  const initializeLocationMap = () => {
+    initCentersMap();
+    setActiveMapCenter(mapCenterButtons[0]?.dataset.center || 0);
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeLocationMap, { once: true });
+  } else {
+    initializeLocationMap();
+  }
 }
 
 directoryCards.forEach((card) => {
@@ -621,6 +740,34 @@ pasantiaProcessCards.forEach((card) => {
     if (event.key !== "Enter" && event.key !== " ") return;
     event.preventDefault();
     card.classList.toggle("is-flipped");
+  });
+});
+
+applyFlipCards.forEach((card) => {
+  card.classList.remove("flipped");
+
+  card.addEventListener("click", () => {
+    card.classList.toggle("flipped");
+  });
+
+  card.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    card.classList.toggle("flipped");
+  });
+});
+
+valueFlipCards.forEach((card) => {
+  card.classList.remove("is-flipped", "flipped");
+
+  card.addEventListener("click", () => {
+    card.classList.toggle("flipped");
+  });
+
+  card.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    card.classList.toggle("flipped");
   });
 });
 
@@ -684,6 +831,7 @@ if (statNumbers.length && statsSection) {
 window.addEventListener("scroll", setHeaderState);
 window.addEventListener("resize", () => {
   if (window.innerWidth > 992) closeMobileMenu();
+  if (centersMap) centersMap.invalidateSize(true);
 });
 
 renderDistricts();

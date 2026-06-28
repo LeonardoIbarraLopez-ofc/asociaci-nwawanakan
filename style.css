@@ -13444,3 +13444,84 @@ footer {
     white-space: normal;
   }
 }
+
+/* Correccion final del acordeon del menu movil */
+@media (max-width: 992px) {
+  body .site-header .site-nav.open {
+    background: rgba(42, 9, 3, 0.98) !important;
+    color: #ffffff !important;
+    max-height: calc(100vh - 78px) !important;
+    overflow-y: auto !important;
+    z-index: 9999 !important;
+  }
+
+  body .site-header .site-nav.open .has-submenu {
+    width: 100%;
+  }
+
+  body .site-header .site-nav.open .has-submenu > .nav-link,
+  body .site-header .site-nav.open .has-submenu > .submenu-toggle {
+    width: 100%;
+    color: #ffffff !important;
+    opacity: 1 !important;
+    font-weight: 850 !important;
+  }
+
+  body .site-header .site-nav.open .has-submenu > .nav-link::after,
+  body .site-header .site-nav.open .has-submenu > .submenu-toggle::after {
+    color: #ffc928 !important;
+    opacity: 1 !important;
+  }
+
+  body .site-header .site-nav.open .has-submenu:not(.open) .submenu {
+    display: none !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
+  }
+
+  body .site-header .site-nav.open .has-submenu.open .submenu,
+  body .site-header .site-nav.open .nav-group.open .submenu {
+    position: static !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 8px 0 8px 14px !important;
+    padding: 12px 16px !important;
+    border: 1px solid rgba(255, 201, 40, 0.28) !important;
+    border-left: 3px solid #ffc928 !important;
+    border-radius: 14px !important;
+    background: rgba(255, 244, 230, 0.10) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    overflow: visible !important;
+    transform: none !important;
+  }
+
+  body .site-header .site-nav.open .submenu a,
+  body .site-header .site-nav.open .submenu a:visited {
+    display: block !important;
+    width: 100% !important;
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    line-height: 1.35 !important;
+    padding: 9px 10px !important;
+    border-radius: 10px !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+
+  body .site-header .site-nav.open .submenu a:hover,
+  body .site-header .site-nav.open .submenu a:focus-visible {
+    color: #ffc928 !important;
+    background: rgba(255, 201, 40, 0.16) !important;
+  }
+}

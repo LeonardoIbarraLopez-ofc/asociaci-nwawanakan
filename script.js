@@ -388,6 +388,7 @@ function setActiveMapCenter(centerReference) {
 }
 
 function closeMobileMenu() {
+  if (!siteNav || !header || !navToggle) return;
   siteNav.classList.remove("open");
   header.classList.remove("open");
   document.body.classList.remove("menu-open");
@@ -395,7 +396,7 @@ function closeMobileMenu() {
   navToggle.setAttribute("aria-expanded", "false");
   submenuItems.forEach((item) => {
     item.classList.remove("open");
-    item.querySelector(".nav-link").setAttribute("aria-expanded", "false");
+    item.querySelector(".submenu-toggle, .nav-link")?.setAttribute("aria-expanded", "false");
   });
 }
 
@@ -573,23 +574,26 @@ function openCenter(districtIndex, centerIndex) {
   centerDetail.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-navToggle.addEventListener("click", () => {
-  const isOpen = siteNav.classList.toggle("open");
-  header.classList.toggle("open", isOpen);
-  document.body.classList.toggle("menu-open", isOpen);
-  navToggle.classList.toggle("active", isOpen);
-  navToggle.setAttribute("aria-expanded", String(isOpen));
-});
+if (navToggle && siteNav && header) {
+  navToggle.addEventListener("click", () => {
+    const isOpen = siteNav.classList.toggle("open");
+    header.classList.toggle("open", isOpen);
+    document.body.classList.toggle("menu-open", isOpen);
+    navToggle.classList.toggle("active", isOpen);
+    navToggle.setAttribute("aria-expanded", String(isOpen));
+  });
+}
 
 submenuItems.forEach((item) => {
-  const button = item.querySelector(".nav-link");
+  const button = item.querySelector(".submenu-toggle, .nav-link");
+  if (!button) return;
   button.addEventListener("click", () => {
     const isMobileMenu = window.innerWidth <= 992;
     if (isMobileMenu) {
       submenuItems.forEach((otherItem) => {
         if (otherItem === item) return;
         otherItem.classList.remove("open");
-        otherItem.querySelector(".nav-link").setAttribute("aria-expanded", "false");
+        otherItem.querySelector(".submenu-toggle, .nav-link")?.setAttribute("aria-expanded", "false");
       });
     }
 

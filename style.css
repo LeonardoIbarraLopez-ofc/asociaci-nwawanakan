@@ -12839,6 +12839,8 @@ body.home-page .allies-inner:hover {
 }
 
 .contact-info-card {
+  position: relative;
+  display: block;
   min-height: 164px;
   padding: 22px 20px;
   border: 1px solid rgba(255, 244, 230, 0.28);
@@ -12847,8 +12849,71 @@ body.home-page .allies-inner:hover {
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.2);
   color: #fff4e6;
   text-align: center;
+  text-decoration: none;
+  overflow: hidden;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+a.contact-info-card {
+  cursor: pointer;
+}
+
+a.contact-info-card:hover,
+a.contact-info-card:focus-visible {
+  transform: translateY(-5px);
+  border-color: rgba(255, 201, 40, 0.64);
+  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.28);
+}
+
+.contact-info-card.location,
+.contact-info-card.location-schedule {
+  background: linear-gradient(135deg, rgba(120, 20, 10, 0.72), rgba(66, 19, 4, 0.7));
+}
+
+.contact-info-card.location-schedule {
+  grid-column: span 2;
+  min-height: 164px;
+  padding: 24px 26px;
+  border-color: rgba(255, 201, 40, 0.45);
+}
+
+.contact-info-card.whatsapp {
+  background: linear-gradient(135deg, rgba(37, 211, 102, 0.7), rgba(15, 95, 48, 0.7));
+}
+
+.contact-info-card.schedule {
+  background: linear-gradient(135deg, rgba(255, 201, 40, 0.72), rgba(155, 105, 10, 0.68));
+  color: #421304;
+}
+
+.contact-info-card.facebook {
+  background: linear-gradient(135deg, rgba(24, 119, 242, 0.75), rgba(12, 55, 130, 0.72));
+}
+
+.contact-info-card.tiktok {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.78), rgba(40, 40, 40, 0.72));
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.contact-info-card.website {
+  background: linear-gradient(135deg, rgba(80, 95, 210, 0.75), rgba(60, 25, 120, 0.72));
+}
+
+.contact-info-card::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 16% 10%, rgba(255, 255, 255, 0.2), transparent 28%),
+    radial-gradient(circle at 88% 86%, rgba(255, 201, 40, 0.14), transparent 34%);
+}
+
+.contact-info-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .contact-icon {
@@ -12866,11 +12931,57 @@ body.home-page .allies-inner:hover {
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
 }
 
+.contact-info-card.schedule .contact-icon {
+  background: rgba(66, 19, 4, 0.86);
+  color: #ffc928;
+}
+
 .contact-info-card h2 {
   margin: 0 0 8px;
   color: #ffc928;
   font-size: 0.9rem;
   font-weight: 900;
+}
+
+.contact-info-card.location-schedule h2 {
+  margin-bottom: 16px;
+}
+
+.contact-split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+.contact-split > div {
+  min-height: 110px;
+  padding: 0 18px;
+}
+
+.contact-split > div:first-child {
+  border-right: 1px solid rgba(255, 201, 40, 0.34);
+}
+
+.contact-split .contact-icon {
+  width: 42px;
+  height: 42px;
+  margin-bottom: 9px;
+  font-size: 1.08rem;
+}
+
+.contact-split h3 {
+  margin: 0 0 6px;
+  color: #ffc928;
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.contact-info-card.schedule h2,
+.contact-info-card.schedule p {
+  color: #421304;
+  text-shadow: none;
 }
 
 .contact-info-card p {
@@ -12879,6 +12990,7 @@ body.home-page .allies-inner:hover {
   font-size: 0.96rem;
   font-weight: 700;
   line-height: 1.35;
+  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.22);
 }
 
 .contact-info-card a {
@@ -13009,6 +13121,10 @@ body.home-page .allies-inner:hover {
   .contact-card-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .contact-info-card.location-schedule {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 640px) {
@@ -13020,6 +13136,27 @@ body.home-page .allies-inner:hover {
   .contact-card-grid,
   .contact-message-form {
     grid-template-columns: 1fr;
+  }
+
+  .contact-info-card.location-schedule {
+    grid-column: auto;
+    padding: 20px 16px;
+  }
+
+  .contact-split {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .contact-split > div {
+    min-height: auto;
+    padding: 0;
+  }
+
+  .contact-split > div:first-child {
+    padding-bottom: 14px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 201, 40, 0.34);
   }
 
   .contact-info-card {

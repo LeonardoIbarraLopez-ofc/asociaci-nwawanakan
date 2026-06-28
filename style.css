@@ -13724,3 +13724,238 @@ footer {
     max-width: 200px;
   }
 }
+
+/* Ubicacion de centros en movil: tarjeta y lista lado a lado */
+@media (max-width: 768px) {
+  body.home-page .centers-map-section {
+    overflow-x: hidden;
+  }
+
+  body.home-page .centers-map-section .section-heading h2 {
+    font-size: clamp(2rem, 9vw, 3.1rem);
+    line-height: 1.02;
+    text-align: center;
+    margin-bottom: 18px;
+  }
+
+  body.home-page .centers-layout,
+  .centros-layout,
+  .ubicacion-layout,
+  .centros-content,
+  .locations-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr) !important;
+    gap: 14px;
+    align-items: start;
+    width: min(100%, calc(100vw - 24px));
+    min-width: 0;
+    overflow: visible;
+  }
+
+  body.home-page .centers-buttons-panel,
+  body.home-page .centers-map-section .center-map-buttons {
+    order: initial;
+  }
+
+  body.home-page .center-info-card,
+  body.home-page .centers-map-section .map-info-card,
+  .centro-info,
+  .centro-card,
+  .selected-center-card,
+  .location-card {
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: 18px 16px !important;
+    border-radius: 24px !important;
+  }
+
+  body.home-page .centers-map-section .map-info-card h3,
+  .centro-info h3,
+  .centro-card h3,
+  .selected-center-card h3,
+  .location-card h3 {
+    font-size: 1.45rem;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  body.home-page .centers-map-section .map-info-card p,
+  .centro-info p,
+  .centro-card p,
+  .selected-center-card p,
+  .location-card p {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+
+  body.home-page .map-location-button,
+  .centro-info .btn,
+  .centro-card .btn,
+  .selected-center-card .btn,
+  .location-card .btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+    font-size: 0.95rem;
+    padding: 12px 14px;
+    text-align: center;
+  }
+
+  body.home-page .centers-buttons-panel,
+  body.home-page .centers-map-section .center-map-buttons,
+  .centros-botones,
+  .centros-list,
+  .locations-list,
+  .center-buttons {
+    display: flex !important;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 10px !important;
+    width: 100%;
+    min-width: 0;
+    padding: 12px !important;
+    overflow: visible;
+  }
+
+  body.home-page .centers-map-section .center-tab,
+  body.home-page .centers-map-section .map-center-button,
+  .centros-botones button,
+  .centros-botones a,
+  .centros-list button,
+  .centros-list a,
+  .locations-list button,
+  .locations-list a,
+  .center-buttons button,
+  .center-buttons a {
+    width: 100%;
+    min-width: 0;
+    text-align: center;
+    white-space: normal;
+    line-height: 1.2 !important;
+    padding: 12px 10px !important;
+    font-size: 0.95rem !important;
+    border-radius: 999px;
+  }
+}
+
+@media (max-width: 560px) {
+  body.home-page .centers-layout,
+  .centros-layout,
+  .ubicacion-layout,
+  .centros-content,
+  .locations-content {
+    grid-template-columns: 1.05fr 0.95fr !important;
+    gap: 12px;
+  }
+
+  body.home-page .center-info-card,
+  body.home-page .centers-map-section .map-info-card,
+  .centro-info,
+  .centro-card,
+  .selected-center-card,
+  .location-card {
+    padding: 16px 14px !important;
+  }
+
+  body.home-page .centers-map-section .map-info-card h3,
+  .centro-info h3,
+  .centro-card h3,
+  .selected-center-card h3,
+  .location-card h3 {
+    font-size: 1.25rem;
+  }
+
+  body.home-page .centers-map-section .map-info-card p,
+  .centro-info p,
+  .centro-card p,
+  .selected-center-card p,
+  .location-card p {
+    font-size: 0.88rem;
+  }
+
+  body.home-page .centers-map-section .center-tab,
+  body.home-page .centers-map-section .map-center-button,
+  .centros-botones button,
+  .centros-botones a,
+  .centros-list button,
+  .centros-list a,
+  .locations-list button,
+  .locations-list a,
+  .center-buttons button,
+  .center-buttons a {
+    font-size: 0.88rem !important;
+    padding: 10px 8px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  body.home-page .centers-layout,
+  .centros-layout,
+  .ubicacion-layout,
+  .centros-content,
+  .locations-content {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px;
+  }
+
+  body.home-page .center-info-card,
+  body.home-page .centers-map-section .map-info-card,
+  .centro-info,
+  .centro-card,
+  .selected-center-card,
+  .location-card {
+    padding: 14px 12px !important;
+    border-radius: 20px !important;
+  }
+
+  body.home-page .centers-map-section .map-info-card h3,
+  .centro-info h3,
+  .centro-card h3,
+  .selected-center-card h3,
+  .location-card h3 {
+    font-size: 1.1rem;
+  }
+
+  body.home-page .centers-map-section .map-info-card p,
+  .centro-info p,
+  .centro-card p,
+  .selected-center-card p,
+  .location-card p {
+    font-size: 0.82rem;
+    line-height: 1.35;
+  }
+
+  body.home-page .map-location-button,
+  .centro-info .btn,
+  .centro-card .btn,
+  .selected-center-card .btn,
+  .location-card .btn {
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+
+  body.home-page .centers-buttons-panel,
+  body.home-page .centers-map-section .center-map-buttons,
+  .centros-botones,
+  .centros-list,
+  .locations-list,
+  .center-buttons {
+    gap: 8px !important;
+  }
+
+  body.home-page .centers-map-section .center-tab,
+  body.home-page .centers-map-section .map-center-button,
+  .centros-botones button,
+  .centros-botones a,
+  .centros-list button,
+  .centros-list a,
+  .locations-list button,
+  .locations-list a,
+  .center-buttons button,
+  .center-buttons a {
+    font-size: 0.82rem !important;
+    padding: 9px 8px !important;
+  }
+}

@@ -14098,3 +14098,277 @@ footer {
     padding: 9px 8px !important;
   }
 }
+
+/* Alcances/logros en movil: tarjetas mas compactas */
+@media (max-width: 768px) {
+  body.home-page #alcances,
+  .impact-strip,
+  .stats-section,
+  .logros-section,
+  .impacto-section {
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+  }
+
+  body.home-page #alcances .section-heading,
+  body.home-page .impact-strip .section-heading {
+    margin-bottom: 16px !important;
+  }
+
+  body.home-page #alcances .section-heading h2::after,
+  body.home-page .impact-strip .section-heading h2::after {
+    margin-top: 10px !important;
+  }
+
+  body.home-page #alcances .stats-grid,
+  body.home-page .impact-strip .stats-grid,
+  .stats-grid,
+  .logros-grid,
+  .impacto-grid,
+  .stats-cards {
+    gap: 14px !important;
+  }
+
+  body.home-page #alcances .stat-card,
+  body.home-page .impact-strip .stat-card,
+  .stat-card,
+  .logro-card,
+  .impact-card,
+  .stats-card {
+    min-height: auto !important;
+    padding: 18px 16px !important;
+    border-radius: 24px !important;
+  }
+
+  body.home-page #alcances .stat-card::before,
+  body.home-page .impact-strip .stat-card::before {
+    top: -42px !important;
+    right: -36px !important;
+    width: 104px !important;
+    height: 104px !important;
+  }
+
+  body.home-page #alcances .stat-card::after,
+  body.home-page .impact-strip .stat-card::after {
+    left: 14px !important;
+    bottom: 12px !important;
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  body.home-page #alcances .stat-icon,
+  body.home-page .impact-strip .stat-icon,
+  .stat-card .icon,
+  .logro-card .icon,
+  .impact-card .icon,
+  .stats-card .icon {
+    width: 58px !important;
+    height: 58px !important;
+    margin: 0 auto 10px !important;
+  }
+
+  body.home-page #alcances .stat-card strong,
+  body.home-page #alcances .stat-number,
+  body.home-page .impact-strip .stat-card strong,
+  .stat-card .number,
+  .logro-card .number,
+  .impact-card .number,
+  .stats-card .number,
+  .stat-card h3,
+  .stats-card h3 {
+    font-size: 2.5rem !important;
+    line-height: 1 !important;
+    margin: 0 0 8px !important;
+  }
+
+  body.home-page #alcances .stat-card h3,
+  body.home-page .impact-strip .stat-card h3,
+  .stat-card .title,
+  .logro-card .title,
+  .impact-card .title,
+  .stats-card .title,
+  .stat-card h4,
+  .stats-card h4 {
+    font-size: 1rem !important;
+    line-height: 1.2 !important;
+    margin: 0 0 8px !important;
+  }
+
+  body.home-page #alcances .stat-card p,
+  body.home-page .impact-strip .stat-card p,
+  .stat-card p,
+  .logro-card p,
+  .impact-card p,
+  .stats-card p {
+    font-size: 0.95rem !important;
+    line-height: 1.35 !important;
+    margin: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body.home-page #alcances .stats-grid,
+  body.home-page .impact-strip .stats-grid,
+  .stats-grid,
+  .logros-grid,
+  .impacto-grid,
+  .stats-cards {
+    gap: 12px !important;
+  }
+
+  body.home-page #alcances .stat-card,
+  body.home-page .impact-strip .stat-card,
+  .stat-card,
+  .logro-card,
+  .impact-card,
+  .stats-card {
+    padding: 16px 14px !important;
+    border-radius: 22px !important;
+  }
+
+  body.home-page #alcances .stat-icon,
+  body.home-page .impact-strip .stat-icon,
+  .stat-card .icon,
+  .logro-card .icon,
+  .impact-card .icon,
+  .stats-card .icon {
+    width: 52px !important;
+    height: 52px !important;
+    margin-bottom: 8px !important;
+  }
+
+  body.home-page #alcances .stat-card strong,
+  body.home-page #alcances .stat-number,
+  body.home-page .impact-strip .stat-card strong,
+  .stat-card .number,
+  .logro-card .number,
+  .impact-card .number,
+  .stats-card .number,
+  .stat-card h3,
+  .stats-card h3 {
+    font-size: 2.2rem !important;
+    margin-bottom: 6px !important;
+  }
+
+  body.home-page #alcances .stat-card h3,
+  body.home-page .impact-strip .stat-card h3,
+  .stat-card .title,
+  .logro-card .title,
+  .impact-card .title,
+  .stats-card .title,
+  .stat-card h4,
+  .stats-card h4 {
+    font-size: 0.92rem !important;
+    line-height: 1.15 !important;
+    margin-bottom: 6px !important;
+  }
+
+  body.home-page #alcances .stat-card p,
+  body.home-page .impact-strip .stat-card p,
+  .stat-card p,
+  .logro-card p,
+  .impact-card p,
+  .stats-card p {
+    font-size: 0.88rem !important;
+    line-height: 1.3 !important;
+  }
+}
+
+/* Ubicacion movil: centrar contenido de la tarjeta seleccionada */
+@media (max-width: 768px) {
+  body.home-page .centers-layout > .center-info-card,
+  body.home-page .centers-map-section .map-info-card.center-info-card,
+  .centro-card,
+  .selected-center-card,
+  .location-card,
+  .centro-info {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 18px 14px !important;
+    min-height: auto !important;
+  }
+
+  body.home-page .centers-map-section .map-info-card.center-info-card h3,
+  .centro-card h3,
+  .selected-center-card h3,
+  .location-card h3,
+  .centro-info h3 {
+    text-align: center !important;
+    font-size: 1.35rem !important;
+    line-height: 1.1 !important;
+    margin: 10px 0 14px !important;
+  }
+
+  body.home-page .centers-map-section .map-info-card.center-info-card p,
+  .centro-card p,
+  .selected-center-card p,
+  .location-card p,
+  .centro-info p {
+    text-align: center !important;
+    font-size: 0.88rem !important;
+    line-height: 1.35 !important;
+    margin: 6px 0 !important;
+  }
+
+  body.home-page .centers-map-section .map-info-card.center-info-card .map-info-kicker,
+  .centro-card .badge,
+  .selected-center-card .badge,
+  .location-card .badge,
+  .centro-info .badge {
+    margin: 0 auto 12px !important;
+    text-align: center !important;
+  }
+
+  body.home-page .centers-map-section .map-info-card.center-info-card .map-location-button,
+  .centro-card .btn,
+  .selected-center-card .btn,
+  .location-card .btn,
+  .centro-info .btn {
+    margin: 16px auto 0 !important;
+    width: auto !important;
+    min-width: 150px !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body.home-page .centers-layout > .center-info-card,
+  body.home-page .centers-map-section .map-info-card.center-info-card,
+  .centro-card,
+  .selected-center-card,
+  .location-card,
+  .centro-info {
+    padding: 16px 12px !important;
+    border-radius: 22px !important;
+  }
+
+  body.home-page .centers-map-section .map-info-card.center-info-card h3,
+  .centro-card h3,
+  .selected-center-card h3,
+  .location-card h3,
+  .centro-info h3 {
+    font-size: 1.2rem !important;
+  }
+
+  body.home-page .centers-map-section .map-info-card.center-info-card p,
+  .centro-card p,
+  .selected-center-card p,
+  .location-card p,
+  .centro-info p {
+    font-size: 0.82rem !important;
+  }
+
+  body.home-page .centers-map-section .map-info-card.center-info-card .map-location-button,
+  .centro-card .btn,
+  .selected-center-card .btn,
+  .location-card .btn,
+  .centro-info .btn {
+    font-size: 0.82rem !important;
+    padding: 10px 12px !important;
+    min-width: 140px !important;
+  }
+}

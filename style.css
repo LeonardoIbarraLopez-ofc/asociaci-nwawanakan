@@ -13666,43 +13666,137 @@ footer {
   }
 }
 
-/* Valores en movil: dos columnas sin desborde horizontal */
+/* Valores en movil: tarjetas compactas, equilibradas y sin desborde */
 @media (max-width: 768px) {
   .values-grid,
   .valores-grid,
   .values-cards,
   .valores-cards,
   body.home-page .values-feature .values-grid {
-    display: grid;
+    display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 16px;
-    justify-content: center;
-    align-items: stretch;
-    overflow: visible;
+    gap: 16px !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+    width: 100% !important;
+    max-width: 420px !important;
+    margin-inline: auto !important;
+    overflow: visible !important;
   }
 
   .values-grid > article,
   .values-grid > .value-card,
+  .value-card,
+  .valor-card,
   .valores-grid > .valor-card,
   .values-cards > .value-card,
   .valores-cards > .valor-card,
   body.home-page .values-feature .flip-card.value-card {
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    justify-self: stretch;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: 1 / 1.18 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 26px !important;
+    justify-self: stretch !important;
+    overflow: hidden !important;
+  }
+
+  .values-grid > article:not(.flip-card),
+  .valores-grid > .valor-card,
+  .values-cards > .value-card:not(.flip-card),
+  .valores-cards > .valor-card {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 16px 12px !important;
+  }
+
+  body.home-page .values-feature .flip-card-inner {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+
+  body.home-page .values-feature .flip-card-front,
+  body.home-page .values-feature .flip-card-back {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    padding: 16px 12px !important;
+    border-radius: 26px !important;
+    text-align: center !important;
+    overflow: hidden !important;
+  }
+
+  .valor-card .icon,
+  .value-card .icon,
+  .valor-card .valor-icono,
+  .value-card .value-icon,
+  body.home-page .values-feature .value-icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 72px !important;
+    height: 72px !important;
+    margin: 0 0 14px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .valor-card .icon svg,
+  .value-card .icon svg,
+  .valor-card img,
+  .value-card img,
+  body.home-page .values-feature .value-icon svg {
+    width: auto !important;
+    height: auto !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
+  }
+
+  .valor-card h3,
+  .value-card h3,
+  .valor-card .titulo,
+  .value-card .title,
+  body.home-page .values-feature .value-card h3 {
+    margin: 0 !important;
+    font-size: 1rem !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    word-break: break-word !important;
+  }
+
+  body.home-page .values-feature .flip-card-back p {
+    max-width: 100% !important;
+    font-size: 0.78rem !important;
+    line-height: 1.25 !important;
+    text-align: center !important;
   }
 
   .values-grid > article:last-child:nth-child(odd),
   .values-grid > .value-card:last-child:nth-child(odd),
+  .values-grid > *:last-child:nth-child(odd),
+  .valores-grid > *:last-child:nth-child(odd),
   .valores-grid > .valor-card:last-child:nth-child(odd),
   .values-cards > .value-card:last-child:nth-child(odd),
+  .values-cards > *:last-child:nth-child(odd),
+  .valores-cards > *:last-child:nth-child(odd),
   .valores-cards > .valor-card:last-child:nth-child(odd),
   body.home-page .values-feature .flip-card.value-card:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
-    justify-self: center;
-    width: 100%;
-    max-width: 220px;
+    grid-column: 1 / -1 !important;
+    justify-self: center !important;
+    width: 100% !important;
+    max-width: 190px !important;
   }
 }
 
@@ -13712,16 +13806,61 @@ footer {
   .values-cards,
   .valores-cards,
   body.home-page .values-feature .values-grid {
-    gap: 14px;
+    gap: 14px !important;
+  }
+
+  .values-grid > article,
+  .values-grid > .value-card,
+  .value-card,
+  .valor-card,
+  .valores-grid > .valor-card,
+  .values-cards > .value-card,
+  .valores-cards > .valor-card,
+  body.home-page .values-feature .flip-card.value-card {
+    aspect-ratio: 1 / 1.12 !important;
+    border-radius: 22px !important;
+  }
+
+  .values-grid > article:not(.flip-card),
+  .valores-grid > .valor-card,
+  .values-cards > .value-card:not(.flip-card),
+  .valores-cards > .valor-card,
+  body.home-page .values-feature .flip-card-front,
+  body.home-page .values-feature .flip-card-back {
+    padding: 14px 10px !important;
+    border-radius: 22px !important;
+  }
+
+  .valor-card .icon,
+  .value-card .icon,
+  .valor-card .valor-icono,
+  .value-card .value-icon,
+  body.home-page .values-feature .value-icon {
+    width: 64px !important;
+    height: 64px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .valor-card h3,
+  .value-card h3,
+  .valor-card .titulo,
+  .value-card .title,
+  body.home-page .values-feature .value-card h3 {
+    font-size: 0.95rem !important;
+    line-height: 1.15 !important;
   }
 
   .values-grid > article:last-child:nth-child(odd),
   .values-grid > .value-card:last-child:nth-child(odd),
+  .values-grid > *:last-child:nth-child(odd),
+  .valores-grid > *:last-child:nth-child(odd),
   .valores-grid > .valor-card:last-child:nth-child(odd),
   .values-cards > .value-card:last-child:nth-child(odd),
+  .values-cards > *:last-child:nth-child(odd),
+  .valores-cards > *:last-child:nth-child(odd),
   .valores-cards > .valor-card:last-child:nth-child(odd),
   body.home-page .values-feature .flip-card.value-card:last-child:nth-child(odd) {
-    max-width: 200px;
+    max-width: 180px !important;
   }
 }
 

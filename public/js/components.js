@@ -37,26 +37,26 @@
         <img class="footer-logo" src="assets/institucional/logotipo.png" alt="Logotipo Wawanakan">
         <p>Síguenos en nuestras redes:</p>
         <div class="footer-socials">
-          <a href="https://www.facebook.com/profile.php?id=61590971327508&amp;locale=es_LA" target="_blank" rel="noopener noreferrer" aria-label="Facebook de Wawanakan"><span aria-hidden="true">f</span></a>
-          <a href="https://www.tiktok.com/@asociacionwawanakan?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer" aria-label="TikTok de Wawanakan"><span aria-hidden="true">♪</span></a>
-          <a href="https://asociacionwawanakan-eng.github.io/asociaci-nwawanakan/" target="_blank" rel="noopener noreferrer" aria-label="Página web de Wawanakan"><span aria-hidden="true">W</span></a>
-          <a href="https://wa.me/59179164334" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp de Wawanakan"><span aria-hidden="true">✆</span></a>
+          <a data-cms-href="config.facebookLink" href="https://www.facebook.com/profile.php?id=61590971327508&amp;locale=es_LA" target="_blank" rel="noopener noreferrer" aria-label="Facebook de Wawanakan"><span aria-hidden="true">f</span></a>
+          <a data-cms-href="config.tiktokLink" href="https://www.tiktok.com/@asociacionwawanakan?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer" aria-label="TikTok de Wawanakan"><span aria-hidden="true">♪</span></a>
+          <a data-cms-href="config.websiteLink" href="https://asociacionwawanakan-eng.github.io/asociaci-nwawanakan/" target="_blank" rel="noopener noreferrer" aria-label="Página web de Wawanakan"><span aria-hidden="true">W</span></a>
+          <a data-cms-href="config.whatsappLink" href="https://wa.me/59179164334" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp de Wawanakan"><span aria-hidden="true">✆</span></a>
         </div>
       </section>
       <section class="footer-info-block">
         <h2>VISÍTANOS</h2>
-        <p>Calle 6, Villa Dolores</p>
-        <p>El Alto, La Paz - Bolivia</p>
+        <p data-cms-text="footer.visitanos1">Calle 6, Villa Dolores</p>
+        <p data-cms-text="footer.visitanos2">El Alto, La Paz - Bolivia</p>
       </section>
       <section class="footer-info-block">
         <h2>COMUNÍCATE CON NOSOTROS</h2>
-        <p><a href="https://wa.me/59179164334" target="_blank" rel="noopener noreferrer">WhatsApp: (+591) 79164334</a></p>
-        <p>Correo electrónico: <a href="mailto:presidencia.wawanakan@gmail.com">presidencia.wawanakan@gmail.com</a></p>
+        <p><a data-cms-href="config.whatsappLink" href="https://wa.me/59179164334" target="_blank" rel="noopener noreferrer">WhatsApp: <span data-cms-text="config.whatsappTexto">(+591) 79164334</span></a></p>
+        <p>Correo electrónico: <a href="mailto:presidencia.wawanakan@gmail.com" data-cms-text="config.email">presidencia.wawanakan@gmail.com</a></p>
       </section>
     </div>
     <div class="footer-bottom">
-      <p>Asociación Wawanakan Kusisiñapa | Desde 2008 – 2026 | <span>18 años al servicio de la niñez</span></p>
-      <p>© 2026. Todos los derechos reservados.</p>
+      <p data-cms-text="footer.credito">Asociación Wawanakan Kusisiñapa | Desde 2008 – 2026 | 18 años al servicio de la niñez</p>
+      <p data-cms-text="footer.copyright">© 2026. Todos los derechos reservados.</p>
     </div>
   `;
 

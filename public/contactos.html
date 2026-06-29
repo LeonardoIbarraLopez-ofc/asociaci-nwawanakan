@@ -30,43 +30,43 @@
         </div>
 
         <div class="contact-card-grid" aria-label="Datos de contacto de Wawanakan">
-          <a class="contact-info-card location-schedule" href="https://www.google.com/maps/search/?api=1&amp;query=Calle%206%20Villa%20Dolores%20El%20Alto%20La%20Paz%20Bolivia" target="_blank" rel="noopener noreferrer" aria-label="Abrir ubicación de Wawanakan en Google Maps">
+          <a class="contact-info-card location-schedule" href="https://www.google.com/maps/search/?api=1&amp;query=Calle%206%20Villa%20Dolores%20El%20Alto%20La%20Paz%20Bolivia" data-cms-href="config.mapsQueryLink" target="_blank" rel="noopener noreferrer" aria-label="Abrir ubicación de Wawanakan en Google Maps">
             <h2>UBICACIóN Y HORARIO</h2>
             <div class="contact-split">
               <div>
                 <span class="contact-icon" aria-hidden="true">⌖</span>
                 <h3>Ubicación</h3>
-                <p>Calle 6, Villa Dolores</p>
-                <p>El Alto, La Paz - Bolivia</p>
+                <p data-cms-text="config.direccionLinea1">Calle 6, Villa Dolores</p>
+                <p data-cms-text="config.direccionLinea2">El Alto, La Paz - Bolivia</p>
               </div>
               <div>
                 <span class="contact-icon" aria-hidden="true">◷</span>
                 <h3>Horario de atención</h3>
-                <p>Lunes a viernes</p>
-                <p>08:00 - 16:00 hrs.</p>
+                <p data-cms-text="config.horarioDias">Lunes a viernes</p>
+                <p data-cms-text="config.horarioHoras">08:00 - 16:00 hrs.</p>
               </div>
             </div>
           </a>
 
-          <a class="contact-info-card whatsapp" href="https://wa.me/59179164334" target="_blank" rel="noopener noreferrer" aria-label="Escribir a Wawanakan por WhatsApp">
+          <a class="contact-info-card whatsapp" href="https://wa.me/59179164334" data-cms-href="config.whatsappLink" target="_blank" rel="noopener noreferrer" aria-label="Escribir a Wawanakan por WhatsApp">
             <span class="contact-icon" aria-hidden="true">☎</span>
             <h2>TELéFONO / WHATSAPP</h2>
-            <p>(+591) 79164334</p>
+            <p data-cms-text="config.whatsappTexto">(+591) 79164334</p>
           </a>
 
-          <a class="contact-info-card facebook" href="https://www.facebook.com/profile.php?id=61590971327508&amp;locale=es_LA" target="_blank" rel="noopener noreferrer" aria-label="Abrir Facebook de Wawanakan">
+          <a class="contact-info-card facebook" href="https://www.facebook.com/profile.php?id=61590971327508&amp;locale=es_LA" data-cms-href="config.facebookLink" target="_blank" rel="noopener noreferrer" aria-label="Abrir Facebook de Wawanakan">
             <span class="contact-icon" aria-hidden="true">f</span>
             <h2>FACEBOOK</h2>
             <p>Asociación Wawanakan</p>
           </a>
 
-          <a class="contact-info-card tiktok" href="https://www.tiktok.com/@asociacionwawanakan?is_from_webapp=1&amp;sender_device=pc" target="_blank" rel="noopener noreferrer" aria-label="Abrir TikTok de Wawanakan">
+          <a class="contact-info-card tiktok" href="https://www.tiktok.com/@asociacionwawanakan?is_from_webapp=1&amp;sender_device=pc" data-cms-href="config.tiktokLink" target="_blank" rel="noopener noreferrer" aria-label="Abrir TikTok de Wawanakan">
             <span class="contact-icon" aria-hidden="true">♪</span>
             <h2>TIKTOK</h2>
             <p>@asociacionwawanakan</p>
           </a>
 
-          <a class="contact-info-card website" href="https://asociacionwawanakan-eng.github.io/asociaci-nwawanakan/" target="_blank" rel="noopener noreferrer" aria-label="Abrir sitio oficial de Wawanakan">
+          <a class="contact-info-card website" href="https://asociacionwawanakan-eng.github.io/asociaci-nwawanakan/" data-cms-href="config.websiteLink" target="_blank" rel="noopener noreferrer" aria-label="Abrir sitio oficial de Wawanakan">
             <span class="contact-icon" aria-hidden="true">◎</span>
             <h2>PáGINA WEB</h2>
             <p>Sitio oficial</p>
@@ -111,6 +111,7 @@
   <script src="js/components.js"></script>
 <script>WawaComponents.renderHeader("contactos.html"); WawaComponents.renderFooter();</script>
 <script src="js/main.js"></script>
+<script type="module" src="js/firebase-content.js"></script>
 </body>
 </html>
 

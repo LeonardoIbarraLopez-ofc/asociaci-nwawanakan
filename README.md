@@ -23,16 +23,47 @@ asociaci-nwawanakan/
 │   ├── css/style.css          — Hoja de estilos principal
 │   ├── js/
 │   │   ├── components.js      — Header y footer compartidos (DRY)
-│   │   └── main.js            — Lógica principal (carruseles, mapa, formulario)
+│   │   ├── main.js            — Lógica principal (carruseles, mapa, formulario)
+│   │   ├── firebase-config.js — Credenciales de Firebase y Cloudinary (CMS)
+│   │   ├── firebase-app.js    — Inicialización del SDK de Firebase
+│   │   ├── content-defaults.js— Contenido por defecto (fallback + semilla)
+│   │   └── firebase-content.js— Carga e hidrata el contenido desde Firestore
+│   ├── admin/                 — Panel de administración (CMS, ruta /admin)
+│   │   ├── index.html         — Login + dashboard
+│   │   ├── admin.css          — Estilos del panel
+│   │   └── js/                — auth, store, cloudinary, schema, form-builder, app
 │   └── data/
-│       ├── centers.json       — Datos de los 12 centros infantiles
-│       └── config.json        — URLs de formularios, redes sociales y WhatsApp
+│       ├── centers.json       — Datos de los 12 centros infantiles (fallback)
+│       └── config.json        — URLs de formularios, redes sociales y WhatsApp (fallback)
 ├── docs/
 │   ├── AUDIT_REPORT.md        — Reporte de auditoría técnica
-│   └── ROADMAP.md             — Plan de optimización por fases
+│   ├── ROADMAP.md             — Plan de optimización por fases
+│   ├── DEUDA_TECNICA.md       — Backlog de deuda técnica pendiente
+│   └── FIREBASE_CMS_PLAN.md   — Plan e implementación del CMS
+├── firebase.json              — Configuración de Firebase Hosting + Firestore
+├── firestore.rules            — Reglas de seguridad de Firestore
+├── .firebaserc
 ├── .gitignore
 └── README.md
 ```
+
+## Panel de administración (CMS)
+
+El sitio incluye un CMS opcional basado en **Firebase** (Auth + Firestore) y
+**Cloudinary** (imágenes), accesible solo escribiendo la ruta `/admin` (no está
+enlazado desde el sitio). Permite editar casi todo el contenido sin tocar código.
+
+**Estado:** el código está completo; solo falta colocar las credenciales reales.
+
+Para activarlo:
+1. Crea un proyecto en Firebase (plan Spark) con Authentication (email/password) y
+   Firestore, y una cuenta en Cloudinary (upload preset *unsigned*).
+2. Pega las credenciales en `public/js/firebase-config.js`.
+3. Abre `/admin`, inicia sesión y pulsa **“Inicializar contenido”** para sembrar
+   Firestore con el contenido actual.
+
+Mientras no se configure, el sitio funciona normalmente con el contenido del HTML
+(degradación elegante). Detalles completos en `docs/FIREBASE_CMS_PLAN.md`.
 
 ## Cómo ejecutar localmente
 

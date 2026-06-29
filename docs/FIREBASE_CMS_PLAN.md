@@ -7,6 +7,48 @@
 
 ---
 
+## ✅ Estado de implementación (rama `leo-firebase-integration`)
+
+El código de las **Fases B a G está completamente implementado**. El sistema queda
+listo para funcionar: solo falta colocar las credenciales reales en
+`public/js/firebase-config.js` (Fase A) y ejecutar el despliegue/migración/pruebas.
+
+| Fase | Descripción | Estado |
+|------|-------------|--------|
+| A | Configuración de cuentas Firebase/Cloudinary | ⏳ Pendiente (manual: crear cuentas + pegar credenciales) |
+| B | Reglas de Firestore | ✅ `firestore.rules` |
+| C | Estructura de datos | ✅ Esquema en `public/admin/js/schema.js` + defaults en `public/js/content-defaults.js` |
+| D | Panel de administración (front-end) | ✅ `public/admin/` |
+| E | Editores de cada sección | ✅ Editor dirigido por esquema (todas las secciones) |
+| F | Sitio público leyendo de Firestore | ✅ Hidratación por atributos `data-cms-*` + `firebase-content.js` |
+| G | Estilos del panel | ✅ `public/admin/admin.css` |
+| H | Despliegue | ⏳ Pendiente (requiere credenciales) |
+| I | Migración de contenido | ⏳ Pendiente — automatizada con el botón **“Inicializar contenido”** del panel |
+| J | Pruebas finales | ⏳ Pendiente (requiere conexión activa) |
+
+### Cómo activar (una vez creadas las cuentas)
+1. Edita `public/js/firebase-config.js` con las credenciales reales de Firebase y Cloudinary.
+2. Sirve el sitio (`npx serve public`) y entra a `/admin`.
+3. Inicia sesión con el usuario administrador creado en Firebase Auth.
+4. Pulsa **“Inicializar contenido”** para sembrar Firestore con el contenido actual (Fase I).
+5. Edita y guarda. El sitio público reflejará los cambios de inmediato.
+
+### Notas de arquitectura (decisiones de implementación)
+- **Configuración única:** las credenciales viven en un solo archivo
+  (`public/js/firebase-config.js`) compartido por el sitio y el panel, en lugar de
+  duplicarlas en `public/admin/config.js`. Más mantenible y una sola fuente de verdad.
+- **Fallback integrado:** el HTML conserva el contenido actual como respaldo. Si el CMS
+  no está configurado o Firestore falla, el sitio se ve idéntico al original
+  (degradación elegante). `content-defaults.js` es ese respaldo y, a la vez, la semilla.
+- **Editores dirigidos por esquema:** en vez de un archivo por sección, un único motor
+  (`schema.js` + `form-builder.js`) genera todos los formularios. Añadir un campo es
+  agregar una línea al esquema.
+- **Limitación conocida:** cambiar el *número* de imágenes del carrusel (hero/misión/
+  visión) desde el panel requiere un pequeño ajuste de código, porque la animación está
+  ligada a la cantidad de slides del HTML. Editar las imágenes existentes sí funciona.
+
+---
+
 ## FASE A — Infraestructura y configuración de cuentas
 
 ### A.1 — Firebase

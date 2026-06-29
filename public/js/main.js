@@ -51,10 +51,19 @@ let centerInstitutionLogo = "assets/institucional/logotipo.png";
 
 async function loadData() {
   try {
-    const [centersData, configData] = await Promise.all([
-      fetch("data/centers.json").then(r => r.json()),
-      fetch("data/config.json").then(r => r.json())
-    ]);
+    let centersData = null;
+    let configData = null;
+
+    // Preferir Firestore (CMS) cuando esté configurado; si no, usar los JSON locales.
+    try {
+      const cms = await import("./firebase-content.js");
+      [centersData, configData] = await Promise.all([cms.loadCenters(), cms.loadSiteConfig()]);
+    } catch {
+      // El módulo del CMS o Firebase no está disponible: se usa el fallback JSON.
+    }
+
+    if (!centersData) centersData = await fetch("data/centers.json").then(r => r.json());
+    if (!configData) configData = await fetch("data/config.json").then(r => r.json());
 
     districts = centersData.districts;
     centers = centersData.centers;
@@ -81,7 +90,9 @@ function getCenterProfile(district, name, image) {
   const detail = centerDetails[name] || {};
   const displayName = detail.name || name;
   const imageFile = detail.image || image;
-  const imagePath = `assets/centros/${imageFile}`;
+  // Soporta tanto nombres de archivo locales (assets/centros/…) como URLs
+  // absolutas subidas al CMS (Cloudinary).
+  const imagePath = /^https?:\/\//.test(imageFile) ? imageFile : `assets/centros/${imageFile}`;
   const address = detail.address || "Direccion institucional por actualizar, El Alto";
   return {
     name: displayName,

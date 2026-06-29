@@ -156,8 +156,8 @@
 <script src="js/main.js"></script>
 <script type="module" src="js/firebase-content.js"></script>
 <script>
-  // Convocatoria cerrada: oculta el botón de postulación y marca el estado.
-  document.addEventListener("wawa:content-ready", (event) => {
+  // Actualizar estado de convocatoria cuando cambia el contenido
+  function updateConvocatoriaState(event) {
     const estado = event.detail && event.detail.pasantia && event.detail.pasantia.callout
       ? event.detail.pasantia.callout.estado : null;
     if (!estado) return;
@@ -169,7 +169,9 @@
     }
     const actions = document.querySelector(".pasantia-actions");
     if (actions) actions.style.display = cerrada ? "none" : "";
-  });
+  }
+  document.addEventListener("wawa:content-ready", updateConvocatoriaState);
+  document.addEventListener("wawa:content-updated", updateConvocatoriaState);
 </script>
 </body>
 </html>

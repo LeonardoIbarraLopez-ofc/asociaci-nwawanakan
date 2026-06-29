@@ -90,14 +90,31 @@ export async function loadContent() {
   return content;
 }
 
+/**
+ * Convierte el formato de Firestore (objetos) al formato que espera main.js
+ * (arrays de arrays para districts.centers y activities).
+ * Firestore no permite arrays anidados, por eso se almacenan como objetos.
+ */
+function normalizeCenters(data) {
+  if (!data) return null;
+  return {
+    ...data,
+    districts: (data.districts || []).map((d) => ({
+      ...d,
+      centers: (d.centers || []).map((c) => Array.isArray(c) ? c : [c.name, c.image])
+    })),
+    activities: (data.activities || []).map((a) => Array.isArray(a) ? a : [a.icon, a.label])
+  };
+}
+
 /** Devuelve el documento de centros (sitio/centros) o null si no existe/CMS off.
- *  Conserva el mismo formato que data/centers.json. */
+ *  Convierte el formato de Firestore al formato que espera main.js. */
 export async function loadCenters() {
   const fb = await initFirebase();
   if (!fb) return null;
   try {
     const snap = await fb.fs.getDoc(fb.fs.doc(fb.db, "sitio", "centros"));
-    return snap.exists() ? snap.data() : null;
+    return snap.exists() ? normalizeCenters(snap.data()) : null;
   } catch (error) {
     console.warn("[CMS] No se pudieron leer los centros desde Firestore:", error);
     return null;
@@ -122,31 +139,248 @@ export async function loadSiteConfig() {
 /* ── Hidratación del DOM ─────────────────────────────────────────────── */
 
 export function hydrate(content) {
-  document.querySelectorAll("[data-cms-text]").forEach((el) => {
-    const value = get(content, el.dataset.cmsText);
-    if (value != null) el.textContent = value;
+  let textUpdates = 0, srcUpdates = 0, hrefUpdates = 0;
+  const allElements = document.querySelectorAll("[data-cms-text]");
+
+  console.log(`[CMS] Iniciando hidratación. Elementos encontrados: ${allElements.length}`);
+
+  // PASO 1: Detectar arrays iterando sobre TODOS los elementos con data-cms-text
+  // Identificar paths que apunten a índices (ej. "valores.0", "directorio.1", etc.)
+  const arrayPaths = new Map(); // path → { indices: Set, minIndex, maxIndex }
+
+  allElements.forEach((el) => {
+    const path = el.dataset.cmsText;
+    const match = path.match(/^(.+)\.(\d+)(?:\..*)?$/); // Extrae "root.0.field" → ["root", "0"]
+    if (!match) return; // No es un array indexado
+
+    const rootPath = match[1];
+    const index = parseInt(match[2], 10);
+
+    if (!arrayPaths.has(rootPath)) {
+      arrayPaths.set(rootPath, { indices: new Set(), minIndex: index, maxIndex: index });
+    }
+    const info = arrayPaths.get(rootPath);
+    info.indices.add(index);
+    info.minIndex = Math.min(info.minIndex, index);
+    info.maxIndex = Math.max(info.maxIndex, index);
   });
+
+  const processedArrays = new Set();
+
+  // PASO 2: Regenerar arrays si el tamaño en Firestore es diferente
+  arrayPaths.forEach((info, rootPath) => {
+    const value = get(content, rootPath);
+    if (!Array.isArray(value)) return;
+
+    const currentSize = info.indices.size;
+    const newSize = value.length;
+
+    if (currentSize === newSize) {
+      console.log(`[CMS] ✓ Array ${rootPath}: tamaño igual (${currentSize})`);
+    } else {
+      console.log(`[CMS] ✅ REGENERANDO array ${rootPath}: ${currentSize} → ${newSize} elementos`);
+
+      // Encontrar todos los elementos que pertenecen a este array
+      const selector = `[data-cms-text^="${rootPath}."]`;
+      const elementsToReplace = document.querySelectorAll(selector);
+
+      if (elementsToReplace.length) {
+        // Agrupar por índice para regenerar en el mismo lugar
+        const byIndex = new Map();
+        elementsToReplace.forEach((el) => {
+          const match = el.dataset.cmsText.match(/^[^.]+\.(\d+)/);
+          if (match) {
+            const idx = parseInt(match[1], 10);
+            if (!byIndex.has(idx)) byIndex.set(idx, []);
+            byIndex.get(idx).push(el);
+          }
+        });
+
+        // Para cada índice original, actualizar el elemento correspondiente
+        // Si hay más índices de los que hay elementos en el array, generar nuevos
+        let lastReplacedEl = null;
+        for (let i = 0; i < newSize; i++) {
+          const newItemContent = value[i];
+          if (typeof newItemContent === "string") {
+            // Array de strings: reemplazar/crear elemento simple
+            const oldEls = byIndex.get(i);
+            if (oldEls && oldEls[0]) {
+              oldEls[0].textContent = newItemContent;
+              lastReplacedEl = oldEls[0];
+            } else if (lastReplacedEl) {
+              // Crear nuevo elemento basado en el anterior
+              const newEl = document.createElement(lastReplacedEl.tagName);
+              newEl.dataset.cmsText = `${rootPath}.${i}`;
+              newEl.textContent = newItemContent;
+              lastReplacedEl.parentElement?.insertBefore(newEl, lastReplacedEl.nextSibling);
+              lastReplacedEl = newEl;
+            }
+          } else {
+            // Array de objetos: actualizar todos los campos de este índice
+            const oldEls = byIndex.get(i);
+            if (oldEls) {
+              oldEls.forEach((el) => {
+                const fieldMatch = el.dataset.cmsText.match(/^[^.]+\.\d+\.(.+)$/);
+                if (fieldMatch) {
+                  const fieldName = fieldMatch[1];
+                  const fieldValue = newItemContent[fieldName];
+                  if (fieldValue != null) {
+                    if (el.dataset.cmsSrc || el.tagName === "IMG") {
+                      el.setAttribute("src", fieldValue);
+                    } else {
+                      el.textContent = fieldValue;
+                    }
+                  }
+                }
+              });
+              lastReplacedEl = oldEls[oldEls.length - 1];
+            }
+          }
+        }
+
+        // Eliminar elementos sobrantes si el array se redujo
+        if (currentSize > newSize) {
+          for (let i = newSize; i <= info.maxIndex; i++) {
+            const oldEls = byIndex.get(i);
+            if (oldEls) oldEls.forEach((el) => {
+              // Eliminar elemento o contenedor padre si es apropiado
+              const parent = el.closest("article, .card, .item, li, div[class*='card'], div[class*='item']");
+              (parent || el).remove();
+            });
+          }
+        }
+      }
+    }
+
+    processedArrays.add(rootPath);
+    textUpdates++;
+  });
+
+  // PASO 3: Actualizar elementos escalares (no son índices de arrays)
+  allElements.forEach((el) => {
+    const path = el.dataset.cmsText;
+
+    // Saltar si ya se procesó como parte de un array
+    const isArrayIndex = Array.from(processedArrays).some((ap) => path.startsWith(ap + "."));
+    if (isArrayIndex && path.match(/\.\d+$/)) return; // Es un índice de array procesado
+
+    const value = get(content, path);
+    if (value != null && !Array.isArray(value)) {
+      el.textContent = value;
+      if (!processedArrays.has(path)) {
+        textUpdates++;
+      }
+    }
+  });
+
   document.querySelectorAll("[data-cms-src]").forEach((el) => {
     const value = get(content, el.dataset.cmsSrc);
-    if (value != null && value !== "") el.setAttribute("src", value);
+    if (value != null && value !== "") {
+      el.setAttribute("src", value);
+      srcUpdates++;
+    }
   });
+
   document.querySelectorAll("[data-cms-alt]").forEach((el) => {
     const value = get(content, el.dataset.cmsAlt);
     if (value != null) el.setAttribute("alt", value);
   });
+
   document.querySelectorAll("[data-cms-href]").forEach((el) => {
     const value = get(content, el.dataset.cmsHref);
-    if (value != null && value !== "") el.setAttribute("href", value);
+    if (value != null && value !== "") {
+      el.setAttribute("href", value);
+      hrefUpdates++;
+    }
   });
+
+  console.log(`[CMS] ✅ Hidratación completada: ${textUpdates} text, ${srcUpdates} src, ${hrefUpdates} href. Arrays procesados: ${processedArrays.size}`);
+}
+
+/* ── Listeners en tiempo real ────────────────────────────────────────── */
+
+async function startRealtimeListeners() {
+  const fb = await initFirebase();
+  if (!fb) {
+    console.log("[CMS] No hay Firebase configurado, listeners deshabilitados.");
+    return;
+  }
+
+  const { db, fs } = fb;
+  let lastContent = null;
+  let updateTimeout;
+  let changeCount = 0;
+
+  // Actualizar contenido (con debounce para evitar múltiples actualizaciones)
+  const updateContent = () => {
+    changeCount++;
+    console.log(`[CMS] Cambio detectado #${changeCount}, iniciando debounce...`);
+    clearTimeout(updateTimeout);
+    updateTimeout = setTimeout(async () => {
+      try {
+        const content = await loadContent();
+        const contentStr = JSON.stringify(content);
+        const lastStr = JSON.stringify(lastContent);
+        const changed = contentStr !== lastStr;
+        console.log(`[CMS] Verificación de cambio: ${changed ? "SÍ cambió" : "no cambió"}`);
+
+        if (changed) {
+          lastContent = structuredClone(content);
+          console.log("[CMS] Iniciando hidratación...");
+          hydrate(content);
+          console.log("[CMS] Contenido actualizado en tiempo real.");
+          document.dispatchEvent(new CustomEvent("wawa:content-updated", { detail: content }));
+        }
+      } catch (error) {
+        console.error("[CMS] Error al actualizar en tiempo real:", error);
+      }
+    }, 200); // Debounce 200ms
+  };
+
+  try {
+    console.log("[CMS] Iniciando listeners en tiempo real...");
+    // Escuchar cambios en TODOS los documentos de "sitio"
+    fs.onSnapshot(fs.collection(db, "sitio"), (snap) => {
+      console.log(`[CMS] onSnapshot(sitio): ${snap.docs.length} docs`);
+      updateContent();
+    });
+
+    // Escuchar cambios en las colecciones
+    fs.onSnapshot(fs.collection(db, "valores"), (snap) => {
+      console.log(`[CMS] onSnapshot(valores): ${snap.docs.length} docs`);
+      updateContent();
+    });
+    fs.onSnapshot(fs.collection(db, "directorio"), (snap) => {
+      console.log(`[CMS] onSnapshot(directorio): ${snap.docs.length} docs`);
+      updateContent();
+    });
+    fs.onSnapshot(fs.collection(db, "noticias"), (snap) => {
+      console.log(`[CMS] onSnapshot(noticias): ${snap.docs.length} docs`);
+      updateContent();
+    });
+
+    console.log("[CMS] Listeners establecidos correctamente.");
+  } catch (error) {
+    console.error("[CMS] No se pudieron establecer listeners en tiempo real:", error);
+  }
 }
 
 /* ── Auto-ejecución ──────────────────────────────────────────────────── */
 
 async function run() {
+  const currentPage = window.location.pathname.split("/").pop() || "index.html";
+  console.log(`[CMS] ===== INICIALIZANDO EN: ${currentPage} =====`);
   try {
     const content = await loadContent();
+    console.log(`[CMS] Contenido cargado:`, {
+      keys: Object.keys(content),
+      requis: content.pasantia?.requisitos,
+      heroSlides: content.heroSlides?.slides?.length || 0
+    });
     hydrate(content);
+    console.log(`[CMS] Hidratación completada para ${currentPage}`);
     document.dispatchEvent(new CustomEvent("wawa:content-ready", { detail: content }));
+    await startRealtimeListeners();
   } catch (error) {
     console.warn("[CMS] Hidratación omitida:", error);
   }

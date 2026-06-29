@@ -6,7 +6,7 @@
  * - Incluye un editor dedicado para los centros y una utilidad para sembrar
  *   el contenido por defecto en Firestore (Fase I del plan).
  */
-import { isFirebaseConfigured } from "../../js/firebase-config.js";
+import { isFirebaseConfigured, FIREBASE_CONFIG, CLOUDINARY } from "../../js/firebase-config.js";
 import { DEFAULT_CONTENT } from "../../js/content-defaults.js";
 import { login, logout, onAuthChanged, authErrorMessage } from "./auth.js";
 import {
@@ -15,6 +15,11 @@ import {
 } from "./store.js";
 import { SECTIONS, CENTROS_SECTION } from "./schema.js";
 import { buildForm } from "./form-builder.js";
+
+/* ── MARCADOR DE DIAGNÓSTICO (temporal) ──────────────────────────────── */
+console.log("%c[CMS] app.js BUILD-4 cargado | apiKey:", "background:#c8922a;color:#000;padding:2px 6px;border-radius:4px", FIREBASE_CONFIG.apiKey, "| configurado:", isFirebaseConfigured());
+document.title = "CMS BUILD-4 | " + document.title;
+window.__CMS_BUILD = 4;
 
 /* ── Referencias del DOM ─────────────────────────────────────────────── */
 const $ = (id) => document.getElementById(id);
@@ -236,25 +241,155 @@ async function renderCentros(section) {
   editorArea.appendChild(el("div", { class: "cms-actions" }, [saveBtn]));
 }
 
+/* ── Subida de imagen local a Cloudinary ─────────────────────────────── */
+async function uploadLocalImage(relPath, folder) {
+  const resp = await fetch(`../${relPath}`);
+  if (!resp.ok) throw new Error(`No encontrada: ${relPath}`);
+  const blob = await resp.blob();
+  const form = new FormData();
+  form.append("file", blob, relPath.split("/").pop());
+  form.append("upload_preset", CLOUDINARY.uploadPreset);
+  form.append("folder", `${CLOUDINARY.folder}/${folder}`);
+  const res = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUDINARY.cloudName}/image/upload`,
+    { method: "POST", body: form }
+  );
+  const json = await res.json();
+  if (!res.ok) {
+    const msg = json.error?.message || `HTTP ${res.status}`;
+    throw new Error(`Cloudinary rechazó ${relPath}: ${msg}`);
+  }
+  return json.secure_url;
+}
+
 /* ── Sembrado inicial de contenido (Fase I) ──────────────────────────── */
 async function seedContent() {
-  if (!confirm("Esto escribirá el contenido actual del sitio en Firestore como punto de partida. ¿Continuar?")) return;
+  if (!confirm("Esto subirá las imágenes del sitio a Cloudinary y sembrará Firestore con el contenido actual. La operación tarda ~1-2 min. ¿Continuar?")) return;
+  const btn = $("seed-btn");
+  btn.disabled = true;
+  btn.textContent = "Iniciando…";
   try {
-    const siteDocs = ["config", "footer", "home", "heroSlides", "misionSlides", "visionSlides", "equipo", "voluntariado", "pasantia", "quienesSomos"];
-    for (const key of siteDocs) {
-      await setDocData(["sitio", key], DEFAULT_CONTENT[key]);
-    }
+    // ── 1. Subir imágenes del sitio a Cloudinary ─────────────────────
+    btn.textContent = "Subiendo imágenes del sitio…";
+    const [
+      urlHeroAbout, urlObjetivo, urlAllies,
+      urlHero1, urlHero2, urlHero3, urlHero4, urlHero5,
+      urlMision1, urlMision2, urlMision3, urlMision4,
+      urlVision1, urlVision2, urlVision3,
+      urlFotoGrupal,
+      urlPresidenta, urlVicepresidenta, urlActas, urlNacional, urlHacienda, urlInternacional,
+      urlVoluntHero, urlVoluntProcess,
+      urlPasantiaProcess,
+      urlQuienes
+    ] = await Promise.all([
+      uploadLocalImage("assets/hero/hero7.jpg", "home"),
+      uploadLocalImage("assets/contenido/objetivo.jpg", "home"),
+      uploadLocalImage("assets/institucional/aliado1.png", "home"),
+      uploadLocalImage("assets/hero/hero1.jpg", "hero"),
+      uploadLocalImage("assets/hero/hero2.jpg", "hero"),
+      uploadLocalImage("assets/hero/hero3.jpg", "hero"),
+      uploadLocalImage("assets/hero/hero4.jpg", "hero"),
+      uploadLocalImage("assets/hero/hero5.jpg", "hero"),
+      uploadLocalImage("assets/mision/mision1.jpg", "mision"),
+      uploadLocalImage("assets/mision/mision2.jpg", "mision"),
+      uploadLocalImage("assets/mision/mision3.jpg", "mision"),
+      uploadLocalImage("assets/mision/mision4.jpg", "mision"),
+      uploadLocalImage("assets/vision/vision1.jpg", "vision"),
+      uploadLocalImage("assets/vision/vision2.jpg", "vision"),
+      uploadLocalImage("assets/vision/vision3.jpg", "vision"),
+      uploadLocalImage("assets/equipo/equipo.png", "equipo"),
+      uploadLocalImage("assets/equipo/presidenta1.png", "equipo"),
+      uploadLocalImage("assets/equipo/vicepresidenta.png", "equipo"),
+      uploadLocalImage("assets/equipo/actas1.png", "equipo"),
+      uploadLocalImage("assets/equipo/nacional.png", "equipo"),
+      uploadLocalImage("assets/equipo/tesoreria.png", "equipo"),
+      uploadLocalImage("assets/equipo/internacional.png", "equipo"),
+      uploadLocalImage("assets/contenido/voluntariado.png", "voluntariado"),
+      uploadLocalImage("assets/contenido/voluntariado2.jpg", "voluntariado"),
+      uploadLocalImage("assets/contenido/fondo-pasantia-proceso.jpg", "pasantia"),
+      uploadLocalImage("assets/contenido/quienes-somos.jpg", "contenido"),
+    ]);
+
+    // ── 2. Subir imágenes de centros ──────────────────────────────────
+    btn.textContent = "Subiendo imágenes de centros…";
+    const centersJson = await fetch("../data/centers.json").then((r) => r.json());
+    const centerEntries = Object.entries(centersJson.centerDetails);
+    const centerImageUrls = await Promise.all(
+      centerEntries.map(([, d]) => uploadLocalImage(`assets/centros/${d.image}`, "centros"))
+    );
+    const updatedDetails = Object.fromEntries(
+      centerEntries.map(([name, d], i) => [name, { ...d, image: centerImageUrls[i] }])
+    );
+
+    // ── 3. Guardar documentos en Firestore ────────────────────────────
+    btn.textContent = "Guardando en Firestore…";
+    await Promise.all([
+      setDocData(["sitio", "config"], DEFAULT_CONTENT.config),
+      setDocData(["sitio", "footer"], DEFAULT_CONTENT.footer),
+      setDocData(["sitio", "home"], {
+        ...DEFAULT_CONTENT.home,
+        aboutImage: urlHeroAbout,
+        objetivoImage: urlObjetivo,
+        alliesImage: urlAllies,
+      }),
+      setDocData(["sitio", "heroSlides"], {
+        slides: DEFAULT_CONTENT.heroSlides.slides.map((s, i) => ({
+          ...s, src: [urlHero1, urlHero2, urlHero3, urlHero4, urlHero5][i]
+        }))
+      }),
+      setDocData(["sitio", "misionSlides"], {
+        slides: DEFAULT_CONTENT.misionSlides.slides.map((s, i) => ({
+          ...s, src: [urlMision1, urlMision2, urlMision3, urlMision4][i]
+        }))
+      }),
+      setDocData(["sitio", "visionSlides"], {
+        slides: DEFAULT_CONTENT.visionSlides.slides.map((s, i) => ({
+          ...s, src: [urlVision1, urlVision2, urlVision3][i]
+        }))
+      }),
+      setDocData(["sitio", "equipo"], { ...DEFAULT_CONTENT.equipo, fotoGrupal: urlFotoGrupal }),
+      setDocData(["sitio", "voluntariado"], {
+        ...DEFAULT_CONTENT.voluntariado,
+        heroImage: urlVoluntHero,
+        processImage: urlVoluntProcess,
+      }),
+      setDocData(["sitio", "pasantia"], { ...DEFAULT_CONTENT.pasantia, processImage: urlPasantiaProcess }),
+      setDocData(["sitio", "quienesSomos"], { ...DEFAULT_CONTENT.quienesSomos, imagen: urlQuienes }),
+      // Firestore no permite arrays anidados → districts.centers y activities
+      // se convierten a objetos; loadCenters() los normaliza de vuelta al frontend.
+      replaceDocData(["sitio", "centros"], {
+        ...centersJson,
+        districts: centersJson.districts.map((d) => ({
+          name: d.name,
+          centers: d.centers.map(([name, image]) => ({ name, image }))
+        })),
+        activities: centersJson.activities.map(([icon, label]) => ({ icon, label })),
+        centerDetails: updatedDetails,
+      }),
+    ]);
+
+    // Colecciones (escritura secuencial para evitar throttling)
     for (const v of DEFAULT_CONTENT.valores) {
       await setCollectionDoc("valores", v.id, { titulo: v.titulo, descripcion: v.descripcion, orden: v.orden });
     }
-    for (const d of DEFAULT_CONTENT.directorio) {
-      await setCollectionDoc("directorio", d.id, { nombre: d.nombre, cargo: d.cargo, descripcionCargo: d.descripcionCargo, foto: d.foto, orden: d.orden });
+    const dirUrls = [
+      urlPresidenta, urlVicepresidenta, urlActas,
+      urlNacional, urlHacienda, urlInternacional
+    ];
+    for (let i = 0; i < DEFAULT_CONTENT.directorio.length; i++) {
+      const d = DEFAULT_CONTENT.directorio[i];
+      await setCollectionDoc("directorio", d.id, {
+        nombre: d.nombre, cargo: d.cargo,
+        descripcionCargo: d.descripcionCargo, foto: dirUrls[i], orden: d.orden
+      });
     }
-    const centers = await fetch("../data/centers.json").then((r) => r.json());
-    await replaceDocData(["sitio", "centros"], centers);
-    showToast("Contenido inicial cargado en Firestore.");
+
+    showToast("¡Contenido e imágenes inicializados correctamente en Firestore!");
   } catch (err) {
     showToast(`No se pudo inicializar: ${err.message}`, "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Inicializar contenido";
   }
 }
 
@@ -277,6 +412,14 @@ function showNotConfigured() {
   loginScreen.hidden = true;
   dashboard.hidden = true;
   notConfigured.hidden = false;
+  // Diagnóstico: muestra qué apiKey está leyendo realmente el navegador.
+  const seen = (FIREBASE_CONFIG && FIREBASE_CONFIG.apiKey) ? FIREBASE_CONFIG.apiKey : "(vacío)";
+  console.log("[CMS] apiKey detectada por el navegador:", seen, "| configurado:", isFirebaseConfigured());
+  const diag = document.createElement("p");
+  diag.className = "cms-hint";
+  diag.style.marginTop = "12px";
+  diag.textContent = `Diagnóstico — apiKey leída: ${seen.slice(0, 10)}…`;
+  notConfigured.querySelector(".cms-message-card")?.appendChild(diag);
 }
 
 /* ── Arranque ────────────────────────────────────────────────────────── */
@@ -285,6 +428,9 @@ function init() {
     showNotConfigured();
     return;
   }
+
+  // Mostrar login inmediatamente; onAuthChanged actualiza cuando Firebase responde.
+  showLogin();
 
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -307,6 +453,9 @@ function init() {
   onAuthChanged((user) => {
     if (user) showDashboard();
     else showLogin();
+  }).catch((err) => {
+    console.error("[CMS] Error al inicializar autenticación:", err);
+    showLogin(); // fallback: al menos muestra el formulario
   });
 }
 

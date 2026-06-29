@@ -706,7 +706,10 @@ if (missionSlides.length) showMissionSlide(0);
 if (visionSlides.length) showVisionSlide(0);
 // Los carruseles de misión y visión arrancan vía IntersectionObserver al entrar al viewport.
 
-loadData().then(() => {
+// Esperar a que firebase-content.js termine de cargar antes de llamar loadData()
+// Esto garantiza que Firestore esté listo y se prefiera sobre JSON locales
+async function initializeCenters() {
+  await loadData();
   renderDistricts();
   if (mapCenterButtons.length) {
     const initializeLocationMap = () => setActiveMapCenter(mapCenterButtons[0]?.dataset.center || 0);
@@ -716,4 +719,9 @@ loadData().then(() => {
       initializeLocationMap();
     }
   }
-});
+}
+
+// Iniciar después de que firebase-content.js dispare content-ready
+document.addEventListener("wawa:content-ready", initializeCenters, { once: true });
+// Fallback si toma demasiado tiempo o falla
+setTimeout(initializeCenters, 3000);

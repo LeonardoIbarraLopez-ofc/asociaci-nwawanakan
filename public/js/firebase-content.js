@@ -34,12 +34,47 @@ function isPlainObject(value) {
 /** Fusión profunda: los objetos se combinan recursivamente; arreglos y
  *  primitivos del override reemplazan por completo al valor base. */
 function deepMerge(base, override) {
-  if (!isPlainObject(override) || !isPlainObject(base)) return override;
+  // Validar que override sea un objeto plano (no array, null, etc.)
+  if (!isPlainObject(override) || !isPlainObject(base)) {
+    // Si override es un array válido, aceptarlo como está
+    if (Array.isArray(override)) return override;
+    return override;
+  }
   const out = { ...base };
   for (const key of Object.keys(override)) {
     out[key] = deepMerge(base[key], override[key]);
   }
   return out;
+}
+
+function validateContent(content) {
+  // Validar que las rutas críticas tengan los tipos correctos
+  const validations = [
+    { path: "heroSlides.slides", type: "array" },
+    { path: "misionSlides.slides", type: "array" },
+    { path: "visionSlides.slides", type: "array" },
+    { path: "valores", type: "array" },
+    { path: "directorio", type: "array" },
+    { path: "pasantia.requisitos", type: "array" },
+    { path: "voluntariado.beneficios", type: "array" },
+    { path: "voluntariado.formasAyuda", type: "array" },
+    { path: "voluntariado.pasos", type: "array" },
+  ];
+
+  let errors = 0;
+  validations.forEach(({ path, type }) => {
+    const value = get(content, path);
+    if (type === "array" && !Array.isArray(value)) {
+      console.warn(`[CMS] Validación: ${path} debería ser array, pero es ${typeof value}`);
+      errors++;
+    }
+  });
+
+  if (errors > 0) {
+    console.warn(`[CMS] ${errors} validaciones fallaron`);
+  }
+
+  return errors === 0;
 }
 
 const byOrden = (a, b) => (a.orden ?? 0) - (b.orden ?? 0);
@@ -63,29 +98,58 @@ export async function loadContent() {
   const { doc, getDoc, collection, getDocs } = fs;
 
   try {
-    const docSnaps = await Promise.all(
-      SITE_DOCS.map((id) => getDoc(doc(db, "sitio", id)))
+    // Cargar documentos de "sitio" con timeout para evitar bloqueos indefinidos
+    const docSnapsPromise = Promise.all(
+      SITE_DOCS.map((id) =>
+        getDoc(doc(db, "sitio", id)).catch((err) => {
+          console.warn(`[CMS] No se pudo leer sitio/${id}:`, err.code);
+          return null;
+        })
+      )
     );
+
+    const docSnaps = await Promise.race([
+      docSnapsPromise,
+      new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout loading site docs")), 5000))
+    ]);
+
     docSnaps.forEach((snap, i) => {
-      if (snap.exists()) {
+      if (snap && snap.exists()) {
         const key = SITE_DOCS[i];
         content[key] = deepMerge(content[key], snap.data());
       }
     });
 
-    const [valSnap, dirSnap] = await Promise.all([
-      getDocs(collection(db, "valores")),
-      getDocs(collection(db, "directorio"))
+    // Cargar colecciones
+    const collectionPromise = Promise.all([
+      getDocs(collection(db, "valores")).catch((err) => {
+        console.warn("[CMS] No se pudo leer colección valores:", err.code);
+        return { empty: true, docs: [] };
+      }),
+      getDocs(collection(db, "directorio")).catch((err) => {
+        console.warn("[CMS] No se pudo leer colección directorio:", err.code);
+        return { empty: true, docs: [] };
+      })
     ]);
-    if (!valSnap.empty) {
+
+    const [valSnap, dirSnap] = await Promise.race([
+      collectionPromise,
+      new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout loading collections")), 5000))
+    ]);
+
+    if (valSnap && !valSnap.empty) {
       content.valores = valSnap.docs.map((d) => ({ id: d.id, ...d.data() })).sort(byOrden);
     }
-    if (!dirSnap.empty) {
+    if (dirSnap && !dirSnap.empty) {
       content.directorio = dirSnap.docs.map((d) => ({ id: d.id, ...d.data() })).sort(byOrden);
     }
   } catch (error) {
-    console.warn("[CMS] No se pudo leer todo el contenido de Firestore, se usan valores por defecto:", error);
+    const errorMsg = error.message || error.code || "unknown error";
+    console.warn(`[CMS] No se pudo leer todo el contenido de Firestore (${errorMsg}), se usan valores por defecto`);
   }
+
+  // Validar que el contenido tiene la estructura correcta
+  validateContent(content);
 
   return content;
 }
@@ -299,10 +363,18 @@ export function hydrate(content) {
 
 /* ── Listeners en tiempo real ────────────────────────────────────────── */
 
+let unsubscribeFunctions = []; // Para desuscribirse de listeners
+
 async function startRealtimeListeners() {
   const fb = await initFirebase();
   if (!fb) {
     console.log("[CMS] No hay Firebase configurado, listeners deshabilitados.");
+    return;
+  }
+
+  // Evitar múltiples listeners si se llama más de una vez
+  if (unsubscribeFunctions.length > 0) {
+    console.log("[CMS] Listeners ya activos, skipping...");
     return;
   }
 
@@ -340,30 +412,43 @@ async function startRealtimeListeners() {
   try {
     console.log("[CMS] Iniciando listeners en tiempo real...");
     // Escuchar cambios en TODOS los documentos de "sitio"
-    fs.onSnapshot(fs.collection(db, "sitio"), (snap) => {
+    const unsubSitio = fs.onSnapshot(fs.collection(db, "sitio"), (snap) => {
       console.log(`[CMS] onSnapshot(sitio): ${snap.docs.length} docs`);
       updateContent();
     });
+    unsubscribeFunctions.push(unsubSitio);
 
     // Escuchar cambios en las colecciones
-    fs.onSnapshot(fs.collection(db, "valores"), (snap) => {
+    const unsubValores = fs.onSnapshot(fs.collection(db, "valores"), (snap) => {
       console.log(`[CMS] onSnapshot(valores): ${snap.docs.length} docs`);
       updateContent();
     });
-    fs.onSnapshot(fs.collection(db, "directorio"), (snap) => {
+    unsubscribeFunctions.push(unsubValores);
+
+    const unsubDirectorio = fs.onSnapshot(fs.collection(db, "directorio"), (snap) => {
       console.log(`[CMS] onSnapshot(directorio): ${snap.docs.length} docs`);
       updateContent();
     });
-    fs.onSnapshot(fs.collection(db, "noticias"), (snap) => {
+    unsubscribeFunctions.push(unsubDirectorio);
+
+    const unsubNoticias = fs.onSnapshot(fs.collection(db, "noticias"), (snap) => {
       console.log(`[CMS] onSnapshot(noticias): ${snap.docs.length} docs`);
       updateContent();
     });
+    unsubscribeFunctions.push(unsubNoticias);
 
     console.log("[CMS] Listeners establecidos correctamente.");
   } catch (error) {
     console.error("[CMS] No se pudieron establecer listeners en tiempo real:", error);
   }
 }
+
+// Limpiar listeners al descargar la página (evitar memory leaks)
+window.addEventListener("beforeunload", () => {
+  console.log("[CMS] Limpiando listeners...");
+  unsubscribeFunctions.forEach((unsub) => unsub());
+  unsubscribeFunctions = [];
+});
 
 /* ── Auto-ejecución ──────────────────────────────────────────────────── */
 

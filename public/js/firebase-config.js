@@ -19,12 +19,13 @@
  */
 
 export const FIREBASE_CONFIG = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_PROYECTO.firebaseapp.com",
-  projectId: "TU_PROYECTO",
-  storageBucket: "TU_PROYECTO.appspot.com",
-  messagingSenderId: "TU_SENDER_ID",
-  appId: "TU_APP_ID"
+  apiKey: "AIzaSyAqMZ5JidfJ0nadZzqgZ80WZ31WN2ru1ak",
+  authDomain: "wawanakan.firebaseapp.com",
+  projectId: "wawanakan",
+  storageBucket: "wawanakan.firebasestorage.app",
+  messagingSenderId: "185859985715",
+  appId: "1:185859985715:web:44c755d160150634222e46",
+  measurementId: "G-4J2R1XY6C8"
 };
 
 export const CLOUDINARY = {

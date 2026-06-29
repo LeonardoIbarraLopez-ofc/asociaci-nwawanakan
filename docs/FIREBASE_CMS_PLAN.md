@@ -61,20 +61,21 @@ listo para funcionar: solo falta colocar las credenciales reales en
   - Email: email del administrador real
   - Contraseña segura (mínimo 12 caracteres)
 - [ ] Ir a Configuración del proyecto > General > Tus apps → registrar **App Web**
-  - Copiar el objeto `firebaseConfig` (apiKey, authDomain, projectId, appId)
-- [ ] Instalar Firebase CLI:
+  - Copiar el objeto `firebaseConfig` completo (apiKey, authDomain, projectId, appId…)
+  - Pegarlo en `public/js/firebase-config.js`. Es información **pública** (no secreta):
+    la seguridad la dan `firestore.rules` + Firebase Auth, por eso es seguro versionarla.
+
+> **Hosting:** el sitio se publica con **GitHub Pages**, no con Firebase Hosting.
+> No se necesita `firebase init hosting`. Firebase se usa solo como base de datos
+> (Firestore) y autenticación (Auth).
+
+- [ ] (Opcional) Para desplegar las reglas de Firestore con la CLI:
   ```bash
   npm install -g firebase-tools
   firebase login
+  firebase deploy --only firestore:rules
   ```
-- [ ] En la raíz del proyecto:
-  ```bash
-  firebase init
-  ```
-  Seleccionar: **Hosting** + **Firestore**
-  - Hosting public dir: `public`
-  - SPA: No (el sitio tiene múltiples páginas)
-  - `.firebaserc` quedará con el project ID
+  El archivo `firebase.json` ya está configurado solo para Firestore (sin hosting).
 
 ### A.2 — Cloudinary
 - [ ] Crear cuenta gratuita en [cloudinary.com](https://cloudinary.com)
@@ -517,27 +518,27 @@ listo para funcionar: solo falta colocar las credenciales reales en
 ## FASE H — Despliegue
 
 ### H.1 — Preparación
-- [ ] Verificar que `.gitignore` incluye `*.env`, `.env.local` y `public/admin/config.js` si tiene secrets
-  > Si `config.js` solo contiene la API key pública de Firebase (no secretos), puede subirse al repo
+- [ ] Pegar el `firebaseConfig` real en `public/js/firebase-config.js` (público, se versiona).
 - [ ] Probar el sitio completo localmente con `npx serve public`
-- [ ] Probar el panel admin en `http://localhost:5000/admin`
+- [ ] Probar el panel admin en `http://localhost:3000/admin`
 
-### H.2 — Desplegar a Firebase Hosting
+### H.2 — Publicar en GitHub Pages
+El sitio se publica con **GitHub Pages** (no Firebase Hosting). El despliegue es el
+flujo habitual del repositorio:
 ```bash
-firebase deploy
+git add -A && git commit -m "deploy" && git push
 ```
-- [ ] Verificar que el sitio público carga desde Firestore (abrir DevTools > Network > ver requests a firestore.googleapis.com)
+- [ ] Verificar en Settings > Pages que la fuente apunta a la rama/carpeta correcta.
+- [ ] (Opcional) Desplegar las reglas de Firestore: `firebase deploy --only firestore:rules`
+- [ ] Verificar que el sitio carga desde Firestore (DevTools > Network → `firestore.googleapis.com`)
 - [ ] Verificar que `/admin` funciona: login, edición y guardado en Firestore
 - [ ] Verificar que las imágenes subidas a Cloudinary aparecen en el sitio
 
 ### H.3 — Configuración post-despliegue
-- [ ] Ir a Firebase Console > Authentication > Settings > Authorized domains:
-  - Añadir el dominio de Firebase Hosting (`tu-proyecto.web.app`)
-  - Añadir el dominio personalizado si existe
-- [ ] Verificar que las reglas de Firestore permiten solo al admin escribir:
-  ```bash
-  firebase firestore:rules:test
-  ```
+- [ ] Ir a Firebase Console > Authentication > Settings > Dominios autorizados:
+  - Añadir el dominio de GitHub Pages (p. ej. `asociacionwawanakan-eng.github.io`)
+  - Añadir `localhost` para pruebas locales (suele venir por defecto)
+- [ ] Confirmar que las reglas de Firestore solo permiten escribir a usuarios autenticados.
 
 ---
 
@@ -577,7 +578,7 @@ firebase deploy
 | Archivo | Descripción |
 |---------|-------------|
 | `public/admin/index.html` | Login + dashboard del CMS |
-| `public/admin/config.js` | Credenciales Firebase + Cloudinary |
+| `public/js/firebase-config.js` | Credenciales Firebase + Cloudinary (compartido) |
 | `public/admin/auth.js` | Lógica de autenticación |
 | `public/admin/firestore.js` | Funciones CRUD de Firestore |
 | `public/admin/cloudinary.js` | Upload de imágenes a Cloudinary |
@@ -596,7 +597,7 @@ firebase deploy
 | `scripts/migrate-to-firestore.js` | Script de migración (ejecutar una vez) |
 | `firestore.rules` | Reglas de seguridad de Firestore |
 | `.firebaserc` | Configuración del proyecto Firebase |
-| `firebase.json` | Configuración de Firebase Hosting |
+| `firebase.json` | Configuración de Firestore (sin hosting; el sitio va en GitHub Pages) |
 
 ---
 

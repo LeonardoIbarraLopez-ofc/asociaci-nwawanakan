@@ -2,15 +2,19 @@
  * Configuración de Firebase y Cloudinary — fuente única de credenciales.
  *
  * ── CÓMO ACTIVAR EL CMS ──────────────────────────────────────────────
- * 1. Reemplaza los valores "TU_..." con las credenciales reales:
- *      - Firebase: Consola > Configuración del proyecto > Tus apps (App Web)
- *      - Cloudinary: Dashboard (cloud name) + Settings > Upload preset (unsigned)
- * 2. No se necesita nada más: el sitio y el panel /admin detectan
+ * 1. En la Consola de Firebase > Configuración del proyecto > Tus apps (App Web)
+ *    copia el objeto `firebaseConfig` que te muestra y pega aquí sus valores
+ *    en FIREBASE_CONFIG (reemplazando los "TU_...").
+ * 2. (Cloudinary ya configurado: cloud name + upload preset unsigned + folder.)
+ * 3. No se necesita nada más: el sitio y el panel /admin detectan
  *    automáticamente que la configuración está completa y se activan.
  *
- * NOTA DE SEGURIDAD: la apiKey de Firebase para web es pública por diseño
- * (no es un secreto). El acceso real lo controlan las reglas de Firestore
- * (ver firestore.rules). Por eso es seguro versionar este archivo.
+ * HOSTING: el sitio se publica con GitHub Pages, no con Firebase Hosting.
+ * Firebase se usa solo como base de datos (Firestore) y autenticación (Auth).
+ *
+ * NOTA DE SEGURIDAD: el firebaseConfig de web (apiKey incluida) es público por
+ * diseño, no es un secreto. El acceso real lo controlan las reglas de Firestore
+ * (ver firestore.rules) + Firebase Auth. Por eso es seguro versionar este archivo.
  * ─────────────────────────────────────────────────────────────────────
  */
 
@@ -24,7 +28,7 @@ export const FIREBASE_CONFIG = {
 };
 
 export const CLOUDINARY = {
-  cloudName: "TU_CLOUD_NAME",
+  cloudName: "diswqpy8v",
   uploadPreset: "wawanakan_cms",
   folder: "wawanakan"
 };

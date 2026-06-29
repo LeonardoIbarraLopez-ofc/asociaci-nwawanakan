@@ -40,7 +40,7 @@ asociaci-nwawanakan/
 │   ├── ROADMAP.md             — Plan de optimización por fases
 │   ├── DEUDA_TECNICA.md       — Backlog de deuda técnica pendiente
 │   └── FIREBASE_CMS_PLAN.md   — Plan e implementación del CMS
-├── firebase.json              — Configuración de Firebase Hosting + Firestore
+├── firebase.json              — Configuración de Firestore (el sitio se publica en GitHub Pages)
 ├── firestore.rules            — Reglas de seguridad de Firestore
 ├── .firebaserc
 ├── .gitignore

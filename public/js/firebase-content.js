@@ -252,11 +252,15 @@ export function hydrate(content) {
         // Agrupar por índice para regenerar en el mismo lugar
         const byIndex = new Map();
         elementsToReplace.forEach((el) => {
-          const match = el.dataset.cmsText.match(/^[^.]+\.(\d+)/);
-          if (match) {
-            const idx = parseInt(match[1], 10);
-            if (!byIndex.has(idx)) byIndex.set(idx, []);
-            byIndex.get(idx).push(el);
+          // Extraer el índice del path (ej. "pasantia.requisitos.0" o "pasantia.requisitos.0.titulo" → 0)
+          if (el.dataset.cmsText.startsWith(rootPath + ".")) {
+            const suffix = el.dataset.cmsText.slice((rootPath + ".").length);
+            const firstPart = suffix.split(".")[0];
+            const idx = parseInt(firstPart, 10);
+            if (!isNaN(idx)) {
+              if (!byIndex.has(idx)) byIndex.set(idx, []);
+              byIndex.get(idx).push(el);
+            }
           }
         });
 

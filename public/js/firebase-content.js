@@ -208,18 +208,15 @@ export function hydrate(content) {
 
   console.log(`[CMS] Iniciando hidratación. Elementos encontrados: ${allElements.length}`);
 
-  // PASO 1: Detectar arrays iterando sobre TODOS los elementos con data-cms-text
-  // Identificar paths que apunten a índices (ej. "valores.0", "directorio.1", etc.)
-  const arrayPaths = new Map(); // path → { indices: Set, minIndex, maxIndex }
+  // PASO 1: Detectar paths que apunten a índices de array (ej. "pasantia.requisitos.0")
+  const arrayPaths = new Map(); // rootPath → { indices: Set, minIndex, maxIndex }
 
   allElements.forEach((el) => {
     const path = el.dataset.cmsText;
-    const match = path.match(/^(.+)\.(\d+)(?:\..*)?$/); // Extrae "root.0.field" → ["root", "0"]
-    if (!match) return; // No es un array indexado
-
+    const match = path.match(/^(.+)\.(\d+)(?:\..*)?$/);
+    if (!match) return;
     const rootPath = match[1];
     const index = parseInt(match[2], 10);
-
     if (!arrayPaths.has(rootPath)) {
       arrayPaths.set(rootPath, { indices: new Set(), minIndex: index, maxIndex: index });
     }
@@ -229,9 +226,10 @@ export function hydrate(content) {
     info.maxIndex = Math.max(info.maxIndex, index);
   });
 
-  const processedArrays = new Set();
+  // processedElements rastrea elementos ya actualizados, para que PASO 3 no los pise
+  const processedElements = new Set();
 
-  // PASO 2: Regenerar arrays si el tamaño en Firestore es diferente
+  // PASO 2: Actualizar arrays — valores existentes + agregar/eliminar si cambia el tamaño
   arrayPaths.forEach((info, rootPath) => {
     const value = get(content, rootPath);
     if (!Array.isArray(value)) return;
@@ -239,101 +237,85 @@ export function hydrate(content) {
     const currentSize = info.indices.size;
     const newSize = value.length;
 
-    if (currentSize === newSize) {
-      console.log(`[CMS] ✓ Array ${rootPath}: tamaño igual (${currentSize})`);
-    } else {
-      console.log(`[CMS] ✅ REGENERANDO array ${rootPath}: ${currentSize} → ${newSize} elementos`);
+    // Construir mapa índice → [elementos DOM] extrayendo el índice relativo al rootPath
+    const selector = `[data-cms-text^="${rootPath}."]`;
+    const byIndex = new Map();
+    document.querySelectorAll(selector).forEach((el) => {
+      if (!el.dataset.cmsText.startsWith(rootPath + ".")) return;
+      const suffix = el.dataset.cmsText.slice(rootPath.length + 1);
+      const idx = parseInt(suffix.split(".")[0], 10);
+      if (!isNaN(idx)) {
+        if (!byIndex.has(idx)) byIndex.set(idx, []);
+        byIndex.get(idx).push(el);
+      }
+    });
 
-      // Encontrar todos los elementos que pertenecen a este array
-      const selector = `[data-cms-text^="${rootPath}."]`;
-      const elementsToReplace = document.querySelectorAll(selector);
-
-      if (elementsToReplace.length) {
-        // Agrupar por índice para regenerar en el mismo lugar
-        const byIndex = new Map();
-        elementsToReplace.forEach((el) => {
-          const match = el.dataset.cmsText.match(/^[^.]+\.(\d+)/);
-          if (match) {
-            const idx = parseInt(match[1], 10);
-            if (!byIndex.has(idx)) byIndex.set(idx, []);
-            byIndex.get(idx).push(el);
-          }
-        });
-
-        // Para cada índice original, actualizar el elemento correspondiente
-        // Si hay más índices de los que hay elementos en el array, generar nuevos
-        let lastReplacedEl = null;
-        for (let i = 0; i < newSize; i++) {
-          const newItemContent = value[i];
-          if (typeof newItemContent === "string") {
-            // Array de strings: reemplazar/crear elemento simple
-            const oldEls = byIndex.get(i);
-            if (oldEls && oldEls[0]) {
-              oldEls[0].textContent = newItemContent;
-              lastReplacedEl = oldEls[0];
-            } else if (lastReplacedEl) {
-              // Crear nuevo elemento basado en el anterior
-              const newEl = document.createElement(lastReplacedEl.tagName);
-              newEl.dataset.cmsText = `${rootPath}.${i}`;
-              newEl.textContent = newItemContent;
-              lastReplacedEl.parentElement?.insertBefore(newEl, lastReplacedEl.nextSibling);
-              lastReplacedEl = newEl;
-            }
-          } else {
-            // Array de objetos: actualizar todos los campos de este índice
-            const oldEls = byIndex.get(i);
-            if (oldEls) {
-              oldEls.forEach((el) => {
-                const fieldMatch = el.dataset.cmsText.match(/^[^.]+\.\d+\.(.+)$/);
-                if (fieldMatch) {
-                  const fieldName = fieldMatch[1];
-                  const fieldValue = newItemContent[fieldName];
-                  if (fieldValue != null) {
-                    if (el.dataset.cmsSrc || el.tagName === "IMG") {
-                      el.setAttribute("src", fieldValue);
-                    } else {
-                      el.textContent = fieldValue;
-                    }
-                  }
-                }
-              });
-              lastReplacedEl = oldEls[oldEls.length - 1];
+    // Actualizar valores de los elementos existentes (independientemente del tamaño)
+    const existingCount = Math.min(newSize, currentSize);
+    for (let i = 0; i < existingCount; i++) {
+      const item = value[i];
+      const oldEls = byIndex.get(i) || [];
+      oldEls.forEach((el) => {
+        if (typeof item === "string") {
+          el.textContent = item;
+        } else if (item && typeof item === "object") {
+          // Extraer el campo relativo al índice (ej. "titulo" de "pasantia.beneficios.0.titulo")
+          const suffix = el.dataset.cmsText.slice(rootPath.length + 1);
+          const fieldPath = suffix.split(".").slice(1).join(".");
+          if (fieldPath) {
+            const fieldValue = get(item, fieldPath);
+            if (fieldValue != null && typeof fieldValue !== "object") {
+              el.textContent = String(fieldValue);
             }
           }
         }
+        processedElements.add(el);
+        textUpdates++;
+      });
+    }
 
-        // Eliminar elementos sobrantes si el array se redujo
-        if (currentSize > newSize) {
-          for (let i = newSize; i <= info.maxIndex; i++) {
-            const oldEls = byIndex.get(i);
-            if (oldEls) oldEls.forEach((el) => {
-              // Eliminar elemento o contenedor padre si es apropiado
-              const parent = el.closest("article, .card, .item, li, div[class*='card'], div[class*='item']");
-              (parent || el).remove();
-            });
-          }
+    // Agregar elementos nuevos si el array creció
+    if (newSize > currentSize) {
+      console.log(`[CMS] ✅ Array ${rootPath}: ${currentSize} → ${newSize} (creció)`);
+      let lastEl = null;
+      for (let i = currentSize - 1; i >= 0; i--) {
+        const els = byIndex.get(i);
+        if (els && els.length) { lastEl = els[els.length - 1]; break; }
+      }
+      for (let i = currentSize; i < newSize; i++) {
+        const item = value[i];
+        if (typeof item === "string" && lastEl) {
+          const newEl = document.createElement(lastEl.tagName);
+          newEl.dataset.cmsText = `${rootPath}.${i}`;
+          newEl.textContent = item;
+          lastEl.parentElement?.insertBefore(newEl, lastEl.nextSibling);
+          processedElements.add(newEl);
+          lastEl = newEl;
+          textUpdates++;
         }
       }
     }
 
-    processedArrays.add(rootPath);
-    textUpdates++;
+    // Eliminar elementos sobrantes si el array se redujo
+    if (newSize < currentSize) {
+      console.log(`[CMS] 🗑 Array ${rootPath}: ${currentSize} → ${newSize} (se redujo)`);
+      for (let i = newSize; i <= info.maxIndex; i++) {
+        const oldEls = byIndex.get(i);
+        if (oldEls) oldEls.forEach((el) => {
+          const parent = el.closest("article, .card, .item, li, div[class*='card'], div[class*='item']");
+          (parent || el).remove();
+        });
+      }
+    }
   });
 
-  // PASO 3: Actualizar elementos escalares (no son índices de arrays)
+  // PASO 3: Actualizar elementos escalares que PASO 2 no procesó
   allElements.forEach((el) => {
-    const path = el.dataset.cmsText;
-
-    // Saltar si ya se procesó como parte de un array
-    const isArrayIndex = Array.from(processedArrays).some((ap) => path.startsWith(ap + "."));
-    if (isArrayIndex && path.match(/\.\d+$/)) return; // Es un índice de array procesado
-
-    const value = get(content, path);
-    if (value != null && !Array.isArray(value)) {
+    if (processedElements.has(el)) return;
+    const value = get(content, el.dataset.cmsText);
+    if (value != null && typeof value !== "object") {
       el.textContent = value;
-      if (!processedArrays.has(path)) {
-        textUpdates++;
-      }
+      textUpdates++;
     }
   });
 
@@ -358,7 +340,7 @@ export function hydrate(content) {
     }
   });
 
-  console.log(`[CMS] ✅ Hidratación completada: ${textUpdates} text, ${srcUpdates} src, ${hrefUpdates} href. Arrays procesados: ${processedArrays.size}`);
+  console.log(`[CMS] ✅ Hidratación completada: ${textUpdates} text, ${srcUpdates} src, ${hrefUpdates} href`);
 }
 
 /* ── Listeners en tiempo real ────────────────────────────────────────── */

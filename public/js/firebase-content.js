@@ -472,9 +472,23 @@ async function run() {
 }
 
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", run, { once: true });
+  document.addEventListener("DOMContentLoaded", () => {
+    try {
+      run().catch((err) => {
+        console.error("[CMS] Error crítico en inicialización:", err);
+      });
+    } catch (err) {
+      console.error("[CMS] Error síncrono en inicialización:", err);
+    }
+  }, { once: true });
 } else {
-  run();
+  try {
+    run().catch((err) => {
+      console.error("[CMS] Error crítico en inicialización:", err);
+    });
+  } catch (err) {
+    console.error("[CMS] Error síncrono en inicialización:", err);
+  }
 }
 
 window.WawaContent = { loadContent, hydrate, loadCenters, loadSiteConfig };

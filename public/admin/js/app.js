@@ -130,6 +130,10 @@ async function renderCollection(section) {
   if (!items.length && Array.isArray(DEFAULT_CONTENT[section.key])) {
     items = structuredClone(DEFAULT_CONTENT[section.key]);
   }
+  if (section.storage.orderBy) {
+    const key = section.storage.orderBy;
+    items.sort((a, b) => (a[key] ?? 0) - (b[key] ?? 0));
+  }
   const originalIds = items.map((it) => it.id).filter(Boolean);
 
   editorArea.innerHTML = "";

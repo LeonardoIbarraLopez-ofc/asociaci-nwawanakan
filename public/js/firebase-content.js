@@ -340,6 +340,23 @@ export function hydrate(content) {
     }
   });
 
+  // data-cms-target: actualiza el atributo data-target (contadores animados)
+  // Si la sección ya es visible, también actualiza el texto directamente
+  document.querySelectorAll("[data-cms-target]").forEach((el) => {
+    const value = get(content, el.dataset.cmsTarget);
+    if (value == null) return;
+    el.setAttribute("data-target", String(value));
+    // Si la sección de alcances ya está en el viewport (animación ya corrió), mostrar valor directo
+    const section = el.closest("section");
+    if (section) {
+      const rect = section.getBoundingClientRect();
+      const alreadyVisible = rect.top < window.innerHeight && rect.bottom > 0;
+      if (alreadyVisible) {
+        el.textContent = Number(value).toLocaleString("es-BO");
+      }
+    }
+  });
+
   console.log(`[CMS] ✅ Hidratación completada: ${textUpdates} text, ${srcUpdates} src, ${hrefUpdates} href`);
 }
 

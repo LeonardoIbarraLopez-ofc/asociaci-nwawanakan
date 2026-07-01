@@ -182,7 +182,7 @@ export const SECTIONS = [
         ]
       },
       {
-        key: "callout", label: "Convocatoria vigente", type: "group",
+        key: "convocatorias", label: "Convocatorias", type: "objectList", itemLabel: "Convocatoria",
         subfields: [
           { key: "estado", label: "Estado de la convocatoria", ...tipoEstado },
           { key: "badge", label: "Etiqueta del estado", type: "text" },

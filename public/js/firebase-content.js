@@ -59,6 +59,7 @@ function validateContent(content) {
     { path: "voluntariado.beneficios", type: "array" },
     { path: "voluntariado.formasAyuda", type: "array" },
     { path: "voluntariado.pasos", type: "array" },
+    { path: "pasantia.convocatorias", type: "array" },
   ];
 
   let errors = 0;

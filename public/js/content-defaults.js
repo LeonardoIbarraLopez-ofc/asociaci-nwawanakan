@@ -167,21 +167,23 @@ export const DEFAULT_CONTENT = {
       { titulo: "Entrevista", texto: "Se realiza una entrevista breve para conocer tu motivación y compromiso." },
       { titulo: "Ingreso", texto: "Si eres seleccionado, se coordina tu incorporación y el inicio de la pasantía." }
     ],
-    callout: {
-      estado: "vigente",
-      badge: "VIGENTE",
-      label: "REQUERIMIENTO DE PASANTE EN:",
-      titulo: "PASANTÍA EN APOYO EDUCATIVO E INSTITUCIONAL",
-      entidad: "Centros Infantiles Wawanakan",
-      centro: "Centro Infantil Nueva Marka",
-      ubicacion: "El Alto",
-      horario: "08:00 a 16:00",
-      area: "Educación / apoyo institucional",
-      fecha: "27 Jun 2026",
-      mapLink: "https://www.google.com/maps/dir/?api=1&destination=Nueva%20Marka%2C%20El%20Alto%2C%20Bolivia",
-      facebookLink: "https://www.facebook.com/profile.php?id=61590971327508&locale=es_LA",
-      whatsappLink: "https://wa.me/59179164334"
-    }
+    convocatorias: [
+      {
+        estado: "vigente",
+        badge: "VIGENTE",
+        label: "REQUERIMIENTO DE PASANTE EN:",
+        titulo: "PASANTÍA EN APOYO EDUCATIVO E INSTITUCIONAL",
+        entidad: "Centros Infantiles Wawanakan",
+        centro: "Centro Infantil Nueva Marka",
+        ubicacion: "El Alto",
+        horario: "08:00 a 16:00",
+        area: "Educación / apoyo institucional",
+        fecha: "27 Jun 2026",
+        mapLink: "https://www.google.com/maps/dir/?api=1&destination=Nueva%20Marka%2C%20El%20Alto%2C%20Bolivia",
+        facebookLink: "https://www.facebook.com/profile.php?id=61590971327508&locale=es_LA",
+        whatsappLink: "https://wa.me/59179164334"
+      }
+    ]
   },
 
   // ── sitio/quienesSomos (página dedicada) ───────────────────────────

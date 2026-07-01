@@ -181,7 +181,8 @@ export const DEFAULT_CONTENT = {
         fecha: "27 Jun 2026",
         mapLink: "https://www.google.com/maps/dir/?api=1&destination=Nueva%20Marka%2C%20El%20Alto%2C%20Bolivia",
         facebookLink: "https://www.facebook.com/profile.php?id=61590971327508&locale=es_LA",
-        whatsappLink: "https://wa.me/59179164334"
+        whatsappLink: "https://wa.me/59179164334",
+        formLink: "https://docs.google.com/forms/d/e/1FAIpQLSfdP1HmZJ5-J9TSSKdyPTiAr6LRWsYknrKuSWTYwveyKi179A/viewform?usp=publish-editor"
       }
     ]
   },

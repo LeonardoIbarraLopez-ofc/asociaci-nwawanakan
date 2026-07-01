@@ -196,7 +196,8 @@ export const SECTIONS = [
           { key: "fecha", label: "Fecha de publicación", type: "text" },
           { key: "mapLink", label: "Enlace 'Cómo llegar'", type: "url" },
           { key: "facebookLink", label: "Enlace de Facebook", type: "url" },
-          { key: "whatsappLink", label: "Enlace de WhatsApp", type: "url" }
+          { key: "whatsappLink", label: "Enlace de WhatsApp", type: "url" },
+          { key: "formLink", label: "Enlace de formulario (Postular ahora)", type: "url" }
         ]
       }
     ]

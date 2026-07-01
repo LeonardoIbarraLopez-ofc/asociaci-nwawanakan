@@ -70,10 +70,6 @@
         </div>
 
         <div id="convocatorias-list"></div>
-
-        <div class="pasantia-actions" id="pasantia-postular-action" style="display:none">
-          <a class="pasantia-btn pasantia-btn-primary btn-postular" href="https://docs.google.com/forms/d/e/1FAIpQLSfdP1HmZJ5-J9TSSKdyPTiAr6LRWsYknrKuSWTYwveyKi179A/viewform?usp=publish-editor" data-cms-href="pasantia.formLink" target="_blank" rel="noopener noreferrer">Postular ahora</a>
-        </div>
       </div>
     </section>
   </main>
@@ -143,7 +139,6 @@
 
     function renderConvocatorias(convocatorias) {
       var list = document.getElementById("convocatorias-list");
-      var postularAction = document.getElementById("pasantia-postular-action");
       if (!list || !Array.isArray(convocatorias)) return;
 
       list.innerHTML = convocatorias.map(function (c, i) {
@@ -152,6 +147,7 @@
         var mapBtn = c.mapLink ? '<a class="pasantia-callout-btn pasantia-callout-btn-map" href="' + esc(c.mapLink) + '" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📍</span>Cómo llegar</a>' : "";
         var fbBtn = c.facebookLink ? '<a class="pasantia-callout-btn pasantia-callout-btn-facebook" href="' + esc(c.facebookLink) + '" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">f</span>Facebook</a>' : "";
         var waBtn = c.whatsappLink ? '<a class="pasantia-callout-btn pasantia-callout-btn-whatsapp" href="' + esc(c.whatsappLink) + '" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">☎</span>WhatsApp</a>' : "";
+        var postularBtn = (!cerrada && c.formLink) ? '<div class="pasantia-actions"><a class="pasantia-btn pasantia-btn-primary btn-postular" href="' + esc(c.formLink) + '" target="_blank" rel="noopener noreferrer">Postular ahora</a></div>' : "";
         return '<article class="pasantia-callout-card" aria-labelledby="convocatoria-title-' + i + '">' +
           '<span class="estado-badge ' + badgeClass + '">' + esc(c.badge) + '</span>' +
           '<div class="pasantia-callout-icon" aria-hidden="true">🎓</div>' +
@@ -169,15 +165,12 @@
           '<span>Fecha de publicación: <span>' + esc(c.fecha) + '</span></span>' +
           '<div class="pasantia-callout-actions" aria-label="Acciones del centro requerido">' +
           mapBtn + fbBtn + waBtn +
-          '</div></div></div>' +
+          '</div></div>' +
+          postularBtn +
+          '</div>' +
           '<div class="pasantia-callout-mark" aria-hidden="true">✦</div>' +
           '</article>';
       }).join("");
-
-      if (postularAction) {
-        var hayVigente = convocatorias.some(function (c) { return c.estado !== "cerrada"; });
-        postularAction.style.display = hayVigente ? "" : "none";
-      }
     }
 
     document.addEventListener("wawa:content-ready", function (e) {

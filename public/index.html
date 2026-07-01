@@ -245,6 +245,11 @@
           var svg = VALUE_SVGS[i % VALUE_SVGS.length];
           return '<article class="flip-card value-card ' + cls + '" tabindex="0"><div class="flip-card-inner"><div class="flip-card-front"><span class="value-icon" aria-hidden="true"><svg viewBox="0 0 64 64">' + svg + '</svg></span><h3>' + esc(v.titulo) + '</h3></div><div class="flip-card-back"><p>' + esc(v.descripcion) + '</p></div></div></article>';
         }).join("");
+        // main.js registra el observer antes de que el CMS renderice estos cards,
+        // así que nunca reciben is-visible automáticamente — los marcamos aquí.
+        grid.querySelectorAll(".value-card").forEach(function(card) {
+          card.classList.add("is-visible");
+        });
       }
       document.addEventListener("wawa:content-ready", function(e) { renderValoresIndex(e.detail && e.detail.valores); });
       document.addEventListener("wawa:content-updated", function(e) { renderValoresIndex(e.detail && e.detail.valores); });

@@ -28,13 +28,7 @@
     </section>
     <section class="section section-cream">
       <h2 class="sr-only">Nuestros valores</h2>
-      <div class="values-grid">
-        <article><span></span><h3 data-cms-text="valores.0.titulo">Equidad</h3></article>
-        <article><span></span><h3 data-cms-text="valores.1.titulo">Solidaridad</h3></article>
-        <article><span></span><h3 data-cms-text="valores.2.titulo">Respeto</h3></article>
-        <article><span></span><h3 data-cms-text="valores.3.titulo">Trabajo en equipo</h3></article>
-        <article><span></span><h3 data-cms-text="valores.4.titulo">Honestidad</h3></article>
-      </div>
+      <div class="values-grid" id="valores-grid-page"></div>
     </section>
   </main>
 
@@ -45,5 +39,19 @@
   <script>WawaComponents.renderHeader("valores.html"); WawaComponents.renderFooter();</script>
   <script src="js/main.js"></script>
   <script type="module" src="js/firebase-content.js"></script>
+  <script>
+    (function () {
+      var esc = function(s) { return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;"); };
+      function renderValoresPage(valores) {
+        var grid = document.getElementById("valores-grid-page");
+        if (!grid || !Array.isArray(valores) || !valores.length) return;
+        grid.innerHTML = valores.map(function(v) {
+          return '<article><span></span><h3>' + esc(v.titulo) + '</h3></article>';
+        }).join("");
+      }
+      document.addEventListener("wawa:content-ready", function(e) { renderValoresPage(e.detail && e.detail.valores); });
+      document.addEventListener("wawa:content-updated", function(e) { renderValoresPage(e.detail && e.detail.valores); });
+    })();
+  </script>
 </body>
 </html>

@@ -93,8 +93,7 @@ export const SECTIONS = [
     itemLabel: "Valor",
     fields: [
       { key: "titulo", label: "Título", type: "text" },
-      { key: "descripcion", label: "Descripción", type: "textarea" },
-      { key: "orden", label: "Orden", type: "text" }
+      { key: "descripcion", label: "Descripción", type: "textarea" }
     ]
   },
 

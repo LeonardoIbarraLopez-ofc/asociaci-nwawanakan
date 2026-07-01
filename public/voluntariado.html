@@ -162,6 +162,39 @@
 
     document.addEventListener("wawa:content-ready", function (e) { renderVoluntariado(e.detail); });
     document.addEventListener("wawa:content-updated", function (e) { renderVoluntariado(e.detail); });
+
+    // Event delegation para flips (main.js los buscaba en el DOM al cargar, antes del render dinámico)
+    var formasGrid = document.getElementById("formas-ayuda-grid");
+    if (formasGrid) {
+      formasGrid.addEventListener("click", function (e) {
+        var card = e.target.closest(".voluntariado-help-content");
+        if (card) card.classList.toggle("is-flipped");
+      });
+      formasGrid.addEventListener("touchend", function (e) {
+        var card = e.target.closest(".voluntariado-help-content");
+        if (!card) return;
+        e.preventDefault();
+        card.classList.toggle("is-flipped");
+      });
+      formasGrid.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        var card = e.target.closest(".voluntariado-help-content");
+        if (card) { e.preventDefault(); card.classList.toggle("is-flipped"); }
+      });
+    }
+
+    var pasosGrid = document.getElementById("pasos-grid");
+    if (pasosGrid) {
+      pasosGrid.addEventListener("click", function (e) {
+        var card = e.target.closest(".apply-flip-card");
+        if (card) card.classList.toggle("flipped");
+      });
+      pasosGrid.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        var card = e.target.closest(".apply-flip-card");
+        if (card) { e.preventDefault(); card.classList.toggle("flipped"); }
+      });
+    }
   })();
 </script>
 </body>

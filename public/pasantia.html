@@ -55,63 +55,14 @@
 
           <section class="pasantia-benefits" aria-labelledby="beneficios-pasantia-title">
             <h2 id="beneficios-pasantia-title">Beneficios</h2>
-            <div class="pasantia-benefit-cards">
-              <article><span aria-hidden="true">✦</span><h3 data-cms-text="pasantia.beneficios.0.titulo">Capacitación constante</h3></article>
-              <article><span aria-hidden="true">◎</span><h3 data-cms-text="pasantia.beneficios.1.titulo">Supervisión institucional</h3></article>
-              <article><span aria-hidden="true">◆</span><h3 data-cms-text="pasantia.beneficios.2.titulo">Certificación y experiencia</h3></article>
-            </div>
+            <div class="pasantia-benefit-cards" id="beneficios-pasantia-grid"></div>
           </section>
         </div>
 
         <div class="pasantia-process-showcase">
           <section class="pasantia-process" aria-labelledby="proceso-pasantia-title">
             <h2 id="proceso-pasantia-title">Proceso de selección</h2>
-            <div class="pasantia-process-line" aria-label="Pasos del proceso de selección">
-              <article class="pasantia-process-card" tabindex="0">
-                <div class="pasantia-process-card-inner">
-                  <div class="pasantia-process-card-front">
-                    <span>1</span>
-                    <strong data-cms-text="pasantia.proceso.0.titulo">Postulación</strong>
-                  </div>
-                  <div class="pasantia-process-card-back">
-                    <p data-cms-text="pasantia.proceso.0.texto">Envía tu solicitud y comparte tu interés en formar parte del programa de pasantías.</p>
-                  </div>
-                </div>
-              </article>
-              <article class="pasantia-process-card" tabindex="0">
-                <div class="pasantia-process-card-inner">
-                  <div class="pasantia-process-card-front">
-                    <span>2</span>
-                    <strong data-cms-text="pasantia.proceso.1.titulo">Revisión</strong>
-                  </div>
-                  <div class="pasantia-process-card-back">
-                    <p data-cms-text="pasantia.proceso.1.texto">El equipo revisa tu perfil, documentación y disponibilidad.</p>
-                  </div>
-                </div>
-              </article>
-              <article class="pasantia-process-card" tabindex="0">
-                <div class="pasantia-process-card-inner">
-                  <div class="pasantia-process-card-front">
-                    <span>3</span>
-                    <strong data-cms-text="pasantia.proceso.2.titulo">Entrevista</strong>
-                  </div>
-                  <div class="pasantia-process-card-back">
-                    <p data-cms-text="pasantia.proceso.2.texto">Se realiza una entrevista breve para conocer tu motivación y compromiso.</p>
-                  </div>
-                </div>
-              </article>
-              <article class="pasantia-process-card" tabindex="0">
-                <div class="pasantia-process-card-inner">
-                  <div class="pasantia-process-card-front">
-                    <span>4</span>
-                    <strong data-cms-text="pasantia.proceso.3.titulo">Ingreso</strong>
-                  </div>
-                  <div class="pasantia-process-card-back">
-                    <p data-cms-text="pasantia.proceso.3.texto">Si eres seleccionado, se coordina tu incorporación y el inicio de la pasantía.</p>
-                  </div>
-                </div>
-              </article>
-            </div>
+            <div class="pasantia-process-line" id="proceso-pasantia-grid" aria-label="Pasos del proceso de selección"></div>
           </section>
           <figure class="pasantia-process-photo" aria-hidden="true">
             <img src="assets/contenido/fondo-pasantia-proceso.jpg" loading="lazy" data-cms-src="pasantia.processImage" alt="Pasantes universitarios en actividad con niños del programa Wawanakan">
@@ -156,6 +107,59 @@
 <script>WawaComponents.renderHeader("pasantia.html"); WawaComponents.renderFooter();</script>
 <script src="js/main.js"></script>
 <script type="module" src="js/firebase-content.js"></script>
+<script>
+  (function () {
+    var esc = function (s) { return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); };
+    var BENEFIT_ICONS = ["✦", "◎", "◆"];
+
+    function renderBeneficios(beneficios) {
+      var grid = document.getElementById("beneficios-pasantia-grid");
+      if (!grid || !Array.isArray(beneficios) || !beneficios.length) return;
+      grid.innerHTML = beneficios.map(function (b, i) {
+        return '<article><span aria-hidden="true">' + BENEFIT_ICONS[i % BENEFIT_ICONS.length] + '</span><h3>' + esc(b.titulo) + '</h3></article>';
+      }).join("");
+    }
+
+    function renderProceso(proceso) {
+      var grid = document.getElementById("proceso-pasantia-grid");
+      if (!grid || !Array.isArray(proceso) || !proceso.length) return;
+      grid.innerHTML = proceso.map(function (p, i) {
+        return '<article class="pasantia-process-card" tabindex="0">' +
+          '<div class="pasantia-process-card-inner">' +
+          '<div class="pasantia-process-card-front">' +
+          '<span>' + (i + 1) + '</span>' +
+          '<strong>' + esc(p.titulo) + '</strong>' +
+          '</div>' +
+          '<div class="pasantia-process-card-back">' +
+          '<p>' + esc(p.texto) + '</p>' +
+          '</div></div></article>';
+      }).join("");
+    }
+
+    function renderPasantia(detail) {
+      if (!detail || !detail.pasantia) return;
+      renderBeneficios(detail.pasantia.beneficios);
+      renderProceso(detail.pasantia.proceso);
+    }
+
+    document.addEventListener("wawa:content-ready", function (e) { renderPasantia(e.detail); });
+    document.addEventListener("wawa:content-updated", function (e) { renderPasantia(e.detail); });
+
+    // Event delegation para flip de proceso (main.js los buscaba al cargar, antes del render dinámico)
+    var procesoGrid = document.getElementById("proceso-pasantia-grid");
+    if (procesoGrid) {
+      procesoGrid.addEventListener("click", function (e) {
+        var card = e.target.closest(".pasantia-process-card");
+        if (card) card.classList.toggle("is-flipped");
+      });
+      procesoGrid.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        var card = e.target.closest(".pasantia-process-card");
+        if (card) { e.preventDefault(); card.classList.toggle("is-flipped"); }
+      });
+    }
+  })();
+</script>
 <script>
   // Actualizar estado de convocatoria cuando cambia el contenido
   function updateConvocatoriaState(event) {

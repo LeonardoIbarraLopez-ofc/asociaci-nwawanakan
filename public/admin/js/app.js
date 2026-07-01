@@ -102,15 +102,21 @@ async function renderDoc(section) {
   const stored = await getDocData(section.storage.path);
   const data = { ...(DEFAULT_CONTENT[section.key] || {}), ...(stored || {}) };
 
-  // Rellenar subfields faltantes en arrays objectList con los defaults del primer ítem.
-  // Necesario cuando se añade un campo nuevo al schema después del primer guardado.
+  // Rellenar subfields ausentes o vacíos en arrays objectList con los defaults del primer ítem.
+  // Necesario cuando se añade un campo nuevo al schema después del primer guardado en Firestore.
   const sectionDefaults = DEFAULT_CONTENT[section.key] || {};
   section.fields.forEach((field) => {
     if (field.type !== "objectList" || !Array.isArray(data[field.key])) return;
     const defaultItems = sectionDefaults[field.key];
     if (!Array.isArray(defaultItems) || !defaultItems.length) return;
     const template = defaultItems[0];
-    data[field.key] = data[field.key].map((item) => ({ ...template, ...item }));
+    data[field.key] = data[field.key].map((item) => {
+      const out = { ...template };
+      Object.entries(item).forEach(([k, v]) => {
+        if (v !== null && v !== undefined && v !== "") out[k] = v;
+      });
+      return out;
+    });
   });
 
   const form = buildForm(section.fields, data);

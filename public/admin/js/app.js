@@ -102,6 +102,17 @@ async function renderDoc(section) {
   const stored = await getDocData(section.storage.path);
   const data = { ...(DEFAULT_CONTENT[section.key] || {}), ...(stored || {}) };
 
+  // Rellenar subfields faltantes en arrays objectList con los defaults del primer ítem.
+  // Necesario cuando se añade un campo nuevo al schema después del primer guardado.
+  const sectionDefaults = DEFAULT_CONTENT[section.key] || {};
+  section.fields.forEach((field) => {
+    if (field.type !== "objectList" || !Array.isArray(data[field.key])) return;
+    const defaultItems = sectionDefaults[field.key];
+    if (!Array.isArray(defaultItems) || !defaultItems.length) return;
+    const template = defaultItems[0];
+    data[field.key] = data[field.key].map((item) => ({ ...template, ...item }));
+  });
+
   const form = buildForm(section.fields, data);
   editorArea.innerHTML = "";
   if (section.note) editorArea.appendChild(el("p", { class: "cms-hint", text: section.note }));

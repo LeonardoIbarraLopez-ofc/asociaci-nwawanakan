@@ -93,7 +93,9 @@ export const SECTIONS = [
     itemLabel: "Valor",
     fields: [
       { key: "titulo", label: "Título", type: "text" },
-      { key: "descripcion", label: "Descripción", type: "textarea" }
+      { key: "descripcion", label: "Descripción", type: "textarea" },
+      { key: "icono", label: "Ícono SVG (código <path .../>)", type: "textarea",
+        note: "Pega aquí los elementos <path d=\"...\"/> del ícono. Envuelve en viewBox 0 0 64 64. Déjalo vacío para usar el ícono por defecto." }
     ]
   },
 

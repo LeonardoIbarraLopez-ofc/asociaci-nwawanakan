@@ -129,6 +129,11 @@ async function renderCollection(section) {
   let items = await getCollectionData(section.storage.name);
   if (!items.length && Array.isArray(DEFAULT_CONTENT[section.key])) {
     items = structuredClone(DEFAULT_CONTENT[section.key]);
+  } else if (Array.isArray(DEFAULT_CONTENT[section.key])) {
+    // Rellenar campos faltantes en items de Firestore con valores de DEFAULT_CONTENT
+    const defById = {};
+    DEFAULT_CONTENT[section.key].forEach((d) => { if (d.id) defById[d.id] = d; });
+    items = items.map((it) => ({ ...(defById[it.id] || {}), ...it }));
   }
   if (section.storage.orderBy) {
     const key = section.storage.orderBy;

@@ -93,11 +93,11 @@ export const DEFAULT_CONTENT = {
 
   // ── colección valores ──────────────────────────────────────────────
   valores: [
-    { id: "equidad", titulo: "Equidad", descripcion: "Garantizamos trato justo, inclusivo y sin discriminación, respetando la igualdad de oportunidades.", orden: 1 },
-    { id: "solidaridad", titulo: "Solidaridad", descripcion: "Promovemos el apoyo mutuo entre asociaciones, familias y comunidad en favor de la niñez.", orden: 2 },
-    { id: "respeto", titulo: "Respeto", descripcion: "Se trata de reconocer, aceptar y valorar la dignidad, los derechos y las diferencias de las demás personas.", orden: 3 },
-    { id: "trabajo-en-equipo", titulo: "Trabajo en Equipo", descripcion: "Es una colaboración de manera organizada para alcanzar un objetivo en común.", orden: 4 },
-    { id: "honestidad", titulo: "Honestidad", descripcion: "Impulsamos el uso responsable y claro de los recursos institucionales.", orden: 5 }
+    { id: "equidad",          titulo: "Equidad",          descripcion: "Garantizamos trato justo, inclusivo y sin discriminación, respetando la igualdad de oportunidades.",                         orden: 1, icono: '<path d="M32 12v40M20 20h24M20 20l-9 17h18L20 20Zm24 0-9 17h18l-9-17ZM24 52h16"/>' },
+    { id: "solidaridad",      titulo: "Solidaridad",      descripcion: "Promovemos el apoyo mutuo entre asociaciones, familias y comunidad en favor de la niñez.",                                   orden: 2, icono: '<path d="M32 50S13 38 13 24c0-7 5-12 12-12 4 0 7 2 7 5 0-3 4-5 8-5 7 0 11 5 11 12 0 14-19 26-19 26Z"/>' },
+    { id: "respeto",          titulo: "Respeto",          descripcion: "Se trata de reconocer, aceptar y valorar la dignidad, los derechos y las diferencias de las demás personas.",               orden: 3, icono: '<path d="M32 35s-9-6-9-13c0-4 3-7 7-7 2 0 4 1 5 3 1-2 3-3 5-3 4 0 7 3 7 7 0 7-15 17-15 17Z"/><path d="M12 38c8 0 12 8 20 8s12-8 20-8M16 45c6 5 11 7 16 7s10-2 16-7"/>' },
+    { id: "trabajo-en-equipo",titulo: "Trabajo en Equipo",descripcion: "Es una colaboración de manera organizada para alcanzar un objetivo en común.",                                              orden: 4, icono: '<path d="M22 29a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm20 0a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM10 50c1-10 6-15 12-15s11 5 12 15M30 50c1-10 6-15 12-15s11 5 12 15"/><path d="M31 28h7v7h-7z"/>' },
+    { id: "honestidad",       titulo: "Honestidad",       descripcion: "Impulsamos el uso responsable y claro de los recursos institucionales.",                                                     orden: 5, icono: '<path d="M32 8 14 15v14c0 13 8 22 18 27 10-5 18-14 18-27V15L32 8Z"/><path d="m24 32 6 6 11-14"/>' }
   ],
 
   // ── sitio/equipo + colección directorio ────────────────────────────

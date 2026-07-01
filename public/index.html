@@ -229,7 +229,7 @@
   <script>
     (function () {
       var VALUE_CLASSES = ["value-equity","value-solidarity","value-respect","value-teamwork","value-honesty"];
-      var VALUE_SVGS = [
+      var VALUE_SVGS_DEFAULT = [
         '<path d="M32 12v40M20 20h24M20 20l-9 17h18L20 20Zm24 0-9 17h18l-9-17ZM24 52h16"/>',
         '<path d="M32 50S13 38 13 24c0-7 5-12 12-12 4 0 7 2 7 5 0-3 4-5 8-5 7 0 11 5 11 12 0 14-19 26-19 26Z"/>',
         '<path d="M32 35s-9-6-9-13c0-4 3-7 7-7 2 0 4 1 5 3 1-2 3-3 5-3 4 0 7 3 7 7 0 7-15 17-15 17Z"/><path d="M12 38c8 0 12 8 20 8s12-8 20-8M16 45c6 5 11 7 16 7s10-2 16-7"/>',
@@ -242,7 +242,7 @@
         if (!grid || !Array.isArray(valores) || !valores.length) return;
         grid.innerHTML = valores.map(function(v, i) {
           var cls = VALUE_CLASSES[i % VALUE_CLASSES.length];
-          var svg = VALUE_SVGS[i % VALUE_SVGS.length];
+          var svg = (v.icono && v.icono.trim()) ? v.icono : VALUE_SVGS_DEFAULT[i % VALUE_SVGS_DEFAULT.length];
           return '<article class="flip-card value-card ' + cls + '" tabindex="0"><div class="flip-card-inner"><div class="flip-card-front"><span class="value-icon" aria-hidden="true"><svg viewBox="0 0 64 64">' + svg + '</svg></span><h3>' + esc(v.titulo) + '</h3></div><div class="flip-card-back"><p>' + esc(v.descripcion) + '</p></div></div></article>';
         }).join("");
         // main.js registra el observer antes de que el CMS renderice estos cards,

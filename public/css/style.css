@@ -12344,3 +12344,87 @@ body.home-page #alcances .stat-card h3 {
     scroll-behavior: auto !important;
   }
 }
+
+/* Voluntariado: tarjetas de ayuda tipo capsula */
+.voluntariado-help-roadmap,
+.help-grid,
+.como-ayudar-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(180px, 1fr)) !important;
+  gap: 18px !important;
+  max-width: 980px !important;
+  margin: 14px auto 0 !important;
+}
+
+.voluntariado-help-stop,
+.help-card,
+.como-ayudar-card {
+  position: relative !important;
+  min-height: 120px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(255, 201, 40, 0.35) !important;
+  border-radius: 999px !important;
+  background: rgba(255, 244, 230, 0.96) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16) !important;
+  overflow: visible !important;
+}
+
+.voluntariado-help-content {
+  min-height: 120px !important;
+  border-radius: 999px !important;
+}
+
+.voluntariado-help-card-inner {
+  min-height: 120px !important;
+  border-radius: 999px !important;
+}
+
+.voluntariado-help-card-face {
+  min-height: 120px !important;
+  padding: 20px 24px !important;
+  border-radius: 999px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+.voluntariado-help-card-front {
+  background: rgba(255, 244, 230, 0.96) !important;
+}
+
+.voluntariado-help-marker,
+.help-card span,
+.como-ayudar-card span,
+.help-card .number,
+.como-ayudar-card .number {
+  position: absolute !important;
+  top: 10px !important;
+  left: 12px !important;
+  z-index: 3 !important;
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 50% !important;
+  background: #ffc928 !important;
+  color: #421304 !important;
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+@media (max-width: 900px) {
+  .voluntariado-help-roadmap,
+  .help-grid,
+  .como-ayudar-grid {
+    grid-template-columns: repeat(2, minmax(180px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .voluntariado-help-roadmap,
+  .help-grid,
+  .como-ayudar-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

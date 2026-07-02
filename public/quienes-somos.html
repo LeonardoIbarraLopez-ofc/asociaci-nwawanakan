@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiénes Somos | Asociación Wawanakan Kusisinapa</title>
+  <meta name="description" content="Somos una institución dependiente de la Diócesis de El Alto que trabaja por el bienestar y desarrollo integral de la primera infancia desde 2008.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Asociación Wawanakan Kusisinapa">
+  <meta property="og:title" content="Quiénes Somos | Asociación Wawanakan Kusisinapa">
+  <meta property="og:description" content="Somos una institución dependiente de la Diócesis de El Alto que trabaja por el bienestar y desarrollo integral de la primera infancia desde 2008.">
+  <meta property="og:image" content="https://asociacionwawanakan-eng.github.io/asociaci-nwawanakan/assets/institucional/logotipo.png">
+  <meta property="og:url" content="https://asociacionwawanakan-eng.github.io/asociaci-nwawanakan/quienes-somos.html">
+  <link rel="icon" href="assets/institucional/logotipo.png" type="image/png">
+  <link rel="canonical" href="https://asociacionwawanakan-eng.github.io/asociaci-nwawanakan/quienes-somos.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <main class="page-main">
+    <section class="page-hero">
+      <p class="eyebrow">Quiénes somos</p>
+      <h1>Institución al servicio de la primera infancia</h1>
+    </section>
+
+    <section class="section section-cream">
+      <div class="section-shell about-layout">
+        <div class="section-copy">
+          <h2 data-cms-text="quienesSomos.titulo">Asociación Wawanakan Kusisinapa</h2>
+          <p data-cms-text="quienesSomos.texto">La Asociación Wawanakan Kusisinapa es una institución dependiente de la Diócesis de El Alto que trabaja por el bienestar y desarrollo integral de la primera infancia. A través de una red de Centros Infantiles, brinda atención integral a niños y niñas, promoviendo su desarrollo educativo, emocional, nutricional y social en un entorno seguro, inclusivo y basado en valores cristianos.</p>
+        </div>
+        <figure class="section-image">
+          <img src="assets/contenido/quienes-somos.jpg" data-cms-src="quienesSomos.imagen" alt="Equipo y comunidad Wawanakan">
+        </figure>
+      </div>
+    </section>
+
+    <section class="section section-white">
+      <div class="section-heading centered">
+        <p class="eyebrow">Conoce más</p>
+        <h2>Áreas institucionales</h2>
+      </div>
+      <div class="access-grid">
+        <a class="access-card accent-yellow" href="index.html#alcances">
+          <span>01</span><h3>Alcances</h3>
+          <p>Nuestros principales datos de atención y presencia institucional.</p>
+        </a>
+        <a class="access-card accent-green" href="index.html#objetivo">
+          <span>02</span><h3>Objetivos</h3>
+          <p>El propósito que guía la defensa, protección y educación integral.</p>
+        </a>
+        <a class="access-card accent-pink" href="index.html#valores">
+          <span>03</span><h3>Valores</h3>
+          <p>Principios que orientan el servicio diario con la niñez y las familias.</p>
+        </a>
+        <a class="access-card accent-blue" href="index.html#mision-vision">
+          <span>04</span><h3>Misión y Visión</h3>
+          <p>Nuestra identidad institucional y mirada de transformación social.</p>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" aria-label="Pie de pagina institucional"></footer>
+
+  <script src="js/diagnostics.js"></script>
+  <script src="js/components.js"></script>
+  <script>WawaComponents.renderHeader("quienes-somos.html"); WawaComponents.renderFooter();</script>
+  <script src="js/main.js"></script>
+  <script type="module" src="js/firebase-content.js"></script>
+  <script>
+    (function () {
+      function renderQuienesSomos(detail) {
+        if (!detail || !detail.quienesSomos) return;
+        var q = detail.quienesSomos;
+        var tituloEl = document.querySelector('[data-cms-text="quienesSomos.titulo"]');
+        var textoEl  = document.querySelector('[data-cms-text="quienesSomos.texto"]');
+        var imagenEl = document.querySelector('[data-cms-src="quienesSomos.imagen"]');
+        if (tituloEl && q.titulo) tituloEl.textContent = q.titulo;
+        if (textoEl  && q.texto)  textoEl.textContent  = q.texto;
+        if (imagenEl && q.imagen) imagenEl.src          = q.imagen;
+      }
+      document.addEventListener("wawa:content-ready",   function (e) { renderQuienesSomos(e.detail); });
+      document.addEventListener("wawa:content-updated", function (e) { renderQuienesSomos(e.detail); });
+    })();
+  </script>
+</body>
+</html>

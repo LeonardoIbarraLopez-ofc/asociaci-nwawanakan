@@ -27,6 +27,7 @@ const valueFlipCards = document.querySelectorAll(".values-feature .flip-card.val
 const applyFlipCards = document.querySelectorAll(".apply-flip-card");
 const contactForm = document.getElementById("contactForm");
 const contactStatus = document.getElementById("contactStatus");
+const contactSubmit = document.getElementById("contactSubmit");
 
 let currentSlide = 0;
 let carouselTimer;
@@ -36,244 +37,80 @@ let currentVisionSlide = 0;
 let visionCarouselTimer;
 let selectedCenterIndex = 0;
 
-const districts = [
-  { name: "Distrito 1", centers: [
-    ["Don Bosquito", "don-bosquito.jpg"],
-    ["Maria Auxiliadora", "maria-auxiliadora.jpg"]
-  ] },
-  { name: "Distrito 2", centers: [
-    ["San Francisco de Asis", "san-francisco-asis.jpg"],
-    ["Cristo del Consuelo", "cristo-del-consuelo.jpg"],
-    ["Palliri", "palliri.jpg"],
-    ["Virgen de la Fuensanta", "virgen-fuensanta.jpg"]
-  ] },
-  { name: "Distrito 3", centers: [
-    ["Beata Piedad de la Cruz", "beata-piedad.jpg"],
-    ["Sagrado Corazon de Jesus", "sagrado-corazon.jpg"],
-    ["Burgosmarka", "burgosmarka.jpg"]
-  ] },
-  { name: "Distrito 4", centers: [["Nueva Marka", "nueva-marka.jpg"]] },
-  { name: "Distrito 5", centers: [["Rinconcito", "rinconcito.jpg"]] },
-  { name: "Distrito 6", centers: [["Menesiano Yurinani", "menesiano-yurinani.jpg"]] }
-];
+let districts = [];
+let centers = [];
+let centersById = {};
+let centerDetails = {};
+let centerActivities = [];
+let centerImpactDescriptions = [];
+let centerDirectionsLink = "";
+let centerFormLink = "";
+let centerFacebookLink = "";
+let centerWhatsappLink = "";
+let centerInstitutionLogo = "assets/institucional/logotipo.png";
 
-const centers = [
-  {
-    id: "san-francisco",
-    name: "San Francisco de As\u00eds",
-    district: "Distrito 2",
-    address: "Zona Cupilupaca, Calle R\u00edo Bermejo N\u00b0 1064, El Alto",
-    lat: -16.521,
-    lng: -68.176,
-    mapsLink: "https://www.google.com/maps/dir/?api=1&origin=Current%20Location&destination=San%20Francisco%20de%20As%C3%ADs%2C%20Zona%20Cupilupaca%2C%20Calle%20R%C3%ADo%20Bermejo%20N%C2%B01064%2C%20El%20Alto%2C%20Bolivia"
-  },
-  {
-    id: "nueva-marka",
-    name: "Nueva Marka",
-    district: "Distrito 4",
-    address: "Zona Nueva Marka, Calle Eliodoro Camacho y Plaza 10 de Febrero, frente al m\u00f3dulo policial Nueva Marka, El Alto",
-    lat: -16.565,
-    lng: -68.206
-  },
-  {
-    id: "maria-auxiliadora",
-    name: "Mar\u00eda Auxiliadora",
-    district: "Distrito 1",
-    address: "Zona 12 de Octubre, Av. Ra\u00fal Salm\u00f3n entre calles 7 y 8 N\u00b0 100, El Alto",
-    lat: -16.503,
-    lng: -68.163
-  },
-  {
-    id: "mi-rinconcito",
-    name: "Mi Rinconcito",
-    district: "Distrito 5",
-    address: "Zona Norte Huayna Potos\u00ed, Calle 24 N\u00b0 575, El Alto",
-    lat: -16.469,
-    lng: -68.19
-  },
-  {
-    id: "sagrado-corazon",
-    name: "Sagrado Coraz\u00f3n de Jes\u00fas",
-    district: "Distrito 3",
-    address: "Plaza Primero de Mayo, El Alto",
-    lat: -16.506,
-    lng: -68.166
-  },
-  {
-    id: "madre-piedad",
-    name: "Madre Piedad de la Cruz",
-    district: "Distrito 3",
-    address: "Villa Dolores, Calle D, El Alto",
-    lat: -16.507,
-    lng: -68.163
-  },
-  {
-    id: "virgen-fuensanta",
-    name: "Virgen de la Fuensanta",
-    district: "Distrito 3",
-    address: "Zona La Primera, Calle Sopocachuy, El Alto",
-    lat: -16.526,
-    lng: -68.183
-  },
-  {
-    id: "cristo-consuelo",
-    name: "Cristo del Consuelo",
-    district: "Distrito 2",
-    address: "Zona Las Delicias, entre Calle Camellas y Pensamiento, El Alto",
-    lat: -16.515,
-    lng: -68.188
-  },
-  {
-    id: "menesiano-yurinani",
-    name: "Menesiano Yuri\u00f1ani",
-    district: "Distrito 6",
-    address: "Zona Alto Villa Victoria, El Alto",
-    lat: -16.477,
-    lng: -68.17
-  },
-  {
-    id: "don-bosquito",
-    name: "Don Bosquito",
-    district: "Distrito 2",
-    address: "Zona Santa Rosa, Calle E N\u00b0 46A, El Alto",
-    lat: -16.499,
-    lng: -68.186
-  },
-  {
-    id: "fundacion-palliri",
-    name: "Fundaci\u00f3n Palliri",
-    district: "Distrito 2",
-    address: "Villa Elizardo P\u00e9rez, Calle H\u00e9roes del Acre entre Calle 16 de Octubre, El Alto",
-    lat: -16.528,
-    lng: -68.179
-  },
-  {
-    id: "burgosmarka",
-    name: "Burgosmarka",
-    district: "Distrito 3",
-    address: "Zona 7 de Septiembre, Calle 31 de Octubre N\u00b0 24, El Alto",
-    lat: -16.535,
-    lng: -68.187
+async function loadData() {
+  try {
+    let centersData = null;
+    let configData = null;
+
+    // Preferir Firestore (CMS) cuando esté configurado; si no, usar los JSON locales.
+    try {
+      const cms = await import("./firebase-content.js");
+      [centersData, configData] = await Promise.all([cms.loadCenters(), cms.loadSiteConfig()]);
+    } catch {
+      // El módulo del CMS o Firebase no está disponible: se usa el fallback JSON.
+    }
+
+    if (!centersData) centersData = await fetch("data/centers.json").then(r => r.json());
+    if (!configData) configData = await fetch("data/config.json").then(r => r.json());
+
+    districts = centersData.districts;
+    centers = centersData.centers;
+    centerDetails = centersData.centerDetails;
+    centerActivities = centersData.activities;
+    centerImpactDescriptions = centersData.impactDescriptions;
+
+    centersById = centers.reduce((acc, center, index) => {
+      acc[center.id] = { ...center, index };
+      return acc;
+    }, {});
+
+    centerDirectionsLink = configData.directionsLink;
+    centerFormLink = configData.formLink;
+    centerFacebookLink = configData.facebookLink;
+    centerWhatsappLink = configData.whatsappLink;
+    centerInstitutionLogo = configData.institutionLogo;
+  } catch {
+    // Si falla la carga (ej. archivo local sin servidor), continúa sin datos de centros
   }
-];
-
-const centersById = centers.reduce((accumulator, center, index) => {
-  accumulator[center.id] = { ...center, index };
-  return accumulator;
-}, {});
-
-const centerDirectionsLink = "https://www.google.com/maps/dir/?api=1&destination=Zona%20Cupilupaca%2C%20Calle%20Rio%20Bermejo%20N%C2%B0%201064%2C%20El%20Alto%2C%20Bolivia";
-const centerFormLink = "https://docs.google.com/forms/d/e/1FAIpQLSff0HB9Bk4NkzAGlJEjGz90EJTxngUOCM3u4kDIBKY1dydNCw/viewform?usp=sharing&ouid=111170788783476830138";
-const centerFacebookLink = "https://www.facebook.com/";
-const centerWhatsappLink = "https://wa.me/591XXXXXXXX";
-const centerInstitutionLogo = "assets/logotipo.png";
-const centerImpactDescriptions = [
-  "Actividades que fortalecen el aprendizaje y la participacion de las ninas y ninos.",
-  "Espacios de cuidado, juego y acompanamiento integral.",
-  "Momentos que reflejan el compromiso del centro con la ninez.",
-  "Experiencias que muestran el impacto educativo y humano del centro."
-];
-
-const centerDetails = {
-  "Don Bosquito": {
-    subtitulo: "Centro infantil con acompanamiento, cuidado y formacion integral",
-    address: "Zona Santa Rosa, Calle E N° 46A, El Alto",
-    image: "don-bosquito.jpg"
-  },
-  "Maria Auxiliadora": {
-    name: "Maria Auxiliadora",
-    subtitulo: "Centro infantil con acompanamiento, cuidado y formacion integral",
-    address: "Zona 12 de Octubre, Av. Raul Salmon entre calles 7 y 8 N° 100, El Alto",
-    image: "maria-auxiliadora.jpg"
-  },
-  "San Francisco de Asis": {
-    subtitulo: "Centro infantil orientado al cuidado, aprendizaje y bienestar comunitario",
-    address: "Zona Cupilupaca, Calle Rio Bermejo N° 1064, El Alto",
-    image: "san-francisco-asis.jpg"
-  },
-  "Cristo del Consuelo": {
-    subtitulo: "Espacio de proteccion y desarrollo para ninas y ninos",
-    address: "Zona Las Delicias, entre Calle Camellas y Pensamiento, El Alto",
-    image: "cristo-del-consuelo.jpg"
-  },
-  Palliri: {
-    name: "Fundacion Palliri",
-    subtitulo: "Centro infantil comprometido con la formacion y el cuidado diario",
-    address: "Villa Elizardo Perez, Calle Heroes del Acre entre Calle 16 de Octubre, El Alto",
-    image: "palliri.jpg"
-  },
-  "Virgen de la Fuensanta": {
-    subtitulo: "Centro de acompanamiento integral para la primera infancia",
-    address: "Zona La Primera, Calle Sopocachuy, El Alto",
-    image: "virgen-fuensanta.jpg"
-  },
-  "Beata Piedad de la Cruz": {
-    name: "Madre Piedad de la Cruz",
-    subtitulo: "Centro infantil con enfoque humano, educativo y familiar",
-    address: "Villa Dolores, Calle D, El Alto",
-    image: "beata-piedad.jpg"
-  },
-  "Sagrado Corazon de Jesus": {
-    subtitulo: "Centro de cuidado, valores y participacion comunitaria",
-    address: "Plaza Primero de Mayo, El Alto",
-    image: "sagrado-corazon.jpg"
-  },
-  Burgosmarka: {
-    subtitulo: "Centro infantil al servicio del desarrollo integral de la ninez",
-    address: "Zona 7 de Septiembre, Calle 31 de Octubre N° 24, El Alto",
-    image: "burgosmarka.jpg"
-  },
-  "Nueva Marka": {
-    subtitulo: "Centro infantil de acompanamiento, proteccion y apoyo familiar",
-    address: "Zona Nueva Marka, Calle Eliodoro Camacho y Plaza 10 de Febrero, frente al modulo policial Nueva Marka, El Alto",
-    image: "nueva-marka.jpg"
-  },
-  Rinconcito: {
-    name: "Mi Rinconcito",
-    subtitulo: "Centro calido de aprendizaje, juego y cuidado integral",
-    address: "Zona Norte Huayna Potosi, Calle 24 N° 575, El Alto",
-    image: "rinconcito.jpg"
-  },
-  "Menesiano Yurinani": {
-    subtitulo: "Centro infantil que promueve cuidado, valores y desarrollo temprano",
-    address: "Zona Alto Villa Victoria, El Alto",
-    image: "menesiano-yurinani.jpg"
-  }
-};
-
-const centerActivities = [
-  ["📘", "Desarrollo educativo"],
-  ["💛", "Acompanamiento emocional"],
-  ["🍲", "Nutricion"],
-  ["🎲", "Juego"],
-  ["✨", "Valores"],
-  ["👨‍👩‍👧", "Participacion familiar"],
-  ["🤸", "Psicomotricidad"],
-  ["🤝", "Apoyo a familias"]
-];
+}
 
 function getCenterProfile(district, name, image) {
   const detail = centerDetails[name] || {};
   const displayName = detail.name || name;
   const imageFile = detail.image || image;
-  const imagePath = `assets/centros/${imageFile}`;
+  // Soporta tanto nombres de archivo locales (assets/centros/…) como URLs
+  // absolutas subidas al CMS (Cloudinary).
+  const imagePath = /^https?:\/\//.test(imageFile) ? imageFile : `assets/centros/${imageFile}`;
   const address = detail.address || "Direccion institucional por actualizar, El Alto";
   return {
     name: displayName,
     district: district.name,
-    subtitulo: detail.subtitulo || "Centro infantil con acompanamiento, cuidado y formacion integral",
+    subtitulo: detail.subtitulo || "Centro infantil con acompañamiento, cuidado y formación integral",
     address,
+    mapsLink: detail.mapsLink || null,
     portada: imagePath,
     imagenPrincipal: imagePath,
     logoCentro: imagePath,
-    logoWawanakan: "assets/logotipo.png",
-    resena: `${displayName} forma parte de la red de centros infantiles acompanados por Wawanakan, fortaleciendo espacios de cuidado, aprendizaje y buen trato para la ninez.`,
-    informacionGeneral: `El centro brinda acompanamiento integral a ninas y ninos, promoviendo experiencias educativas, juego, cuidado diario y relacion cercana con las familias y la comunidad.`,
+    logoWawanakan: "assets/institucional/logotipo.png",
+    resena: `${displayName} forma parte de la red de centros infantiles acompañados por Wawanakan, fortaleciendo espacios de cuidado, aprendizaje y buen trato para la niñez.`,
+    informacionGeneral: `El centro brinda acompañamiento integral a niñas y niños, promoviendo experiencias educativas, juego, cuidado diario y relación cercana con las familias y la comunidad.`,
     directora: {
       nombre: "Lic. Tania Loyola Acarapi Mamani",
       cargo: "Directora",
-      foto: "assets/presidenta1.png",
-      descripcion: "Lidera la gestion del centro con compromiso, vocacion de servicio y enfoque en el bienestar integral de la ninez y sus familias."
+      foto: "assets/equipo/presidenta1.png",
+      descripcion: "Lidera la gestión del centro con compromiso, vocación de servicio y enfoque en el bienestar integral de la niñez y sus familias."
     },
     galeria: [imagePath, imagePath, imagePath, imagePath],
     actividades: centerActivities
@@ -301,6 +138,8 @@ function showSlide(index) {
     slide.classList.remove("active", "is-zooming");
     if (!isActive) return;
     slide.classList.add("active");
+    // Doble rAF: el primer frame flushea remove("is-zooming") al DOM,
+    // el segundo dispara la transición CSS desde el estado limpio.
     requestAnimationFrame(() => {
       requestAnimationFrame(() => slide.classList.add("is-zooming"));
     });
@@ -345,6 +184,10 @@ function startVisionCarousel() {
   clearInterval(visionCarouselTimer);
   visionCarouselTimer = setInterval(() => showVisionSlide(currentVisionSlide + 1), 4000);
 }
+
+function stopCarousel() { clearInterval(carouselTimer); }
+function stopMissionCarousel() { clearInterval(missionCarouselTimer); }
+function stopVisionCarousel() { clearInterval(visionCarouselTimer); }
 
 function animateStatNumber(numberElement) {
   const target = Number(numberElement.dataset.target);
@@ -440,7 +283,7 @@ function openCenter(districtIndex, centerIndex) {
         </div>
         <div class="center-hero-actions">
           <a href="voluntariado.html">🤝 Voluntariado</a>
-          <a href="pasantia.html">🎓 Pasantia</a>
+          <a href="pasantia.html">🎓 Pasantía</a>
         </div>
       </div>
 
@@ -451,24 +294,24 @@ function openCenter(districtIndex, centerIndex) {
 
         <div class="center-info-panel">
           <section class="center-glass-block">
-            <h3>Informacion general</h3>
+            <h3>Información general</h3>
             <p>${center.informacionGeneral}</p>
           </section>
 
           <section class="center-history-card">
             <span aria-hidden="true">📖</span>
             <div>
-              <h3>Resena historica</h3>
+              <h3>Reseña histórica</h3>
               <p>${center.resena}</p>
               <button type="button">Conocer historia</button>
             </div>
           </section>
 
           <section class="center-address-card">
-            <h3>Direccion</h3>
+            <h3>Dirección</h3>
             <p>${center.address}</p>
             <p><strong>Distrito:</strong> ${center.district.replace("Distrito ", "")}</p>
-            <p><strong>Enfoque de servicio:</strong> Atencion integral a la primera infancia.</p>
+            <p><strong>Enfoque de servicio:</strong> Atención integral a la primera infancia.</p>
           </section>
         </div>
 
@@ -496,7 +339,7 @@ function openCenter(districtIndex, centerIndex) {
           </div>
 
           <div class="social-card">
-            <h3 class="social-title">S&iacute;guenos para m&aacute;s informaci&oacute;n</h3>
+            <h3 class="social-title">Síguenos para más información</h3>
             <a class="social-btn facebook-btn" href="${centerFacebookLink}" target="_blank" rel="noopener noreferrer">Facebook</a>
             <a class="social-btn whatsapp-btn" href="${centerWhatsappLink}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
           </div>
@@ -525,9 +368,12 @@ function openCenter(districtIndex, centerIndex) {
     </article>
   `;
 
+  // El template completo se genera primero para aprovechar un solo reflow;
+  // luego se eliminan o reescriben elementos opcionales según el estado real del centro.
   const locationText = centerDetail.querySelector(".center-address-pill");
   if (locationText) {
-    locationText.outerHTML = `<a class="center-location-button" href="${centerDirectionsLink}" target="_blank" rel="noopener noreferrer">C&oacute;mo llegar al centro</a>`;
+    const dirLink = center.mapsLink || centerDirectionsLink;
+    locationText.outerHTML = `<a class="center-location-button" href="${dirLink}" target="_blank" rel="noopener noreferrer">Cómo llegar al centro</a>`;
   }
 
   const centerTitle = centerDetail.querySelector(".center-hero-content h2");
@@ -543,13 +389,13 @@ function openCenter(districtIndex, centerIndex) {
   centerDetail.querySelector(".center-history-card button")?.remove();
 
   const historyTitle = centerDetail.querySelector(".center-history-card h3");
-  if (historyTitle) historyTitle.innerHTML = "Rese&ntilde;a hist&oacute;rica";
+  if (historyTitle) historyTitle.textContent = "Reseña histórica";
 
   centerDetail.querySelectorAll(".center-hero-actions a").forEach((link, index) => {
     link.href = centerFormLink;
     link.target = "_blank";
     link.rel = "noopener noreferrer";
-    link.innerHTML = index === 0 ? "Voluntariado" : "Pasant&iacute;a";
+    link.textContent = index === 0 ? "Voluntariado" : "Pasantía";
     link.classList.add(index === 0 ? "center-action-volunteer" : "center-action-internship");
   });
 
@@ -652,13 +498,6 @@ if (mapCenterButtons.length) {
     if (button.disabled) return;
     button.addEventListener("click", () => setActiveMapCenter(button.dataset.center || Number(button.dataset.centerMap)));
   });
-  const initializeLocationMap = () => setActiveMapCenter(mapCenterButtons[0]?.dataset.center || 0);
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initializeLocationMap, { once: true });
-  } else {
-    initializeLocationMap();
-  }
 }
 
 directoryCards.forEach((card) => {
@@ -735,6 +574,10 @@ if (contactForm) {
       contactStatus.textContent = "Enviando mensaje...";
       contactStatus.className = "contact-form-status contact-status sending";
     }
+    if (contactSubmit) contactSubmit.setAttribute("aria-busy", "true");
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     try {
       const response = await fetch("https://formsubmit.co/ajax/presidencia.wawanakan@gmail.com", {
@@ -743,7 +586,9 @@ if (contactForm) {
         headers: {
           Accept: "application/json",
         },
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
 
       if (response.ok) {
         if (contactStatus) {
@@ -751,6 +596,7 @@ if (contactForm) {
           contactStatus.className = "contact-form-status contact-status success";
         }
         contactForm.reset();
+        if (contactSubmit) contactSubmit.removeAttribute("aria-busy");
         return;
       }
 
@@ -759,11 +605,17 @@ if (contactForm) {
         contactStatus.className = "contact-form-status contact-status error";
       }
     } catch (error) {
+      clearTimeout(timeoutId);
       if (contactStatus) {
-        contactStatus.textContent = "Error de conexion. Intenta nuevamente.";
+        const isTimeout = error.name === "AbortError";
+        contactStatus.textContent = isTimeout
+          ? "La solicitud tardó demasiado. Verifica tu conexión e intenta nuevamente."
+          : "Error de conexión. Intenta nuevamente.";
         contactStatus.className = "contact-form-status contact-status error";
       }
     }
+
+    if (contactSubmit) contactSubmit.removeAttribute("aria-busy");
   });
 }
 
@@ -824,16 +676,71 @@ if (statNumbers.length && statsSection) {
   statsObserver.observe(statsSection);
 }
 
+if (hero && slides.length) {
+  new IntersectionObserver((entries) => {
+    entries.forEach(e => e.isIntersecting ? startCarousel() : stopCarousel());
+  }, { threshold: 0.05 }).observe(hero);
+}
+
+const missionSection = document.querySelector(".mission-vision-feature");
+if (missionSection && missionSlides.length) {
+  new IntersectionObserver((entries) => {
+    entries.forEach(e => e.isIntersecting ? startMissionCarousel() : stopMissionCarousel());
+  }, { threshold: 0.1 }).observe(missionSection);
+}
+
+const visionCarouselEl = document.querySelector(".vision-carousel");
+if (visionCarouselEl && visionSlides.length) {
+  new IntersectionObserver((entries) => {
+    entries.forEach(e => e.isIntersecting ? startVisionCarousel() : stopVisionCarousel());
+  }, { threshold: 0.1 }).observe(visionCarouselEl);
+}
+
 window.addEventListener("scroll", setHeaderState);
 window.addEventListener("resize", () => {
   if (window.innerWidth > 992) closeMobileMenu();
 });
 
-renderDistricts();
 setHeaderState();
 if (slides.length) showSlide(0);
 startCarousel();
 if (missionSlides.length) showMissionSlide(0);
-startMissionCarousel();
 if (visionSlides.length) showVisionSlide(0);
-startVisionCarousel();
+// Los carruseles de misión y visión arrancan vía IntersectionObserver al entrar al viewport.
+
+// Esperar a que firebase-content.js termine de cargar antes de llamar loadData()
+// Esto garantiza que Firestore esté listo y se prefiera sobre JSON locales
+async function initializeCenters() {
+  await loadData();
+  renderDistricts();
+  if (mapCenterButtons.length) {
+    const initializeLocationMap = () => setActiveMapCenter(mapCenterButtons[0]?.dataset.center || 0);
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initializeLocationMap, { once: true });
+    } else {
+      initializeLocationMap();
+    }
+  }
+}
+
+// Iniciar después de que firebase-content.js dispare content-ready
+document.addEventListener("wawa:content-ready", initializeCenters, { once: true });
+// Fallback si toma demasiado tiempo o falla
+setTimeout(initializeCenters, 3000);
+
+// Recargar datos de centros cuando el admin guarda cambios en Firestore
+async function reloadCenters() {
+  if (!window.WawaContent || !window.WawaContent.loadCenters) return;
+  try {
+    const centersData = await window.WawaContent.loadCenters();
+    if (!centersData) return;
+    districts = centersData.districts;
+    centers = centersData.centers;
+    centerDetails = centersData.centerDetails;
+    centerActivities = centersData.activities;
+    centerImpactDescriptions = centersData.impactDescriptions;
+    centersById = centers.reduce((acc, c, i) => { acc[c.id] = { ...c, index: i }; return acc; }, {});
+    if (districtGrid) renderDistricts();
+  } catch { /* silent */ }
+}
+document.addEventListener("wawa:content-updated", reloadCenters);

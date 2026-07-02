@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pasantías | Asociación Wawanakan Kusisinapa</title>
+  <meta name="description" content="Programa de pasantías de Wawanakan: formación con propósito para estudiantes universitarios que desean contribuir al bienestar infantil.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Asociación Wawanakan Kusisinapa">
+  <meta property="og:title" content="Pasantías | Asociación Wawanakan Kusisinapa">
+  <meta property="og:description" content="Programa de pasantías de Wawanakan: formación con propósito para estudiantes universitarios que desean contribuir al bienestar infantil.">
+  <meta property="og:image" content="https://asociacionwawanakan-eng.github.io/asociaci-nwawanakan/assets/institucional/logotipo.png">
+  <meta property="og:url" content="https://asociacionwawanakan-eng.github.io/asociaci-nwawanakan/pasantia.html">
+  <link rel="icon" href="assets/institucional/logotipo.png" type="image/png">
+  <link rel="canonical" href="https://asociacionwawanakan-eng.github.io/asociaci-nwawanakan/pasantia.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="pasantia-body">
+  <header class="site-header" id="site-header"></header>
+
+  <main class="page-main pasantia-page">
+    <section class="pasantia-section pasantia-glass-section" aria-labelledby="pasantia-title">
+      <div class="pasantia-glass pasantia-glass-card">
+        <div class="pasantia-card-top">
+          <div class="pasantia-brand-block">
+            <strong>WAWANAKAN</strong>
+            <span>Por la niñez, por el futuro.</span>
+          </div>
+        </div>
+
+        <div class="pasantia-title-block">
+          <h1 id="pasantia-title" data-cms-text="pasantia.titulo">Pasantías Wawanakan</h1>
+          <p data-cms-text="pasantia.subtitulo">Formación, compromiso y experiencia con propósito</p>
+          <span aria-hidden="true"></span>
+        </div>
+
+        <div class="pasantia-intro">
+          <span aria-hidden="true">👥</span>
+          <p data-cms-text="pasantia.intro">Dirigido a estudiantes y egresados que desean fortalecer sus habilidades, adquirir experiencia y contribuir al bienestar de la niñez.</p>
+        </div>
+
+        <div class="pasantia-content-grid">
+          <section class="pasantia-requirements" id="requisitos" aria-labelledby="requisitos-title">
+            <h2 id="requisitos-title">Requisitos principales</h2>
+            <ul>
+              <li data-cms-text="pasantia.requisitos.0">Ser estudiante universitario o egresado.</li>
+              <li data-cms-text="pasantia.requisitos.1">Contar con respaldo o convenio institucional.</li>
+              <li data-cms-text="pasantia.requisitos.2">Demostrar responsabilidad, ética y compromiso.</li>
+              <li data-cms-text="pasantia.requisitos.3">Disponibilidad para cumplir el proceso formativo.</li>
+            </ul>
+          </section>
+
+          <section class="pasantia-benefits" aria-labelledby="beneficios-pasantia-title">
+            <h2 id="beneficios-pasantia-title">Beneficios</h2>
+            <div class="pasantia-benefit-cards" id="beneficios-pasantia-grid"></div>
+          </section>
+        </div>
+
+        <div class="pasantia-process-showcase">
+          <section class="pasantia-process" aria-labelledby="proceso-pasantia-title">
+            <h2 id="proceso-pasantia-title">Proceso de selección</h2>
+            <div class="pasantia-process-line" id="proceso-pasantia-grid" aria-label="Pasos del proceso de selección"></div>
+          </section>
+          <figure class="pasantia-process-photo" aria-hidden="true">
+            <img src="assets/contenido/fondo-pasantia-proceso.jpg" loading="lazy" data-cms-src="pasantia.processImage" alt="Pasantes universitarios en actividad con niños del programa Wawanakan">
+          </figure>
+        </div>
+
+        <div id="convocatorias-list"></div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer" aria-label="Pie de pagina institucional"></footer>
+
+  <script src="js/diagnostics.js"></script>
+  <script src="js/components.js"></script>
+<script>WawaComponents.renderHeader("pasantia.html"); WawaComponents.renderFooter();</script>
+<script src="js/main.js"></script>
+<script type="module" src="js/firebase-content.js"></script>
+<script>
+  (function () {
+    var esc = function (s) { return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); };
+    var BENEFIT_ICONS = ["✦", "◎", "◆"];
+
+    function renderBeneficios(beneficios) {
+      var grid = document.getElementById("beneficios-pasantia-grid");
+      if (!grid || !Array.isArray(beneficios) || !beneficios.length) return;
+      grid.innerHTML = beneficios.map(function (b, i) {
+        return '<article><span aria-hidden="true">' + BENEFIT_ICONS[i % BENEFIT_ICONS.length] + '</span><h3>' + esc(b.titulo) + '</h3></article>';
+      }).join("");
+    }
+
+    function renderProceso(proceso) {
+      var grid = document.getElementById("proceso-pasantia-grid");
+      if (!grid || !Array.isArray(proceso) || !proceso.length) return;
+      grid.innerHTML = proceso.map(function (p, i) {
+        return '<article class="pasantia-process-card" tabindex="0">' +
+          '<div class="pasantia-process-card-inner">' +
+          '<div class="pasantia-process-card-front">' +
+          '<span>' + (i + 1) + '</span>' +
+          '<strong>' + esc(p.titulo) + '</strong>' +
+          '</div>' +
+          '<div class="pasantia-process-card-back">' +
+          '<p>' + esc(p.texto) + '</p>' +
+          '</div></div></article>';
+      }).join("");
+    }
+
+    function renderPasantia(detail) {
+      if (!detail || !detail.pasantia) return;
+      renderBeneficios(detail.pasantia.beneficios);
+      renderProceso(detail.pasantia.proceso);
+    }
+
+    document.addEventListener("wawa:content-ready", function (e) { renderPasantia(e.detail); });
+    document.addEventListener("wawa:content-updated", function (e) { renderPasantia(e.detail); });
+
+    // Event delegation para flip de proceso (main.js los buscaba al cargar, antes del render dinámico)
+    var procesoGrid = document.getElementById("proceso-pasantia-grid");
+    if (procesoGrid) {
+      procesoGrid.addEventListener("click", function (e) {
+        var card = e.target.closest(".pasantia-process-card");
+        if (card) card.classList.toggle("is-flipped");
+      });
+      procesoGrid.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        var card = e.target.closest(".pasantia-process-card");
+        if (card) { e.preventDefault(); card.classList.toggle("is-flipped"); }
+      });
+    }
+  })();
+</script>
+<script>
+  (function () {
+    var esc = function (s) { return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); };
+
+    function renderConvocatorias(convocatorias) {
+      var list = document.getElementById("convocatorias-list");
+      if (!list || !Array.isArray(convocatorias)) return;
+
+      list.innerHTML = convocatorias.map(function (c, i) {
+        var cerrada = c.estado === "cerrada";
+        var badgeClass = cerrada ? "cerrada" : "vigente";
+        var mapBtn = c.mapLink ? '<a class="pasantia-callout-btn pasantia-callout-btn-map" href="' + esc(c.mapLink) + '" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📍</span>Cómo llegar</a>' : "";
+        var fbBtn = c.facebookLink ? '<a class="pasantia-callout-btn pasantia-callout-btn-facebook" href="' + esc(c.facebookLink) + '" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">f</span>Facebook</a>' : "";
+        var waBtn = c.whatsappLink ? '<a class="pasantia-callout-btn pasantia-callout-btn-whatsapp" href="' + esc(c.whatsappLink) + '" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">☎</span>WhatsApp</a>' : "";
+        var postularBtn = (!cerrada && c.formLink) ? '<div class="pasantia-actions"><a class="pasantia-btn pasantia-btn-primary btn-postular" href="' + esc(c.formLink) + '" target="_blank" rel="noopener noreferrer">Postular ahora</a></div>' : "";
+        return '<article class="pasantia-callout-card" aria-labelledby="convocatoria-title-' + i + '">' +
+          '<span class="estado-badge ' + badgeClass + '">' + esc(c.badge) + '</span>' +
+          '<div class="pasantia-callout-icon" aria-hidden="true">🎓</div>' +
+          '<div class="pasantia-callout-content">' +
+          '<p class="pasantia-callout-label">' + esc(c.label) + '</p>' +
+          '<h2 id="convocatoria-title-' + i + '">' + esc(c.titulo) + '</h2>' +
+          '<p class="pasantia-callout-entity">' + esc(c.entidad) + '</p>' +
+          '<div class="pasantia-callout-details">' +
+          '<span><i aria-hidden="true">🏫</i><strong>Centro:</strong> <span>' + esc(c.centro) + '</span></span>' +
+          '<span><i aria-hidden="true">📍</i><strong>Ubicación:</strong> <span>' + esc(c.ubicacion) + '</span></span>' +
+          '<span><i aria-hidden="true">🕘</i><strong>Horario:</strong> <span>' + esc(c.horario) + '</span></span>' +
+          '<span><i aria-hidden="true">📚</i><strong>Área:</strong> <span>' + esc(c.area) + '</span></span>' +
+          '</div>' +
+          '<div class="pasantia-callout-footer">' +
+          '<span>Fecha de publicación: <span>' + esc(c.fecha) + '</span></span>' +
+          '<div class="pasantia-callout-actions" aria-label="Acciones del centro requerido">' +
+          mapBtn + fbBtn + waBtn +
+          '</div></div>' +
+          postularBtn +
+          '</div>' +
+          '<div class="pasantia-callout-mark" aria-hidden="true">✦</div>' +
+          '</article>';
+      }).join("");
+    }
+
+    document.addEventListener("wawa:content-ready", function (e) {
+      if (e.detail && e.detail.pasantia) renderConvocatorias(e.detail.pasantia.convocatorias);
+    });
+    document.addEventListener("wawa:content-updated", function (e) {
+      if (e.detail && e.detail.pasantia) renderConvocatorias(e.detail.pasantia.convocatorias);
+    });
+  })();
+</script>
+</body>
+</html>

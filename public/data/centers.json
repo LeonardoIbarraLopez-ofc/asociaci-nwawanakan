@@ -1,0 +1,221 @@
+{
+  "districts": [
+    {
+      "name": "Distrito 1",
+      "centers": [
+        ["Don Bosquito", "don-bosquito.jpg"],
+        ["María Auxiliadora", "maria-auxiliadora.jpg"]
+      ]
+    },
+    {
+      "name": "Distrito 2",
+      "centers": [
+        ["San Francisco de Asís", "san-francisco-asis.jpg"],
+        ["Cristo del Consuelo", "cristo-del-consuelo.jpg"],
+        ["Palliri", "palliri.jpg"],
+        ["Virgen de la Fuensanta", "virgen-fuensanta.jpg"]
+      ]
+    },
+    {
+      "name": "Distrito 3",
+      "centers": [
+        ["Beata Piedad de la Cruz", "beata-piedad.jpg"],
+        ["Sagrado Corazón de Jesús", "sagrado-corazon.jpg"],
+        ["Burgosmarka", "burgosmarka.jpg"]
+      ]
+    },
+    {
+      "name": "Distrito 4",
+      "centers": [["Nueva Marka", "nueva-marka.jpg"]]
+    },
+    {
+      "name": "Distrito 5",
+      "centers": [["Rinconcito", "rinconcito.jpg"]]
+    },
+    {
+      "name": "Distrito 6",
+      "centers": [["Menesiano Yurinani", "menesiano-yurinani.jpg"]]
+    }
+  ],
+  "centers": [
+    {
+      "id": "san-francisco",
+      "name": "San Francisco de Asís",
+      "district": "Distrito 2",
+      "address": "Zona Cupilupaca, Calle Río Bermejo N° 1064, El Alto",
+      "lat": -16.521,
+      "lng": -68.176,
+      "mapsLink": "https://www.google.com/maps/dir/?api=1&origin=Current%20Location&destination=San%20Francisco%20de%20As%C3%ADs%2C%20Zona%20Cupilupaca%2C%20Calle%20R%C3%ADo%20Bermejo%20N%C2%B01064%2C%20El%20Alto%2C%20Bolivia"
+    },
+    {
+      "id": "nueva-marka",
+      "name": "Nueva Marka",
+      "district": "Distrito 4",
+      "address": "Zona Nueva Marka, Calle Eliodoro Camacho y Plaza 10 de Febrero, frente al módulo policial Nueva Marka, El Alto",
+      "lat": -16.565,
+      "lng": -68.206
+    },
+    {
+      "id": "maria-auxiliadora",
+      "name": "María Auxiliadora",
+      "district": "Distrito 1",
+      "address": "Zona 12 de Octubre, Av. Raúl Salmón entre calles 7 y 8 N° 100, El Alto",
+      "lat": -16.503,
+      "lng": -68.163
+    },
+    {
+      "id": "mi-rinconcito",
+      "name": "Mi Rinconcito",
+      "district": "Distrito 5",
+      "address": "Zona Norte Huayna Potosí, Calle 24 N° 575, El Alto",
+      "lat": -16.469,
+      "lng": -68.19
+    },
+    {
+      "id": "sagrado-corazon",
+      "name": "Sagrado Corazón de Jesús",
+      "district": "Distrito 3",
+      "address": "Plaza Primero de Mayo, El Alto",
+      "lat": -16.506,
+      "lng": -68.166
+    },
+    {
+      "id": "madre-piedad",
+      "name": "Madre Piedad de la Cruz",
+      "district": "Distrito 3",
+      "address": "Villa Dolores, Calle D, El Alto",
+      "lat": -16.507,
+      "lng": -68.163
+    },
+    {
+      "id": "virgen-fuensanta",
+      "name": "Virgen de la Fuensanta",
+      "district": "Distrito 3",
+      "address": "Zona La Primera, Calle Sopocachuy, El Alto",
+      "lat": -16.526,
+      "lng": -68.183
+    },
+    {
+      "id": "cristo-consuelo",
+      "name": "Cristo del Consuelo",
+      "district": "Distrito 2",
+      "address": "Zona Las Delicias, entre Calle Camellas y Pensamiento, El Alto",
+      "lat": -16.515,
+      "lng": -68.188
+    },
+    {
+      "id": "menesiano-yurinani",
+      "name": "Menesiano Yuriñani",
+      "district": "Distrito 6",
+      "address": "Zona Alto Villa Victoria, El Alto",
+      "lat": -16.477,
+      "lng": -68.17
+    },
+    {
+      "id": "don-bosquito",
+      "name": "Don Bosquito",
+      "district": "Distrito 2",
+      "address": "Zona Santa Rosa, Calle E N° 46A, El Alto",
+      "lat": -16.499,
+      "lng": -68.186
+    },
+    {
+      "id": "fundacion-palliri",
+      "name": "Fundación Palliri",
+      "district": "Distrito 2",
+      "address": "Villa Elizardo Pérez, Calle Héroes del Acre entre Calle 16 de Octubre, El Alto",
+      "lat": -16.528,
+      "lng": -68.179
+    },
+    {
+      "id": "burgosmarka",
+      "name": "Burgosmarka",
+      "district": "Distrito 3",
+      "address": "Zona 7 de Septiembre, Calle 31 de Octubre N° 24, El Alto",
+      "lat": -16.535,
+      "lng": -68.187
+    }
+  ],
+  "centerDetails": {
+    "Don Bosquito": {
+      "subtitulo": "Centro infantil con acompañamiento, cuidado y formación integral",
+      "address": "Zona Santa Rosa, Calle E N° 46A, El Alto",
+      "image": "don-bosquito.jpg"
+    },
+    "María Auxiliadora": {
+      "name": "María Auxiliadora",
+      "subtitulo": "Centro infantil con acompañamiento, cuidado y formación integral",
+      "address": "Zona 12 de Octubre, Av. Raúl Salmón entre calles 7 y 8 N° 100, El Alto",
+      "image": "maria-auxiliadora.jpg"
+    },
+    "San Francisco de Asís": {
+      "subtitulo": "Centro infantil orientado al cuidado, aprendizaje y bienestar comunitario",
+      "address": "Zona Cupilupaca, Calle Río Bermejo N° 1064, El Alto",
+      "image": "san-francisco-asis.jpg"
+    },
+    "Cristo del Consuelo": {
+      "subtitulo": "Espacio de protección y desarrollo para niñas y niños",
+      "address": "Zona Las Delicias, entre Calle Camellas y Pensamiento, El Alto",
+      "image": "cristo-del-consuelo.jpg"
+    },
+    "Palliri": {
+      "name": "Fundación Palliri",
+      "subtitulo": "Centro infantil comprometido con la formación y el cuidado diario",
+      "address": "Villa Elizardo Pérez, Calle Héroes del Acre entre Calle 16 de Octubre, El Alto",
+      "image": "palliri.jpg"
+    },
+    "Virgen de la Fuensanta": {
+      "subtitulo": "Centro de acompañamiento integral para la primera infancia",
+      "address": "Zona La Primera, Calle Sopocachuy, El Alto",
+      "image": "virgen-fuensanta.jpg"
+    },
+    "Beata Piedad de la Cruz": {
+      "name": "Madre Piedad de la Cruz",
+      "subtitulo": "Centro infantil con enfoque humano, educativo y familiar",
+      "address": "Villa Dolores, Calle D, El Alto",
+      "image": "beata-piedad.jpg"
+    },
+    "Sagrado Corazón de Jesús": {
+      "subtitulo": "Centro de cuidado, valores y participación comunitaria",
+      "address": "Plaza Primero de Mayo, El Alto",
+      "image": "sagrado-corazon.jpg"
+    },
+    "Burgosmarka": {
+      "subtitulo": "Centro infantil al servicio del desarrollo integral de la niñez",
+      "address": "Zona 7 de Septiembre, Calle 31 de Octubre N° 24, El Alto",
+      "image": "burgosmarka.jpg"
+    },
+    "Nueva Marka": {
+      "subtitulo": "Centro infantil de acompañamiento, protección y apoyo familiar",
+      "address": "Zona Nueva Marka, Calle Eliodoro Camacho y Plaza 10 de Febrero, frente al módulo policial Nueva Marka, El Alto",
+      "image": "nueva-marka.jpg"
+    },
+    "Rinconcito": {
+      "name": "Mi Rinconcito",
+      "subtitulo": "Centro cálido de aprendizaje, juego y cuidado integral",
+      "address": "Zona Norte Huayna Potosí, Calle 24 N° 575, El Alto",
+      "image": "rinconcito.jpg"
+    },
+    "Menesiano Yurinani": {
+      "subtitulo": "Centro infantil que promueve cuidado, valores y desarrollo temprano",
+      "address": "Zona Alto Villa Victoria, El Alto",
+      "image": "menesiano-yurinani.jpg"
+    }
+  },
+  "activities": [
+    ["📘", "Desarrollo educativo"],
+    ["💛", "Acompañamiento emocional"],
+    ["🍲", "Nutrición"],
+    ["🎲", "Juego"],
+    ["✨", "Valores"],
+    ["👨‍👩‍👧", "Participación familiar"],
+    ["🤸", "Psicomotricidad"],
+    ["🤝", "Apoyo a familias"]
+  ],
+  "impactDescriptions": [
+    "Actividades que fortalecen el aprendizaje y la participación de las niñas y niños.",
+    "Espacios de cuidado, juego y acompañamiento integral.",
+    "Momentos que reflejan el compromiso del centro con la niñez.",
+    "Experiencias que muestran el impacto educativo y humano del centro."
+  ]
+}

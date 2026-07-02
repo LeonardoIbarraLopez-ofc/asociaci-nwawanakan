@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valores | Asociación Wawanakan Kusisinapa</title>
+  <meta name="description" content="Los principios que guían el trabajo diario de la Asociación Wawanakan Kusisinapa: equidad, solidaridad, respeto, trabajo en equipo y honestidad.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Asociación Wawanakan Kusisinapa">
+  <meta property="og:title" content="Valores | Asociación Wawanakan Kusisinapa">
+  <meta property="og:description" content="Los principios que guían el trabajo diario de la Asociación Wawanakan Kusisinapa: equidad, solidaridad, respeto, trabajo en equipo y honestidad.">
+  <meta property="og:image" content="https://asociacionwawanakan-eng.github.io/asociaci-nwawanakan/assets/institucional/logotipo.png">
+  <meta property="og:url" content="https://asociacionwawanakan-eng.github.io/asociaci-nwawanakan/valores.html">
+  <link rel="icon" href="assets/institucional/logotipo.png" type="image/png">
+  <link rel="canonical" href="https://asociacionwawanakan-eng.github.io/asociaci-nwawanakan/valores.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header" id="site-header"></header>
+
+  <main class="page-main">
+    <section class="page-hero">
+      <p class="eyebrow">Valores</p>
+      <h1>Principios que guían nuestro servicio</h1>
+    </section>
+    <section class="section section-cream">
+      <h2 class="sr-only">Nuestros valores</h2>
+      <div class="values-grid" id="valores-grid-page"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer" aria-label="Pie de pagina institucional"></footer>
+
+  <script src="js/diagnostics.js"></script>
+  <script src="js/components.js"></script>
+  <script>WawaComponents.renderHeader("valores.html"); WawaComponents.renderFooter();</script>
+  <script src="js/main.js"></script>
+  <script type="module" src="js/firebase-content.js"></script>
+  <script>
+    (function () {
+      var VALUE_SVGS_DEFAULT = [
+        '<path d="M32 12v40M20 20h24M20 20l-9 17h18L20 20Zm24 0-9 17h18l-9-17ZM24 52h16"/>',
+        '<path d="M32 50S13 38 13 24c0-7 5-12 12-12 4 0 7 2 7 5 0-3 4-5 8-5 7 0 11 5 11 12 0 14-19 26-19 26Z"/>',
+        '<path d="M32 35s-9-6-9-13c0-4 3-7 7-7 2 0 4 1 5 3 1-2 3-3 5-3 4 0 7 3 7 7 0 7-15 17-15 17Z"/><path d="M12 38c8 0 12 8 20 8s12-8 20-8M16 45c6 5 11 7 16 7s10-2 16-7"/>',
+        '<path d="M22 29a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm20 0a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM10 50c1-10 6-15 12-15s11 5 12 15M30 50c1-10 6-15 12-15s11 5 12 15"/><path d="M31 28h7v7h-7z"/>',
+        '<path d="M32 8 14 15v14c0 13 8 22 18 27 10-5 18-14 18-27V15L32 8Z"/><path d="m24 32 6 6 11-14"/>'
+      ];
+      var esc = function(s) { return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;"); };
+      function renderValoresPage(valores) {
+        var grid = document.getElementById("valores-grid-page");
+        if (!grid || !Array.isArray(valores) || !valores.length) return;
+        grid.innerHTML = valores.map(function(v, i) {
+          var svg = (v.icono && v.icono.trim()) ? v.icono : VALUE_SVGS_DEFAULT[i % VALUE_SVGS_DEFAULT.length];
+          return '<article><span aria-hidden="true"><svg viewBox="0 0 64 64">' + svg + '</svg></span><h3>' + esc(v.titulo) + '</h3></article>';
+        }).join("");
+      }
+      document.addEventListener("wawa:content-ready", function(e) { renderValoresPage(e.detail && e.detail.valores); });
+      document.addEventListener("wawa:content-updated", function(e) { renderValoresPage(e.detail && e.detail.valores); });
+    })();
+  </script>
+</body>
+</html>

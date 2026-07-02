@@ -93,11 +93,11 @@ export const DEFAULT_CONTENT = {
 
   // ── colección valores ──────────────────────────────────────────────
   valores: [
-    { id: "equidad", titulo: "Equidad", descripcion: "Garantizamos trato justo, inclusivo y sin discriminación, respetando la igualdad de oportunidades.", orden: 1 },
-    { id: "solidaridad", titulo: "Solidaridad", descripcion: "Promovemos el apoyo mutuo entre asociaciones, familias y comunidad en favor de la niñez.", orden: 2 },
-    { id: "respeto", titulo: "Respeto", descripcion: "Se trata de reconocer, aceptar y valorar la dignidad, los derechos y las diferencias de las demás personas.", orden: 3 },
-    { id: "trabajo-en-equipo", titulo: "Trabajo en Equipo", descripcion: "Es una colaboración de manera organizada para alcanzar un objetivo en común.", orden: 4 },
-    { id: "honestidad", titulo: "Honestidad", descripcion: "Impulsamos el uso responsable y claro de los recursos institucionales.", orden: 5 }
+    { id: "equidad",          titulo: "Equidad",          descripcion: "Garantizamos trato justo, inclusivo y sin discriminación, respetando la igualdad de oportunidades.",                         orden: 1, icono: '<path d="M32 12v40M20 20h24M20 20l-9 17h18L20 20Zm24 0-9 17h18l-9-17ZM24 52h16"/>' },
+    { id: "solidaridad",      titulo: "Solidaridad",      descripcion: "Promovemos el apoyo mutuo entre asociaciones, familias y comunidad en favor de la niñez.",                                   orden: 2, icono: '<path d="M32 50S13 38 13 24c0-7 5-12 12-12 4 0 7 2 7 5 0-3 4-5 8-5 7 0 11 5 11 12 0 14-19 26-19 26Z"/>' },
+    { id: "respeto",          titulo: "Respeto",          descripcion: "Se trata de reconocer, aceptar y valorar la dignidad, los derechos y las diferencias de las demás personas.",               orden: 3, icono: '<path d="M32 35s-9-6-9-13c0-4 3-7 7-7 2 0 4 1 5 3 1-2 3-3 5-3 4 0 7 3 7 7 0 7-15 17-15 17Z"/><path d="M12 38c8 0 12 8 20 8s12-8 20-8M16 45c6 5 11 7 16 7s10-2 16-7"/>' },
+    { id: "trabajo-en-equipo",titulo: "Trabajo en Equipo",descripcion: "Es una colaboración de manera organizada para alcanzar un objetivo en común.",                                              orden: 4, icono: '<path d="M22 29a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm20 0a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM10 50c1-10 6-15 12-15s11 5 12 15M30 50c1-10 6-15 12-15s11 5 12 15"/><path d="M31 28h7v7h-7z"/>' },
+    { id: "honestidad",       titulo: "Honestidad",       descripcion: "Impulsamos el uso responsable y claro de los recursos institucionales.",                                                     orden: 5, icono: '<path d="M32 8 14 15v14c0 13 8 22 18 27 10-5 18-14 18-27V15L32 8Z"/><path d="m24 32 6 6 11-14"/>' }
   ],
 
   // ── sitio/equipo + colección directorio ────────────────────────────
@@ -118,11 +118,13 @@ export const DEFAULT_CONTENT = {
 
   // ── sitio/voluntariado ─────────────────────────────────────────────
   voluntariado: {
-    heroTitle: "Transforma vidas desde el voluntariado",
-    lead: "Acompaña, aprende y aporta al bienestar de la niñez.",
+    heroTitle: "Voluntariado Wawanakan",
+    heroLead: "Transforma vidas desde el voluntariado",
+    heroSublead: "Acompaña, aprende y aporta al bienestar de la niñez.",
     heroImage: "assets/contenido/voluntariado.png",
     processImage: "assets/contenido/voluntariado2.jpg",
     ctaTitle: "Tu tiempo es un regalo, su futuro una esperanza.",
+    formLink: "https://docs.google.com/forms/d/e/1FAIpQLSff0HB9Bk4NkzAGlJEjGz90EJTxngUOCM3u4kDIBKY1dydNCw/viewform?usp=sharing&ouid=111170788783476830138",
     beneficios: [
       { icon: "❤", titulo: "Genera impacto", texto: "Acompaña y apoya el desarrollo integral de niñas y niños." },
       { icon: "✦", titulo: "Aprende", texto: "Conoce de cerca los desafíos que enfrenta la niñez en Bolivia." },
@@ -167,25 +169,30 @@ export const DEFAULT_CONTENT = {
       { titulo: "Entrevista", texto: "Se realiza una entrevista breve para conocer tu motivación y compromiso." },
       { titulo: "Ingreso", texto: "Si eres seleccionado, se coordina tu incorporación y el inicio de la pasantía." }
     ],
-    callout: {
-      estado: "vigente",
-      badge: "VIGENTE",
-      label: "REQUERIMIENTO DE PASANTE EN:",
-      titulo: "PASANTÍA EN APOYO EDUCATIVO E INSTITUCIONAL",
-      entidad: "Centros Infantiles Wawanakan",
-      centro: "Centro Infantil Nueva Marka",
-      ubicacion: "El Alto",
-      horario: "08:00 a 16:00",
-      area: "Educación / apoyo institucional",
-      fecha: "27 Jun 2026",
-      mapLink: "https://www.google.com/maps/dir/?api=1&destination=Nueva%20Marka%2C%20El%20Alto%2C%20Bolivia",
-      facebookLink: "https://www.facebook.com/profile.php?id=61590971327508&locale=es_LA",
-      whatsappLink: "https://wa.me/59179164334"
-    }
+    convocatorias: [
+      {
+        estado: "vigente",
+        badge: "VIGENTE",
+        label: "REQUERIMIENTO DE PASANTE EN:",
+        titulo: "PASANTÍA EN APOYO EDUCATIVO E INSTITUCIONAL",
+        entidad: "Centros Infantiles Wawanakan",
+        centro: "Centro Infantil Nueva Marka",
+        ubicacion: "El Alto",
+        horario: "08:00 a 16:00",
+        area: "Educación / apoyo institucional",
+        fecha: "27 Jun 2026",
+        mapLink: "https://www.google.com/maps/dir/?api=1&destination=Nueva%20Marka%2C%20El%20Alto%2C%20Bolivia",
+        facebookLink: "https://www.facebook.com/profile.php?id=61590971327508&locale=es_LA",
+        whatsappLink: "https://wa.me/59179164334",
+        formLink: "https://docs.google.com/forms/d/e/1FAIpQLSfdP1HmZJ5-J9TSSKdyPTiAr6LRWsYknrKuSWTYwveyKi179A/viewform?usp=publish-editor"
+      }
+    ]
   },
 
-  // ── sitio/quienesSomos (página dedicada) ───────────────────────────
+  // ── sitio/quienesSomos (portada + página dedicada) ────────────────
   quienesSomos: {
+    heroTitulo: "ASOCIACIÓN\nWAWANAKAN\nKUSISIÑAPA",
+    heroSubtitulo: "Identidad, cultura y equidad como pilares de nuestro servicio.",
     titulo: "Asociación Wawanakan Kusisinapa",
     texto: "La Asociación Wawanakan Kusisinapa es una institución dependiente de la Diócesis de El Alto que trabaja por el bienestar y desarrollo integral de la primera infancia. A través de una red de Centros Infantiles, brinda atención integral a niños y niñas, promoviendo su desarrollo educativo, emocional, nutricional y social en un entorno seguro, inclusivo y basado en valores cristianos.",
     imagen: "assets/contenido/quienes-somos.jpg"

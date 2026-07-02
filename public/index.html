@@ -36,7 +36,7 @@
       <div class="hero-sparkles" aria-hidden="true"></div>
       <div class="hero-content">
         <h1 class="hero-title"><span>ASOCIACIÓN</span><span>WAWANAKAN</span><span>KUSISIÑAPA</span></h1>
-        <p class="hero-subtitle" data-cms-text="home.heroSubtitle">Identidad, cultura y equidad como pilares de nuestro servicio.</p>
+        <p class="hero-subtitle" data-cms-text="quienesSomos.heroSubtitulo">Identidad, cultura y equidad como pilares de nuestro servicio.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="centros.html">Conoce nuestros centros</a>
           <a class="btn btn-secondary" href="voluntariado.html">Sé voluntario</a>
@@ -226,6 +226,28 @@
   <script>WawaComponents.renderHeader("index.html"); WawaComponents.renderFooter();</script>
   <script src="js/main.js"></script>
   <script type="module" src="js/firebase-content.js"></script>
+  <script>
+    (function () {
+      var esc = function (s) { return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;"); };
+      function renderHero(detail) {
+        if (!detail || !detail.quienesSomos) return;
+        var q = detail.quienesSomos;
+        if (q.heroTitulo) {
+          var h1 = document.querySelector(".hero-title");
+          if (h1) {
+            var lines = String(q.heroTitulo).split(/\n/).map(function (l) { return l.trim(); }).filter(Boolean);
+            h1.innerHTML = lines.map(function (l) { return "<span>" + esc(l) + "</span>"; }).join("");
+          }
+        }
+        if (q.heroSubtitulo) {
+          var p = document.querySelector(".hero-subtitle");
+          if (p) p.textContent = q.heroSubtitulo;
+        }
+      }
+      document.addEventListener("wawa:content-ready",   function (e) { renderHero(e.detail); });
+      document.addEventListener("wawa:content-updated", function (e) { renderHero(e.detail); });
+    })();
+  </script>
   <script>
     (function () {
       var VALUE_CLASSES = ["value-equity","value-solidarity","value-respect","value-teamwork","value-honesty"];

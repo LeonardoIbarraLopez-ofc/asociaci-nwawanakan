@@ -72,5 +72,21 @@
   <script>WawaComponents.renderHeader("quienes-somos.html"); WawaComponents.renderFooter();</script>
   <script src="js/main.js"></script>
   <script type="module" src="js/firebase-content.js"></script>
+  <script>
+    (function () {
+      function renderQuienesSomos(detail) {
+        if (!detail || !detail.quienesSomos) return;
+        var q = detail.quienesSomos;
+        var tituloEl = document.querySelector('[data-cms-text="quienesSomos.titulo"]');
+        var textoEl  = document.querySelector('[data-cms-text="quienesSomos.texto"]');
+        var imagenEl = document.querySelector('[data-cms-src="quienesSomos.imagen"]');
+        if (tituloEl && q.titulo) tituloEl.textContent = q.titulo;
+        if (textoEl  && q.texto)  textoEl.textContent  = q.texto;
+        if (imagenEl && q.imagen) imagenEl.src          = q.imagen;
+      }
+      document.addEventListener("wawa:content-ready",   function (e) { renderQuienesSomos(e.detail); });
+      document.addEventListener("wawa:content-updated", function (e) { renderQuienesSomos(e.detail); });
+    })();
+  </script>
 </body>
 </html>

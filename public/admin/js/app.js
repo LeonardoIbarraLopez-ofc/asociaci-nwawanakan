@@ -232,49 +232,216 @@ async function renderCollection(section) {
 /* ── Editor dedicado de centros ──────────────────────────────────────── */
 async function renderCentros(section) {
   let doc = await getDocData(section.storage.path);
-  if (!doc) {
-    doc = await fetch("../data/centers.json").then((r) => r.json());
-  }
-  const details = doc.centerDetails || {};
-  const keys = Object.keys(details);
+  if (!doc) doc = await fetch("../data/centers.json").then((r) => r.json());
 
-  const centerFields = [
-    { key: "name", label: "Nombre mostrado", type: "text" },
+  const details   = doc.centerDetails || {};
+  const centersDb = doc.centers       || [];
+
+  // Índice nombre → centro para pre-poblar mapsLink desde coordenadas
+  const refByName = {};
+  centersDb.forEach((c) => { refByName[c.name] = c; });
+
+  function defaultMapsLink(name, detail) {
+    if (detail && detail.mapsLink) return detail.mapsLink;
+    const ref = refByName[name] || centersDb.find((c) => c.name === name);
+    if (!ref) return "";
+    if (ref.mapsLink) return ref.mapsLink;
+    if (typeof ref.lat === "number" && typeof ref.lng === "number")
+      return `https://www.google.com/maps/dir/?api=1&origin=Current%20Location&destination=${ref.lat},${ref.lng}`;
+    if (ref.address)
+      return `https://www.google.com/maps/dir/?api=1&origin=Current%20Location&destination=${encodeURIComponent(ref.address)}`;
+    return "";
+  }
+
+  const centerDetailFields = [
     { key: "subtitulo", label: "Subtítulo", type: "text" },
-    { key: "address", label: "Dirección", type: "text" },
-    { key: "image", label: "Imagen del centro", type: "image", folder: "centros" }
+    { key: "address",   label: "Dirección", type: "text" },
+    { key: "mapsLink",  label: "Enlace 'Cómo llegar al centro'", type: "url" },
+    { key: "image",     label: "Imagen del centro", type: "image", folder: "centros" }
   ];
 
   editorArea.innerHTML = "";
-  editorArea.appendChild(el("p", { class: "cms-hint", text: "Edita el nombre, subtítulo, dirección e imagen de cada centro infantil. La imagen puede ser un archivo subido a Cloudinary o el nombre del archivo en assets/centros/." }));
+  editorArea.appendChild(el("p", { class: "cms-hint", text: "Gestiona distritos y centros. Usa ↑↓ para reordenar. 'Reasignar' mueve un centro a otro distrito." }));
 
-  const list = el("div", { class: "cms-objlist" });
-  const controllers = [];
+  const districtList = el("div", { class: "cms-objlist" });
 
-  keys.forEach((key) => {
-    const data = { name: details[key].name || key, ...details[key] };
-    const form = buildForm(centerFields, data);
-    const item = el("div", { class: "cms-objlist-item" }, [
-      el("div", { class: "cms-objlist-head" }, [el("strong", { text: key })]),
-      form.node
+  // Actualiza los <select> de reasignación con los nombres actuales de distritos
+  function refreshReassignSelects() {
+    const names = Array.from(districtList.querySelectorAll(":scope > .cms-district-item .cms-district-name-input"))
+      .map((i) => i.value.trim()).filter(Boolean);
+    districtList.querySelectorAll(".cms-reassign-select").forEach((sel) => {
+      const ci = sel.closest(".cms-center-item");
+      const di = ci && ci.closest(".cms-district-item");
+      const cur = di ? (di.querySelector(".cms-district-name-input")?.value.trim() || "") : "";
+      sel.innerHTML = names.map((n) => `<option value="${n}"${n === cur ? " selected" : ""}>${n}</option>`).join("");
+    });
+  }
+
+  // ── Fábrica de elementos de centro ───────────────────────────────────
+  function makeCenterItem(name, image, detail) {
+    detail = detail || {};
+    const displayName = detail.name || name;
+    const ref = refByName[displayName] || refByName[name];
+    const detailData = {
+      subtitulo: detail.subtitulo || "",
+      address:   detail.address   || (ref && ref.address) || "",
+      mapsLink:  defaultMapsLink(displayName, detail),
+      image:     detail.image || image || ""
+    };
+    const form = buildForm(centerDetailFields, detailData);
+
+    const nameInput = el("input", {
+      type: "text", class: "cms-input", value: displayName,
+      placeholder: "Nombre del centro", style: "flex:1;min-width:0"
+    });
+
+    // Select + botón de reasignación
+    const reassignSel = el("select", { class: "cms-select cms-reassign-select", style: "flex:1" });
+    const moveBtn = el("button", {
+      class: "cms-btn cms-btn-soft", type: "button", text: "Mover",
+      onclick: () => {
+        const targetName = reassignSel.value;
+        const targetDI = Array.from(districtList.querySelectorAll(":scope > .cms-district-item"))
+          .find((d) => d.querySelector(".cms-district-name-input")?.value.trim() === targetName);
+        if (!targetDI || targetDI === centerItem.closest(".cms-district-item")) return;
+        const tCL  = targetDI.querySelector(".cms-center-list");
+        const row  = tCL.querySelector(".cms-add-btn-row");
+        row ? tCL.insertBefore(centerItem, row) : tCL.appendChild(centerItem);
+        refreshReassignSelects();
+      }
+    });
+
+    const upBtn  = el("button", { class: "cms-icon-btn", type: "button", text: "↑", title: "Subir",
+      onclick: () => { const p = centerItem.previousElementSibling; if (p && p.classList.contains("cms-center-item")) centerItem.parentElement.insertBefore(centerItem, p); }
+    });
+    const downBtn = el("button", { class: "cms-icon-btn", type: "button", text: "↓", title: "Bajar",
+      onclick: () => { const n = centerItem.nextElementSibling; if (n && n.classList.contains("cms-center-item")) centerItem.parentElement.insertBefore(n, centerItem); }
+    });
+    const delBtn  = el("button", { class: "cms-icon-btn cms-icon-danger", type: "button", text: "✕", title: "Eliminar centro",
+      onclick: () => { if (confirm(`¿Eliminar el centro "${nameInput.value}"?`)) centerItem.remove(); }
+    });
+
+    const head = el("div", { class: "cms-objlist-head" }, [
+      nameInput,
+      el("div", { class: "cms-objlist-actions" }, [upBtn, downBtn, delBtn])
     ]);
-    list.appendChild(item);
-    controllers.push({ key, collect: form.collect });
-  });
-  editorArea.appendChild(list);
+    const reassignRow = el("div", { style: "display:flex;gap:.5rem;align-items:center;margin-top:.5rem;padding:.5rem;background:rgba(0,0,0,.03);border-radius:6px" }, [
+      el("span", { text: "Reasignar a:", style: "white-space:nowrap;font-size:.85rem;color:#666" }),
+      reassignSel,
+      moveBtn
+    ]);
 
+    const centerItem = el("div", { class: "cms-objlist-item cms-center-item" }, [head, form.node, reassignRow]);
+    centerItem.__collect = () => ({ name: nameInput.value.trim() || "Centro", ...form.collect() });
+    return centerItem;
+  }
+
+  // ── Fábrica de elementos de distrito ─────────────────────────────────
+  function makeDistrictItem({ name, centers: dc }) {
+    const nameInput = el("input", {
+      type: "text", class: "cms-input cms-district-name-input", value: name,
+      placeholder: "Nombre del distrito", style: "flex:1;min-width:0"
+    });
+    nameInput.addEventListener("input", refreshReassignSelects);
+
+    const upBtn  = el("button", { class: "cms-icon-btn", type: "button", text: "↑", title: "Subir distrito",
+      onclick: () => { const p = districtItem.previousElementSibling; if (p) districtList.insertBefore(districtItem, p); }
+    });
+    const downBtn = el("button", { class: "cms-icon-btn", type: "button", text: "↓", title: "Bajar distrito",
+      onclick: () => { const n = districtItem.nextElementSibling; if (n) districtList.insertBefore(n, districtItem); }
+    });
+    const delBtn  = el("button", { class: "cms-icon-btn cms-icon-danger", type: "button", text: "✕", title: "Eliminar distrito",
+      onclick: () => {
+        const count = centerList.querySelectorAll(".cms-center-item").length;
+        if (count > 0 && !confirm(`El distrito tiene ${count} centro(s). ¿Eliminarlo junto con sus centros?`)) return;
+        districtItem.remove();
+      }
+    });
+
+    const head = el("div", { class: "cms-objlist-head" }, [
+      el("strong", { text: "Distrito: ", style: "white-space:nowrap" }),
+      nameInput,
+      el("div", { class: "cms-objlist-actions" }, [upBtn, downBtn, delBtn])
+    ]);
+
+    const centerList = el("div", { class: "cms-center-list", style: "margin-left:1.25rem;padding-left:1rem;border-left:2px solid rgba(200,146,42,.35)" });
+
+    // Centros existentes del distrito
+    (Array.isArray(dc) ? dc : []).forEach(([cName, cImage]) => {
+      centerList.appendChild(makeCenterItem(cName, cImage, details[cName] || {}));
+    });
+
+    // Botón añadir centro
+    const addCenterBtn = el("button", { class: "cms-btn cms-btn-soft", type: "button", text: "+ Añadir centro al distrito",
+      onclick: () => {
+        const ni = makeCenterItem("Nuevo Centro", "", {});
+        const row = centerList.querySelector(".cms-add-btn-row");
+        row ? centerList.insertBefore(ni, row) : centerList.appendChild(ni);
+        refreshReassignSelects();
+      }
+    });
+    centerList.appendChild(el("div", { class: "cms-add-btn-row", style: "margin-top:.5rem" }, [addCenterBtn]));
+
+    const districtItem = el("div", { class: "cms-objlist-item cms-district-item" }, [head, centerList]);
+    return districtItem;
+  }
+
+  // ── Renderizar distritos actuales ────────────────────────────────────
+  const workingDistricts = (doc.districts || []).map((d) => ({
+    name: d.name,
+    centers: (d.centers || []).map((c) => Array.isArray(c) ? c : [c.name || "", c.image || ""])
+  }));
+  workingDistricts.forEach((d) => districtList.appendChild(makeDistrictItem(d)));
+
+  const addDistrictBtn = el("button", { class: "cms-btn cms-btn-soft", type: "button", text: "+ Añadir distrito",
+    onclick: () => {
+      districtList.appendChild(makeDistrictItem({ name: "Nuevo Distrito", centers: [] }));
+      refreshReassignSelects();
+    }
+  });
+
+  editorArea.appendChild(addDistrictBtn);
+  editorArea.appendChild(districtList);
+  setTimeout(refreshReassignSelects, 0);
+
+  // ── Guardar ──────────────────────────────────────────────────────────
   const saveBtn = el("button", {
     class: "cms-btn cms-btn-primary", type: "button", text: "Guardar cambios",
     onclick: async () => {
       saveBtn.disabled = true;
       try {
-        const updated = structuredClone(doc);
-        updated.centerDetails = updated.centerDetails || {};
-        controllers.forEach(({ key, collect }) => {
-          updated.centerDetails[key] = { ...updated.centerDetails[key], ...collect() };
+        const updated      = structuredClone(doc);
+        const newDistricts = [];
+        const newDetails   = {};
+
+        Array.from(districtList.querySelectorAll(":scope > .cms-district-item")).forEach((di) => {
+          const dName = di.querySelector(".cms-district-name-input")?.value.trim() || "Distrito";
+          const distCenters = [];
+
+          Array.from(di.querySelectorAll(".cms-center-list > .cms-center-item")).forEach((ci) => {
+            const d = ci.__collect();
+            const cName = d.name;
+            newDetails[cName] = {
+              subtitulo: d.subtitulo,
+              address:   d.address,
+              mapsLink:  d.mapsLink,
+              image:     d.image
+            };
+            // Actualizar campo district en el array centers (para main.js y la sección del mapa)
+            const dbEntry = (updated.centers || []).find((c) => c.name === cName);
+            if (dbEntry) dbEntry.district = dName;
+            distCenters.push({ name: cName, image: d.image || "" });
+          });
+
+          newDistricts.push({ name: dName, centers: distCenters });
         });
+
+        updated.districts    = newDistricts;
+        updated.centerDetails = newDetails;
+
         await replaceDocData(section.storage.path, updated);
         showToast("Centros guardados correctamente.");
+        await renderCentros(section);
       } catch (err) {
         showToast(`No se pudo guardar: ${err.message}`, "error");
       } finally {

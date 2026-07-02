@@ -269,6 +269,10 @@ a { color: inherit; text-decoration: none; }
 .site-header:not(.scrolled):not(.open) {
   color: var(--guindo);
 }
+
+body.home-page .site-header:not(.scrolled):not(.open) {
+  color: var(--white);
+}
 .brand {
   display: flex;
   align-items: center;
@@ -308,12 +312,26 @@ a { color: inherit; text-decoration: none; }
 .site-header:not(.scrolled):not(.open) .nav-link {
   color: var(--guindo);
 }
+
+body.home-page .site-header:not(.scrolled):not(.open) .site-nav > a,
+body.home-page .site-header:not(.scrolled):not(.open) .nav-link {
+  color: var(--white);
+}
 .site-header:not(.scrolled):not(.open) .nav-toggle {
   border-color: rgba(66, 19, 4, 0.35);
   background: rgba(255, 255, 255, 0.5);
 }
+
+body.home-page .site-header:not(.scrolled):not(.open) .nav-toggle {
+  border-color: rgba(255, 244, 230, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+}
 .site-header:not(.scrolled):not(.open) .nav-toggle span {
   background: var(--guindo);
+}
+
+body.home-page .site-header:not(.scrolled):not(.open) .nav-toggle span {
+  background: var(--white);
 }
 .site-nav > a::after,
 .nav-link::after {
@@ -5627,7 +5645,7 @@ body.home-page .centers-map-section {
 
 .pasantia-title-block h1 {
   margin: 0;
-  color: #ffffff;
+  color: var(--gold);
   font-family: "Lora", Georgia, serif;
   font-size: clamp(2.35rem, 5vw, 4.5rem);
   line-height: 1.02;
@@ -8815,8 +8833,8 @@ body.home-page .allies-inner:hover {
 }
 
 .voluntariado-glass-section {
-  padding-top: clamp(86px, 8vw, 108px) !important;
-  padding-bottom: clamp(24px, 4vw, 44px) !important;
+  padding-top: clamp(74px, 7vw, 96px) !important;
+  padding-bottom: clamp(18px, 3vw, 32px) !important;
 }
 
 .voluntariado-glass {
@@ -8832,6 +8850,38 @@ body.home-page .allies-inner:hover {
 
 .voluntariado-shell {
   max-width: 1080px;
+}
+
+.voluntariado-hero-copy {
+  display: grid;
+  max-width: 760px;
+  margin: 10px auto 14px;
+  gap: 6px;
+  justify-items: center;
+  text-align: center;
+}
+
+.voluntariado-hero-copy h1 {
+  width: fit-content;
+  max-width: 14ch;
+  margin: 0 auto;
+  font-size: clamp(2.35rem, 5vw, 4.5rem) !important;
+  line-height: 1.02;
+  letter-spacing: 0.01em;
+}
+
+.voluntariado-hero-copy .voluntariado-lead {
+  margin-top: 8px;
+  max-width: 42rem;
+}
+
+.voluntariado-sublead {
+  margin: 0;
+  max-width: 42rem;
+  color: #fff4e6;
+  font-size: clamp(0.98rem, 1.6vw, 1.16rem);
+  font-weight: 700;
+  line-height: 1.45;
 }
 
 .voluntariado-section-heading {
@@ -8890,6 +8940,78 @@ body.home-page .allies-inner:hover {
   font-weight: 700;
 }
 
+.voluntariado-actions {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+
+.voluntariado-cta-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: fit-content;
+  margin-top: 22px;
+}
+
+.voluntariado-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 13px 24px;
+  border: 2px solid rgba(255, 201, 40, 0.84);
+  border-radius: var(--radius-pill);
+  background: var(--gold);
+  color: #421304 !important;
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 16px 34px rgba(255, 201, 40, 0.24);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+}
+
+.voluntariado-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 34px rgba(42, 11, 3, 0.18);
+}
+
+@keyframes voluntariadoHeartbeat {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 16px 34px rgba(255, 201, 40, 0.24);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 0 18px 40px rgba(255, 201, 40, 0.34);
+  }
+}
+
+.voluntariado-btn-primary {
+  animation: voluntariadoHeartbeat 2.2s ease-in-out infinite;
+}
+
+.voluntariado-btn-gold {
+  animation: voluntariadoHeartbeat 2.2s ease-in-out infinite;
+}
+
+.voluntariado-btn-primary:hover {
+  animation-play-state: paused;
+}
+
+.voluntariado-btn-gold:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voluntariado-btn-primary,
+  .voluntariado-btn-gold {
+    animation: none;
+  }
+}
+
 .voluntariado-btn-primary,
 .voluntariado-btn-gold,
 .voluntariado-btn {
@@ -8900,6 +9022,18 @@ body.home-page .allies-inner:hover {
 .voluntariado-btn-primary,
 .voluntariado-btn-gold {
   color: #421304 !important;
+}
+
+.voluntariado-cta-wrap .voluntariado-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.voluntariado-cta-wrap .voluntariado-hand {
+  font-size: 1.25rem;
+  line-height: 1;
+  transform: translateY(1px);
 }
 
 .voluntariado-benefit-grid {
@@ -9474,6 +9608,16 @@ body.home-page .allies-inner:hover {
   box-shadow: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  text-align: center;
+}
+
+.voluntariado-final-cta {
+  display: flex;
+  justify-content: center;
   text-align: center;
 }
 
@@ -9481,6 +9625,165 @@ body.home-page .allies-inner:hover {
   margin: 0 0 14px !important;
   color: #ffc928 !important;
   text-shadow: 0 5px 18px rgba(0, 0, 0, 0.45);
+  text-align: center;
+}
+
+.voluntariado-final-cta .voluntariado-btn-gold {
+  margin-inline: auto;
+}
+
+/* Voluntariado: tarjetas limpias para "¿Cómo puedes ayudar?" */
+.voluntariado-help-roadmap {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(12px, 1.6vw, 16px);
+  margin-top: 14px;
+  position: relative;
+}
+
+.voluntariado-help-roadmap::before,
+.voluntariado-help-roadmap::after {
+  display: none !important;
+  content: none !important;
+}
+
+.voluntariado-help-stop {
+  position: relative;
+  display: block;
+  min-width: 0;
+  padding: 0 !important;
+  border: 1px solid rgba(255, 201, 40, 0.28);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(255, 201, 40, 0.12), transparent 28%),
+    linear-gradient(180deg, rgba(255, 244, 230, 0.98), rgba(255, 248, 236, 0.94));
+  box-shadow: 0 18px 38px rgba(42, 11, 3, 0.12);
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.voluntariado-help-stop:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 201, 40, 0.6);
+  box-shadow: 0 22px 46px rgba(42, 11, 3, 0.18);
+}
+
+.voluntariado-help-marker {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin: 0;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--guindo);
+  font-size: 0.86rem;
+  font-weight: 900;
+  box-shadow: 0 8px 18px rgba(255, 201, 40, 0.28);
+}
+
+.voluntariado-help-marker span {
+  line-height: 1;
+}
+
+.voluntariado-help-content {
+  position: relative;
+  display: block;
+  min-height: 198px;
+  border-radius: 24px;
+  outline: none;
+  cursor: pointer;
+  perspective: 1200px;
+}
+
+.voluntariado-help-card-inner {
+  position: relative;
+  width: 100%;
+  min-height: inherit;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.voluntariado-help-content.is-flipped .voluntariado-help-card-inner {
+  transform: rotateY(180deg);
+}
+
+.voluntariado-help-card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 34px 18px 18px;
+  border-radius: inherit;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.voluntariado-help-card-front {
+  background:
+    radial-gradient(circle at 20% 18%, rgba(255, 201, 40, 0.16), transparent 28%),
+    linear-gradient(180deg, #fffdf7, #fff3de);
+  text-align: center;
+}
+
+.voluntariado-help-face-icon {
+  display: none;
+}
+
+.voluntariado-help-card-front h3 {
+  margin: 0;
+  max-width: 16ch;
+  color: #421304 !important;
+  font-size: clamp(0.92rem, 1.05vw, 1.05rem);
+  line-height: 1.2;
+}
+
+.voluntariado-help-card-back {
+  transform: rotateY(180deg);
+  background:
+    radial-gradient(circle at 20% 16%, rgba(255, 201, 40, 0.14), transparent 26%),
+    linear-gradient(180deg, rgba(66, 19, 4, 0.98), rgba(42, 11, 3, 0.98));
+  text-align: center;
+}
+
+.voluntariado-help-card-back p {
+  margin: 0;
+  color: #fff4e6 !important;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.voluntariado-help-content:focus-visible .voluntariado-help-card-front,
+.voluntariado-help-content:focus-visible .voluntariado-help-card-back {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+@media (max-width: 1100px) {
+  .voluntariado-help-roadmap {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .voluntariado-help-roadmap {
+    grid-template-columns: 1fr;
+  }
+
+  .voluntariado-help-content {
+    min-height: 188px;
+  }
+
+  .voluntariado-help-card-face {
+    padding: 30px 16px 16px;
+  }
 }
 
 /* ==============================================

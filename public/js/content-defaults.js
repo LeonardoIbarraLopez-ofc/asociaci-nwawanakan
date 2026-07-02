@@ -118,11 +118,13 @@ export const DEFAULT_CONTENT = {
 
   // ── sitio/voluntariado ─────────────────────────────────────────────
   voluntariado: {
-    heroTitle: "Transforma vidas desde el voluntariado",
-    lead: "Acompaña, aprende y aporta al bienestar de la niñez.",
+    heroTitle: "Voluntariado Wawanakan",
+    heroLead: "Transforma vidas desde el voluntariado",
+    heroSublead: "Acompaña, aprende y aporta al bienestar de la niñez.",
     heroImage: "assets/contenido/voluntariado.png",
     processImage: "assets/contenido/voluntariado2.jpg",
     ctaTitle: "Tu tiempo es un regalo, su futuro una esperanza.",
+    formLink: "https://docs.google.com/forms/d/e/1FAIpQLSff0HB9Bk4NkzAGlJEjGz90EJTxngUOCM3u4kDIBKY1dydNCw/viewform?usp=sharing&ouid=111170788783476830138",
     beneficios: [
       { icon: "❤", titulo: "Genera impacto", texto: "Acompaña y apoya el desarrollo integral de niñas y niños." },
       { icon: "✦", titulo: "Aprende", texto: "Conoce de cerca los desafíos que enfrenta la niñez en Bolivia." },
@@ -187,8 +189,10 @@ export const DEFAULT_CONTENT = {
     ]
   },
 
-  // ── sitio/quienesSomos (página dedicada) ───────────────────────────
+  // ── sitio/quienesSomos (portada + página dedicada) ────────────────
   quienesSomos: {
+    heroTitulo: "ASOCIACIÓN\nWAWANAKAN\nKUSISIÑAPA",
+    heroSubtitulo: "Identidad, cultura y equidad como pilares de nuestro servicio.",
     titulo: "Asociación Wawanakan Kusisinapa",
     texto: "La Asociación Wawanakan Kusisinapa es una institución dependiente de la Diócesis de El Alto que trabaja por el bienestar y desarrollo integral de la primera infancia. A través de una red de Centros Infantiles, brinda atención integral a niños y niñas, promoviendo su desarrollo educativo, emocional, nutricional y social en un entorno seguro, inclusivo y basado en valores cristianos.",
     imagen: "assets/contenido/quienes-somos.jpg"

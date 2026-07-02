@@ -99,6 +99,7 @@ function getCenterProfile(district, name, image) {
     district: district.name,
     subtitulo: detail.subtitulo || "Centro infantil con acompañamiento, cuidado y formación integral",
     address,
+    mapsLink: detail.mapsLink || null,
     portada: imagePath,
     imagenPrincipal: imagePath,
     logoCentro: imagePath,
@@ -371,7 +372,8 @@ function openCenter(districtIndex, centerIndex) {
   // luego se eliminan o reescriben elementos opcionales según el estado real del centro.
   const locationText = centerDetail.querySelector(".center-address-pill");
   if (locationText) {
-    locationText.outerHTML = `<a class="center-location-button" href="${centerDirectionsLink}" target="_blank" rel="noopener noreferrer">Cómo llegar al centro</a>`;
+    const dirLink = center.mapsLink || centerDirectionsLink;
+    locationText.outerHTML = `<a class="center-location-button" href="${dirLink}" target="_blank" rel="noopener noreferrer">Cómo llegar al centro</a>`;
   }
 
   const centerTitle = centerDetail.querySelector(".center-hero-content h2");
@@ -725,3 +727,20 @@ async function initializeCenters() {
 document.addEventListener("wawa:content-ready", initializeCenters, { once: true });
 // Fallback si toma demasiado tiempo o falla
 setTimeout(initializeCenters, 3000);
+
+// Recargar datos de centros cuando el admin guarda cambios en Firestore
+async function reloadCenters() {
+  if (!window.WawaContent || !window.WawaContent.loadCenters) return;
+  try {
+    const centersData = await window.WawaContent.loadCenters();
+    if (!centersData) return;
+    districts = centersData.districts;
+    centers = centersData.centers;
+    centerDetails = centersData.centerDetails;
+    centerActivities = centersData.activities;
+    centerImpactDescriptions = centersData.impactDescriptions;
+    centersById = centers.reduce((acc, c, i) => { acc[c.id] = { ...c, index: i }; return acc; }, {});
+    if (districtGrid) renderDistricts();
+  } catch { /* silent */ }
+}
+document.addEventListener("wawa:content-updated", reloadCenters);

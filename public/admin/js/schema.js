@@ -23,7 +23,6 @@ export const SECTIONS = [
     label: "Inicio",
     storage: { type: "doc", path: ["sitio", "home"] },
     fields: [
-      { key: "heroSubtitle", label: "Subtítulo de portada", type: "text" },
       { key: "aboutTitle", label: "¿Quiénes somos? — Título", type: "text" },
       { key: "aboutSubtitle", label: "¿Quiénes somos? — Subtítulo", type: "text" },
       { key: "aboutText", label: "¿Quiénes somos? — Texto", type: "textarea" },
@@ -134,6 +133,7 @@ export const SECTIONS = [
       { key: "heroImage", label: "Imagen de portada", type: "image", folder: "voluntariado" },
       { key: "processImage", label: "Imagen del proceso", type: "image", folder: "voluntariado" },
       { key: "ctaTitle", label: "Frase del llamado final", type: "text" },
+      { key: "formLink", label: "Enlace de formulario de postulación (botones 'Inscribirme' y 'Quiero ser parte')", type: "url" },
       {
         key: "beneficios", label: "¿Por qué ser voluntario/a?", type: "objectList", itemLabel: "Beneficio",
         subfields: [
@@ -208,9 +208,11 @@ export const SECTIONS = [
     label: "Quiénes somos (página)",
     storage: { type: "doc", path: ["sitio", "quienesSomos"] },
     fields: [
-      { key: "titulo", label: "Título", type: "text" },
-      { key: "texto", label: "Texto", type: "textarea" },
-      { key: "imagen", label: "Imagen", type: "image", folder: "contenido" }
+      { key: "heroTitulo", label: "Título portada (nombre de la asociación — una línea por salto de línea)", type: "textarea" },
+      { key: "heroSubtitulo", label: "Subtítulo portada (lema)", type: "text" },
+      { key: "titulo", label: "Título de la página", type: "text" },
+      { key: "texto", label: "Texto de la página", type: "textarea" },
+      { key: "imagen", label: "Imagen de la página", type: "image", folder: "contenido" }
     ]
   },
 

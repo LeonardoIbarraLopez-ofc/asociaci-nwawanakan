@@ -12693,3 +12693,152 @@ body.home-page #alcances .stat-card h3 {
     height: 190px;
   }
 }
+
+/* Valores: tarjetas flip en paleta cafe guindo claro */
+.values-grid .flip-card.value-card {
+  display: block !important;
+  min-width: 0 !important;
+  min-height: 240px !important;
+  height: 100% !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 24px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  perspective: 1100px;
+  cursor: pointer;
+  overflow: visible !important;
+}
+
+.values-grid .flip-card.value-card:hover {
+  transform: translateY(-4px);
+}
+
+.values-grid .flip-card.value-card::before,
+.values-grid .flip-card.value-card::after {
+  content: none !important;
+}
+
+.values-grid .flip-card.value-card .flip-card-inner {
+  position: relative;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 240px !important;
+  transform-style: preserve-3d;
+  transition: transform 0.72s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.values-grid .flip-card.value-card:hover .flip-card-inner,
+.values-grid .flip-card.value-card.flipped .flip-card-inner,
+.values-grid .flip-card.value-card.is-flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.values-grid .flip-card.value-card .flip-card-front,
+.values-grid .flip-card.value-card .flip-card-back {
+  position: absolute;
+  inset: 0;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 240px !important;
+  padding: 24px 18px !important;
+  border: 1px solid rgba(92, 31, 22, 0.18) !important;
+  border-radius: 24px !important;
+  background:
+    linear-gradient(145deg, rgba(255, 250, 246, 0.96), rgba(238, 214, 204, 0.94)),
+    #f4e2da !important;
+  box-shadow:
+    0 20px 42px rgba(66, 19, 4, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82) !important;
+  color: #421304;
+  text-align: center;
+  overflow: hidden !important;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.values-grid .flip-card.value-card .flip-card-back {
+  transform: rotateY(180deg);
+  background:
+    linear-gradient(145deg, #5c1f16, #8b3f34),
+    #6f2b24 !important;
+  color: #fff7f1;
+}
+
+.values-grid .flip-card.value-card .value-icon {
+  display: grid !important;
+  place-items: center;
+  width: 70px !important;
+  height: 70px !important;
+  margin: 0 !important;
+  border: 1px solid rgba(92, 31, 22, 0.18);
+  border-radius: 22px;
+  background: rgba(92, 31, 22, 0.1) !important;
+  box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.45);
+  color: #5c1f16;
+}
+
+.values-grid .flip-card.value-card .value-icon::before,
+.values-grid .flip-card.value-card .value-icon::after {
+  content: none !important;
+}
+
+.values-grid .flip-card.value-card .value-icon svg {
+  width: 40px !important;
+  height: 40px !important;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.values-grid .flip-card.value-card h3 {
+  margin: 0 !important;
+  color: #421304 !important;
+  font-size: clamp(1rem, 1.5vw, 1.18rem) !important;
+  line-height: 1.2 !important;
+}
+
+.values-grid .flip-card.value-card h3::after {
+  display: block;
+  width: 52px;
+  height: 3px;
+  margin: 12px auto 0;
+  content: "";
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, rgba(92, 31, 22, 0), rgba(92, 31, 22, 0.5), rgba(92, 31, 22, 0));
+}
+
+.values-grid .flip-card.value-card .flip-card-back p {
+  max-width: 210px !important;
+  margin: 0 !important;
+  color: #fff7f1 !important;
+  font-size: 0.94rem !important;
+  font-weight: 700;
+  line-height: 1.5 !important;
+}
+
+@media (max-width: 768px) {
+  .values-grid .flip-card.value-card,
+  .values-grid .flip-card.value-card .flip-card-inner,
+  .values-grid .flip-card.value-card .flip-card-front,
+  .values-grid .flip-card.value-card .flip-card-back {
+    min-height: 220px !important;
+    aspect-ratio: auto !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .values-grid .flip-card.value-card,
+  .values-grid .flip-card.value-card .flip-card-inner,
+  .values-grid .flip-card.value-card .flip-card-front,
+  .values-grid .flip-card.value-card .flip-card-back {
+    min-height: 210px !important;
+  }
+}

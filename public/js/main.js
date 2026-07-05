@@ -552,16 +552,20 @@ applyFlipCards.forEach((card) => {
 
 valueFlipCards.forEach((card) => {
   card.classList.remove("is-flipped", "flipped");
+});
 
-  card.addEventListener("click", () => {
-    card.classList.toggle("flipped");
-  });
+document.addEventListener("click", (event) => {
+  const card = event.target.closest(".values-grid .flip-card.value-card");
+  if (!card) return;
+  card.classList.toggle("flipped");
+});
 
-  card.addEventListener("keydown", (event) => {
-    if (event.key !== "Enter" && event.key !== " ") return;
-    event.preventDefault();
-    card.classList.toggle("flipped");
-  });
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter" && event.key !== " ") return;
+  const card = event.target.closest(".values-grid .flip-card.value-card");
+  if (!card) return;
+  event.preventDefault();
+  card.classList.toggle("flipped");
 });
 
 if (contactForm) {

@@ -66,12 +66,53 @@
   (function () {
     const DECORATORS = ["✦", "◆", "✧"];
     const esc = (s) => String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+    const ROLE_ORDER = [
+      "presidencia",
+      "vicepresidencia",
+      "hacienda",
+      "actas",
+      "proyectos nacionales",
+      "proyectos internacionales"
+    ];
+    const FALLBACK_DESCRIPTIONS = {
+      presidencia: "Lidera, representa y acompaña la gestión institucional de la Asociación.",
+      vicepresidencia: "Apoya la coordinación general y fortalece el trabajo organizacional.",
+      hacienda: "Acompaña la administración económica y el seguimiento responsable de recursos.",
+      actas: "Organiza registros, actas y documentación para la memoria institucional.",
+      "proyectos nacionales": "Impulsa iniciativas, alianzas y gestiones dentro del ámbito nacional.",
+      "proyectos internacionales": "Fortalece vínculos y oportunidades de cooperación externa."
+    };
+
+    function normalizeRole(value) {
+      return String(value || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/^area de\s+/i, "")
+        .trim()
+        .toLowerCase();
+    }
+
+    function roleRank(member) {
+      const cargo = normalizeRole(member.cargo);
+      const id = normalizeRole(member.id);
+      const index = ROLE_ORDER.findIndex((role) => cargo.includes(role) || id.includes(role));
+      return index === -1 ? ROLE_ORDER.length + Number(member.orden || 99) : index;
+    }
+
+    function roleDescription(member) {
+      if (member.descripcionCargo) return member.descripcionCargo;
+      const cargo = normalizeRole(member.cargo);
+      const id = normalizeRole(member.id);
+      const key = ROLE_ORDER.find((role) => cargo.includes(role) || id.includes(role));
+      return FALLBACK_DESCRIPTIONS[key] || "Acompaña el trabajo institucional y aporta al servicio de la niñez.";
+    }
 
     function renderDirectorio(members) {
       const grid = document.getElementById("directorio-grid");
       if (!grid || !Array.isArray(members) || !members.length) return;
-      grid.innerHTML = members.map((m, i) => `
-        <article class="flip-card directory-card" tabindex="0">
+      const orderedMembers = [...members].sort((a, b) => roleRank(a) - roleRank(b));
+      grid.innerHTML = orderedMembers.map((m, i) => `
+        <article class="flip-card directory-card" tabindex="0" role="button" aria-label="Ver función de ${esc(m.nombre)}">
           <div class="flip-card-inner directory-card-inner">
             <div class="flip-card-front directory-card-face directory-card-front">
               <img src="${esc(m.foto || "assets/equipo/equipo.png")}" loading="lazy" alt="${esc(m.nombre)}">
@@ -83,7 +124,7 @@
             <div class="flip-card-back directory-card-face directory-card-back">
               <span aria-hidden="true">${DECORATORS[i % DECORATORS.length]}</span>
               <h3>${esc(m.cargo)}</h3>
-              <p>${esc(m.descripcionCargo)}</p>
+              <p>${esc(roleDescription(m))}</p>
             </div>
           </div>
         </article>`).join("");
@@ -91,6 +132,22 @@
 
     document.addEventListener("wawa:content-ready", (e) => renderDirectorio(e.detail && e.detail.directorio));
     document.addEventListener("wawa:content-updated", (e) => renderDirectorio(e.detail && e.detail.directorio));
+
+    const grid = document.getElementById("directorio-grid");
+    if (grid) {
+      grid.addEventListener("click", (event) => {
+        const card = event.target.closest(".directory-card");
+        if (card) card.classList.toggle("is-flipped");
+      });
+
+      grid.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        const card = event.target.closest(".directory-card");
+        if (!card) return;
+        event.preventDefault();
+        card.classList.toggle("is-flipped");
+      });
+    }
   })();
 </script>
 </body>

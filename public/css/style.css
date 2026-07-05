@@ -12428,3 +12428,138 @@ body.home-page #alcances .stat-card h3 {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* Directorio: flip institucional restaurado */
+.equipo-page .directorio-grid {
+  grid-template-columns: repeat(3, minmax(280px, 1fr)) !important;
+  gap: clamp(14px, 2vw, 22px) !important;
+  align-items: stretch !important;
+}
+
+.equipo-page .flip-card.directory-card {
+  height: 190px !important;
+  min-height: 190px !important;
+  border-radius: 24px !important;
+  perspective: 1200px !important;
+}
+
+.equipo-page .flip-card.directory-card .flip-card-inner {
+  height: 100% !important;
+  min-height: 190px !important;
+  transform-style: preserve-3d !important;
+  transition: transform 0.72s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+.equipo-page .flip-card.directory-card:hover .flip-card-inner,
+.equipo-page .flip-card.directory-card.is-flipped .flip-card-inner {
+  transform: rotateY(180deg) !important;
+}
+
+.equipo-page .flip-card.directory-card .directory-card-face,
+.equipo-page .flip-card.directory-card .flip-card-front,
+.equipo-page .flip-card.directory-card .flip-card-back {
+  border: 1px solid rgba(255, 201, 40, 0.32) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22) !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+}
+
+.equipo-page .flip-card.directory-card .directory-card-front {
+  display: grid !important;
+  grid-template-columns: 126px minmax(0, 1fr) !important;
+  gap: 16px !important;
+  align-items: center !important;
+  padding: 18px !important;
+  color: #fff4e6 !important;
+  background:
+    radial-gradient(circle at 16% 18%, rgba(255, 201, 40, 0.2), transparent 30%),
+    linear-gradient(135deg, rgba(66, 19, 4, 0.88), rgba(93, 45, 27, 0.82)) !important;
+}
+
+.equipo-page .flip-card.directory-card .directory-card-front img {
+  width: 116px !important;
+  height: 116px !important;
+  min-width: 116px !important;
+  max-width: 116px !important;
+  border: 4px solid rgba(255, 201, 40, 0.72) !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  object-position: center 58% !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22) !important;
+}
+
+.equipo-page .flip-card.directory-card .directory-card-content {
+  justify-items: start !important;
+  gap: 9px !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+
+.equipo-page .flip-card.directory-card h3 {
+  color: #ffffff !important;
+  font-size: clamp(0.98rem, 1.15vw, 1.15rem) !important;
+  line-height: 1.16 !important;
+}
+
+.equipo-page .flip-card.directory-card .directory-role {
+  justify-self: start !important;
+  color: #421304 !important;
+  background: #ffc928 !important;
+  box-shadow: 0 8px 18px rgba(255, 201, 40, 0.22) !important;
+}
+
+.equipo-page .flip-card.directory-card .directory-card-back {
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 22px 20px !important;
+  color: #fff4e6 !important;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(255, 201, 40, 0.26), transparent 30%),
+    linear-gradient(135deg, rgba(42, 11, 3, 0.96), rgba(84, 38, 22, 0.94)) !important;
+  text-align: center !important;
+  transform: rotateY(180deg) !important;
+}
+
+.equipo-page .flip-card.directory-card .directory-card-back h3 {
+  margin: 0 0 8px !important;
+  color: #ffc928 !important;
+}
+
+.equipo-page .flip-card.directory-card .directory-card-back p {
+  max-width: 300px !important;
+  color: #fff4e6 !important;
+  font-size: 0.9rem !important;
+  line-height: 1.38 !important;
+}
+
+@media (max-width: 1180px) {
+  .equipo-page .directorio-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .equipo-page .directorio-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .equipo-page .flip-card.directory-card,
+  .equipo-page .flip-card.directory-card .flip-card-inner {
+    height: 176px !important;
+    min-height: 176px !important;
+  }
+
+  .equipo-page .flip-card.directory-card .directory-card-front {
+    grid-template-columns: 104px minmax(0, 1fr) !important;
+    gap: 12px !important;
+    padding: 14px !important;
+  }
+
+  .equipo-page .flip-card.directory-card .directory-card-front img {
+    width: 96px !important;
+    height: 96px !important;
+    min-width: 96px !important;
+    max-width: 96px !important;
+  }
+}

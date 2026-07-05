@@ -12904,8 +12904,9 @@ body.home-page main > .values-feature {
   padding-top: clamp(16px, 2.4vw, 26px) !important;
   padding-bottom: clamp(16px, 2.4vw, 26px) !important;
   background:
-    radial-gradient(circle at 16% 12%, rgba(255, 201, 40, 0.12), transparent 24%),
-    linear-gradient(180deg, #fffaf6 0%, #f3e1d8 100%) !important;
+    radial-gradient(circle at 16% 12%, rgba(255, 201, 40, 0.2), transparent 24%),
+    radial-gradient(circle at 88% 82%, rgba(255, 244, 230, 0.12), transparent 30%),
+    linear-gradient(180deg, rgba(92, 31, 22, 0.78), rgba(66, 19, 4, 0.66)) !important;
   overflow: visible !important;
 }
 
@@ -12916,7 +12917,7 @@ body.home-page .values-feature .section-heading {
 body.home-page .values-feature .section-heading h2 {
   margin: 0 !important;
   padding-top: 4px;
-  color: #421304 !important;
+  color: #fff4e6 !important;
   line-height: 1.08 !important;
 }
 
@@ -13054,7 +13055,7 @@ body.home-page .values-feature .values-closing,
 body.home-page #valores .values-closing {
   max-width: min(620px, 92vw);
   margin: 6px auto 0 !important;
-  color: #421304 !important;
+  color: #fff4e6 !important;
   font-size: clamp(1.02rem, 1.7vw, 1.18rem) !important;
   font-weight: 900;
   text-align: center;

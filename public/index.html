@@ -194,7 +194,7 @@
         <p>Compartimos novedades, actividades y avances de nuestra comunidad.</p>
       </div>
       <div class="noticias-grid" id="noticias-grid" aria-live="polite"></div>
-      <p class="noticias-empty" id="noticias-empty" hidden>Próximamente compartiremos nuestras noticias y actividades.</p>
+      <p class="noticias-empty" id="noticias-empty">Próximamente compartiremos nuestras noticias y actividades.</p>
     </section>
     <!-- FIN NOTICIAS -->
 
@@ -295,13 +295,10 @@
         return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
       };
       var isActive = function(n) {
-        var state = String(n.activa ?? n.estado ?? "").trim().toLowerCase();
-        return state === "si" || state === "sí" || state === "activa" || state === "activo" || state === "true" || n.activa === true;
-      };
-      var shortText = function(text, limit) {
-        var value = String(text || "").trim();
-        if (value.length <= limit) return value;
-        return value.slice(0, limit).trim().replace(/\s+\S*$/, "") + "...";
+        var rawState = n.activa ?? n.estado;
+        if (rawState === undefined || rawState === null || rawState === "") return true;
+        var state = String(rawState).trim().toLowerCase();
+        return state === "si" || state === "sí" || state === "activa" || state === "activo" || state === "visible" || state === "true" || rawState === true;
       };
       var sortByDate = function(a, b) {
         return String(b.fecha || "").localeCompare(String(a.fecha || ""));
@@ -322,11 +319,11 @@
 
         grid.innerHTML = activeNews.map(function(n, index) {
           var content = String(n.contenido || "").trim();
-          var hasLongContent = content.length > 180;
           var image = n.imagen ? '<img src="' + esc(n.imagen) + '" alt="' + esc(n.titulo) + '" loading="lazy">' : "";
-          var body = hasLongContent
-            ? '<p>' + esc(shortText(content, 180)) + '</p><details class="noticia-more"><summary>Leer más</summary><p>' + esc(content) + '</p></details>'
-            : '<p>' + esc(content) + '</p>';
+          var panelId = "noticia-full-" + index;
+          var body = content
+            ? '<button class="noticia-more" type="button" aria-expanded="false" aria-controls="' + panelId + '"><span class="noticia-more-open">Leer más</span><span class="noticia-more-close">Ver menos</span></button><div class="noticia-full" id="' + panelId + '" hidden><p>' + esc(content) + '</p></div>'
+            : "";
 
           return '<article class="noticia-card" style="--delay:' + (index * 70) + 'ms">' +
             '<figure class="noticia-image">' + image + '</figure>' +
@@ -341,6 +338,15 @@
 
       document.addEventListener("wawa:content-ready", function(e) { renderNoticias(e.detail && e.detail.noticias); });
       document.addEventListener("wawa:content-updated", function(e) { renderNoticias(e.detail && e.detail.noticias); });
+      document.addEventListener("click", function(e) {
+        var button = e.target.closest(".noticia-more");
+        if (!button) return;
+        var panel = document.getElementById(button.getAttribute("aria-controls"));
+        if (!panel) return;
+        var isOpen = button.getAttribute("aria-expanded") === "true";
+        button.setAttribute("aria-expanded", String(!isOpen));
+        panel.hidden = isOpen;
+      });
     })();
   </script>
 </body>

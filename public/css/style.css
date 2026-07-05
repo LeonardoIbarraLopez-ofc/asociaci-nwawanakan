@@ -2226,7 +2226,15 @@ body.home-page #quienes-somos .about-card {
 }
 
 body.home-page #quienes-somos .about-card h2 {
+  width: 100%;
   margin-bottom: 10px !important;
+  text-align: center;
+}
+
+body.home-page #quienes-somos .about-card h2::after {
+  margin-right: auto;
+  margin-left: auto;
+  background: linear-gradient(90deg, rgba(255, 201, 40, 0), var(--gold), rgba(255, 201, 40, 0));
 }
 
 body.home-page #quienes-somos .title-heart-line {

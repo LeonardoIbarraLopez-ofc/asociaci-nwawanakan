@@ -8262,18 +8262,21 @@ body.home-page .values-closing {
 .center-gallery.center-impact {
   position: relative;
   overflow: hidden;
-  scroll-behavior: smooth;
+  padding-inline: clamp(2.7rem, 6vw, 4rem);
 }
 
 .center-gallery.center-impact > div {
   display: flex;
-  width: max-content;
+  width: 100%;
   gap: 14px;
-  animation: center-impact-scroll 24s linear infinite;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
 }
 
-.center-gallery.center-impact:hover > div {
-  animation-play-state: paused;
+.center-gallery.center-impact > div::-webkit-scrollbar {
+  display: none;
 }
 
 .center-gallery.center-impact article {
@@ -8306,16 +8309,19 @@ body.home-page .values-closing {
 }
 
 .center-gallery.center-impact h3 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  text-align: center;
 }
 
 .center-impact-controls {
+  position: absolute;
+  top: calc(50% + 1.8rem);
+  right: 0;
+  left: 0;
+  z-index: 3;
   display: flex;
-  flex: 0 0 auto;
-  gap: 8px;
+  justify-content: space-between;
+  pointer-events: none;
+  transform: translateY(-50%);
 }
 
 .center-impact-arrow {
@@ -8335,6 +8341,7 @@ body.home-page .values-closing {
   font-size: 2rem;
   font-weight: 800;
   line-height: 1;
+  pointer-events: auto;
   transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
 }
 
@@ -8347,16 +8354,6 @@ body.home-page .values-closing {
     0 0 18px rgba(255, 201, 40, 0.2);
 }
 
-@keyframes center-impact-scroll {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(calc(-50% - 7px));
-  }
-}
-
 @media (max-width: 620px) {
   .center-location-button {
     width: 100%;
@@ -8366,19 +8363,13 @@ body.home-page .values-closing {
     align-items: flex-start;
   }
 
-  .center-gallery.center-impact > div {
-    animation-duration: 30s;
-  }
-
-  .center-gallery.center-impact h3 {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 10px;
+  .center-gallery.center-impact {
+    padding-inline: 2.55rem;
   }
 
   .center-impact-controls {
-    width: 100%;
-    justify-content: flex-end;
+    right: 0.15rem;
+    left: 0.15rem;
   }
 
   .center-impact-arrow {

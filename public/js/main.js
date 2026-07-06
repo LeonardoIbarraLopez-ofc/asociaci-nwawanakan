@@ -35,6 +35,7 @@ let currentMissionSlide = 0;
 let missionCarouselTimer;
 let currentVisionSlide = 0;
 let visionCarouselTimer;
+let centerImpactTimer;
 let selectedCenterIndex = 0;
 
 let districts = [];
@@ -290,6 +291,7 @@ function openCenter(districtIndex, centerIndex) {
   const district = districts[districtIndex];
   const [name, image] = district.centers[centerIndex];
   const center = getCenterProfile(district, name, image);
+  clearInterval(centerImpactTimer);
 
   centerDetail.hidden = false;
   centerDetail.innerHTML = `
@@ -439,29 +441,49 @@ function openCenter(districtIndex, centerIndex) {
 
     gallery.classList.add("center-impact");
     if (galleryTitle) {
-      galleryTitle.innerHTML = `
-        <span>Alcances e Impacto</span>
-        <span class="center-impact-controls">
+      galleryTitle.textContent = "Alcances e Impacto";
+      galleryTitle.insertAdjacentHTML("afterend", `
+        <div class="center-impact-controls" aria-label="Controles del carrusel Alcances e Impacto">
           <button class="center-impact-arrow center-impact-prev" type="button" aria-label="Ver imagen anterior">‹</button>
           <button class="center-impact-arrow center-impact-next" type="button" aria-label="Ver imagen siguiente">›</button>
-        </span>
-      `;
+        </div>
+      `);
     }
     if (galleryGrid) galleryGrid.innerHTML = impactCards + impactCards;
+
+    const getImpactStep = () => {
+      const firstCard = galleryGrid.querySelector("article");
+      if (!firstCard) return 294;
+      const gap = Number.parseFloat(getComputedStyle(galleryGrid).columnGap) || 14;
+      return firstCard.getBoundingClientRect().width + gap;
+    };
+    const normalizeImpactScroll = () => {
+      const loopPoint = galleryGrid.scrollWidth / 2;
+      if (!loopPoint) return;
+      if (galleryGrid.scrollLeft >= loopPoint) galleryGrid.scrollLeft -= loopPoint;
+      if (galleryGrid.scrollLeft < 0) galleryGrid.scrollLeft += loopPoint;
+    };
+    const moveImpact = (direction, behavior = "smooth") => {
+      normalizeImpactScroll();
+      const loopPoint = galleryGrid.scrollWidth / 2;
+      if (direction < 0 && galleryGrid.scrollLeft <= 2) galleryGrid.scrollLeft += loopPoint;
+      galleryGrid.scrollBy({
+        left: direction * getImpactStep(),
+        behavior
+      });
+      window.setTimeout(normalizeImpactScroll, behavior === "smooth" ? 520 : 0);
+    };
+    const startImpactAutoplay = () => {
+      clearInterval(centerImpactTimer);
+      centerImpactTimer = setInterval(() => moveImpact(1), 3600);
+    };
+
+    startImpactAutoplay();
     gallery.addEventListener("click", (event) => {
       const button = event.target.closest(".center-impact-arrow");
       if (!button || !galleryGrid) return;
-      const firstCard = galleryGrid.querySelector("article");
-      const step = firstCard ? firstCard.getBoundingClientRect().width + 14 : 294;
-      galleryGrid.style.animationPlayState = "paused";
-      gallery.scrollBy({
-        left: button.classList.contains("center-impact-prev") ? -step : step,
-        behavior: "smooth"
-      });
-      clearTimeout(gallery.__impactAutoplayTimer);
-      gallery.__impactAutoplayTimer = setTimeout(() => {
-        galleryGrid.style.animationPlayState = "";
-      }, 4500);
+      moveImpact(button.classList.contains("center-impact-prev") ? -1 : 1);
+      startImpactAutoplay();
     });
   }
 
@@ -530,6 +552,7 @@ if (centerDetail) {
     }
 
     if (!event.target.closest(".close-center")) return;
+    clearInterval(centerImpactTimer);
     centerDetail.hidden = true;
     centerDetail.innerHTML = "";
   });

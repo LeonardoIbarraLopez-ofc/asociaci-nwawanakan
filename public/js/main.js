@@ -423,6 +423,26 @@ function openCenter(districtIndex, centerIndex) {
     gallery.classList.add("center-impact");
     if (galleryTitle) galleryTitle.innerHTML = "Alcances e Impacto";
     if (galleryGrid) galleryGrid.innerHTML = impactCards + impactCards;
+    if (galleryGrid) {
+      const controls = document.createElement("div");
+      controls.className = "center-impact-controls";
+      controls.innerHTML = `
+        <button class="center-impact-arrow center-impact-prev" type="button" aria-label="Ver imagen anterior">‹</button>
+        <button class="center-impact-arrow center-impact-next" type="button" aria-label="Ver imagen siguiente">›</button>
+      `;
+      gallery.appendChild(controls);
+
+      controls.addEventListener("click", (event) => {
+        const button = event.target.closest(".center-impact-arrow");
+        if (!button) return;
+        const firstCard = galleryGrid.querySelector("article");
+        const step = firstCard ? firstCard.getBoundingClientRect().width + 14 : 294;
+        gallery.scrollBy({
+          left: button.classList.contains("center-impact-prev") ? -step : step,
+          behavior: "smooth"
+        });
+      });
+    }
   }
 
   centerDetail.scrollIntoView({ behavior: "smooth", block: "start" });

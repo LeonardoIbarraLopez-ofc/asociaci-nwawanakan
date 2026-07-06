@@ -421,28 +421,31 @@ function openCenter(districtIndex, centerIndex) {
     `).join("");
 
     gallery.classList.add("center-impact");
-    if (galleryTitle) galleryTitle.innerHTML = "Alcances e Impacto";
-    if (galleryGrid) galleryGrid.innerHTML = impactCards + impactCards;
-    if (galleryGrid) {
-      const controls = document.createElement("div");
-      controls.className = "center-impact-controls";
-      controls.innerHTML = `
-        <button class="center-impact-arrow center-impact-prev" type="button" aria-label="Ver imagen anterior">‹</button>
-        <button class="center-impact-arrow center-impact-next" type="button" aria-label="Ver imagen siguiente">›</button>
+    if (galleryTitle) {
+      galleryTitle.innerHTML = `
+        <span>Alcances e Impacto</span>
+        <span class="center-impact-controls">
+          <button class="center-impact-arrow center-impact-prev" type="button" aria-label="Ver imagen anterior">‹</button>
+          <button class="center-impact-arrow center-impact-next" type="button" aria-label="Ver imagen siguiente">›</button>
+        </span>
       `;
-      gallery.appendChild(controls);
-
-      controls.addEventListener("click", (event) => {
-        const button = event.target.closest(".center-impact-arrow");
-        if (!button) return;
-        const firstCard = galleryGrid.querySelector("article");
-        const step = firstCard ? firstCard.getBoundingClientRect().width + 14 : 294;
-        gallery.scrollBy({
-          left: button.classList.contains("center-impact-prev") ? -step : step,
-          behavior: "smooth"
-        });
-      });
     }
+    if (galleryGrid) galleryGrid.innerHTML = impactCards + impactCards;
+    gallery.addEventListener("click", (event) => {
+      const button = event.target.closest(".center-impact-arrow");
+      if (!button || !galleryGrid) return;
+      const firstCard = galleryGrid.querySelector("article");
+      const step = firstCard ? firstCard.getBoundingClientRect().width + 14 : 294;
+      galleryGrid.style.animationPlayState = "paused";
+      gallery.scrollBy({
+        left: button.classList.contains("center-impact-prev") ? -step : step,
+        behavior: "smooth"
+      });
+      clearTimeout(gallery.__impactAutoplayTimer);
+      gallery.__impactAutoplayTimer = setTimeout(() => {
+        galleryGrid.style.animationPlayState = "";
+      }, 4500);
+    });
   }
 
   centerDetail.scrollIntoView({ behavior: "smooth", block: "start" });

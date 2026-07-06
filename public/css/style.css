@@ -8305,14 +8305,17 @@ body.home-page .values-closing {
   line-height: 1.4;
 }
 
-.center-impact-controls {
-  position: absolute;
-  inset: 50% 10px auto;
-  z-index: 3;
+.center-gallery.center-impact h3 {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  pointer-events: none;
-  transform: translateY(-50%);
+  gap: 12px;
+}
+
+.center-impact-controls {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
 }
 
 .center-impact-arrow {
@@ -8332,7 +8335,6 @@ body.home-page .values-closing {
   font-size: 2rem;
   font-weight: 800;
   line-height: 1;
-  pointer-events: auto;
   transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
 }
 
@@ -8368,9 +8370,15 @@ body.home-page .values-closing {
     animation-duration: 30s;
   }
 
+  .center-gallery.center-impact h3 {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
   .center-impact-controls {
-    inset: auto 12px 12px;
-    transform: none;
+    width: 100%;
+    justify-content: flex-end;
   }
 
   .center-impact-arrow {

@@ -17,9 +17,9 @@ import { SECTIONS, CENTROS_SECTION } from "./schema.js";
 import { buildForm } from "./form-builder.js";
 
 /* ── MARCADOR DE DIAGNÓSTICO (temporal) ──────────────────────────────── */
-console.log("%c[CMS] app.js BUILD-4 cargado | apiKey:", "background:#c8922a;color:#000;padding:2px 6px;border-radius:4px", FIREBASE_CONFIG.apiKey, "| configurado:", isFirebaseConfigured());
-document.title = "CMS BUILD-4 | " + document.title;
-window.__CMS_BUILD = 4;
+console.log("%c[CMS] app.js BUILD-5 cargado | apiKey:", "background:#c8922a;color:#000;padding:2px 6px;border-radius:4px", FIREBASE_CONFIG.apiKey, "| configurado:", isFirebaseConfigured());
+document.title = "CMS BUILD-5 | " + document.title;
+window.__CMS_BUILD = 5;
 
 /* ── Referencias del DOM ─────────────────────────────────────────────── */
 const $ = (id) => document.getElementById(id);
@@ -259,6 +259,52 @@ async function renderCentros(section) {
     { icon: "✨", label: "Afectividad y espiritualidad en la familia" },
     { icon: "🧠", label: "Desarrollo psicomotriz y cognitivo" }
   ];
+
+  function prepareCentersForFirestore(data) {
+    const sanitizeNestedArrays = (value) => {
+      if (Array.isArray(value)) {
+        return value.map((item) => {
+          if (!Array.isArray(item)) return sanitizeNestedArrays(item);
+          return Object.fromEntries(item.map((entry, index) => [`valor${index + 1}`, sanitizeNestedArrays(entry)]));
+        });
+      }
+      if (value && typeof value === "object") {
+        return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, sanitizeNestedArrays(item)]));
+      }
+      return value;
+    };
+    const prepared = structuredClone(data);
+    prepared.districts = (prepared.districts || []).map((district) => ({
+      ...district,
+      centers: (district.centers || []).map((center) => (
+        Array.isArray(center)
+          ? { name: center[0] || "", image: center[1] || "" }
+          : { name: center.name || "", image: center.image || "" }
+      ))
+    }));
+    prepared.activities = officialCenterActivities.map(({ icon, label }) => ({ icono: icon, texto: label }));
+    prepared.centerDetails = Object.fromEntries(
+      Object.entries(prepared.centerDetails || {}).map(([name, detail]) => {
+        const centerDetail = detail || {};
+        return [
+          name,
+          {
+            ...centerDetail,
+            fotos: (centerDetail.fotos || []).map((photo) => Array.isArray(photo) ? (photo[0] || "") : (photo || "")),
+            actividades: (centerDetail.actividades || []).map((activity) => (
+              Array.isArray(activity)
+                ? { icono: activity[0] || "", texto: activity[1] || "" }
+                : {
+                    icono: activity.icono || activity.icon || "",
+                    texto: activity.texto || activity.label || activity.actividad || ""
+                  }
+            )).filter((activity) => activity.icono || activity.texto)
+          }
+        ];
+      })
+    );
+    return sanitizeNestedArrays(prepared);
+  }
 
   const centerDetailFields = [
     { key: "subtitulo", label: "Subtítulo", type: "text" },
@@ -520,7 +566,7 @@ async function renderCentros(section) {
         updated.centerDetails = newDetails;
         updated.activities = officialCenterActivities.map(({ icon, label }) => ({ icono: icon, texto: label }));
 
-        await replaceDocData(section.storage.path, updated);
+        await replaceDocData(section.storage.path, prepareCentersForFirestore(updated));
         showToast("Centros guardados correctamente.");
         await renderCentros(section);
       } catch (err) {

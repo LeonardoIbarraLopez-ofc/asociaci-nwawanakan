@@ -178,7 +178,7 @@ function normalizeCenters(data) {
       ...d,
       centers: (d.centers || []).map((c) => Array.isArray(c) ? c : [c.name, c.image])
     })),
-    activities: (data.activities || []).map((a) => Array.isArray(a) ? a : [a.icon, a.label])
+    activities: (data.activities || []).map((a) => Array.isArray(a) ? a : [a.icon || a.icono, a.label || a.texto])
   };
 }
 

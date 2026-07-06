@@ -480,10 +480,10 @@ async function renderCentros(section) {
             const cName = d.name;
             const actividades = officialCenterActivities
               .map((_, index) => ({
-                icon: d[`actividadIcono${index + 1}`] || "",
-                label: d[`actividadTexto${index + 1}`] || ""
+                icono: d[`actividadIcono${index + 1}`] || "",
+                texto: d[`actividadTexto${index + 1}`] || ""
               }))
-              .filter((activity) => activity.icon || activity.label);
+              .filter((activity) => activity.icono || activity.texto);
             newDetails[cName] = {
               subtitulo: d.subtitulo,
               address:   d.address,
@@ -518,7 +518,7 @@ async function renderCentros(section) {
 
         updated.districts    = newDistricts;
         updated.centerDetails = newDetails;
-        updated.activities = officialCenterActivities.map(({ icon, label }) => [icon, label]);
+        updated.activities = officialCenterActivities.map(({ icon, label }) => ({ icono: icon, texto: label }));
 
         await replaceDocData(section.storage.path, updated);
         showToast("Centros guardados correctamente.");
@@ -655,7 +655,7 @@ async function seedContent() {
           name: d.name,
           centers: d.centers.map(([name, image]) => ({ name, image }))
         })),
-        activities: centersJson.activities.map(([icon, label]) => ({ icon, label })),
+        activities: centersJson.activities.map(([icon, label]) => ({ icono: icon, texto: label })),
         centerDetails: updatedDetails,
       }),
     ]);

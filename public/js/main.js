@@ -56,6 +56,57 @@ const officialCenterActivities = [
   ["🧠", "Desarrollo psicomotriz y cognitivo"]
 ];
 
+function getGoogleMapsCoordinates(value) {
+  const text = String(value || "");
+  const atMatch = text.match(/@(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/);
+  if (atMatch) return `${atMatch[1]},${atMatch[2]}`;
+  const bangMatch = text.match(/!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/);
+  if (bangMatch) return `${bangMatch[1]},${bangMatch[2]}`;
+  return "";
+}
+
+function getGoogleMapsDestination(value) {
+  const text = String(value || "").trim();
+  if (!text) return "";
+  const coordinates = getGoogleMapsCoordinates(text);
+  if (coordinates) return coordinates;
+  try {
+    const url = new URL(text);
+    const destination = url.searchParams.get("destination")
+      || url.searchParams.get("q")
+      || url.searchParams.get("query");
+    return destination || "";
+  } catch {
+    return text;
+  }
+}
+
+function buildGoogleDirectionsUrl(value, fallbackAddress = "") {
+  const destination = getGoogleMapsDestination(value) || String(fallbackAddress || "").trim();
+  if (!destination) return "";
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving`;
+}
+
+async function resolveGoogleMapsDirectionsUrl(originalLink, fallbackAddress = "") {
+  const link = String(originalLink || "").trim();
+  const directUrl = buildGoogleDirectionsUrl(link);
+  if (directUrl && !/maps\.app\.goo\.gl/i.test(link)) return directUrl;
+
+  if (/maps\.app\.goo\.gl/i.test(link)) {
+    try {
+      const response = await fetch(link, { method: "GET", redirect: "follow" });
+      const expandedUrl = response.url || "";
+      const expandedDirections = buildGoogleDirectionsUrl(expandedUrl);
+      if (expandedDirections) return expandedDirections;
+    } catch {
+      return buildGoogleDirectionsUrl(fallbackAddress) || link;
+    }
+    return buildGoogleDirectionsUrl(fallbackAddress) || link;
+  }
+
+  return directUrl || buildGoogleDirectionsUrl(fallbackAddress) || link;
+}
+
 async function loadData() {
   try {
     let centersData = null;
@@ -106,7 +157,9 @@ function getCenterProfile(district, name, image) {
     return `assets/centros/${value}`;
   };
   const imagePath = normalizeCenterImage(imageFile);
-  const mainImagePath = normalizeCenterImage(detail.imagenPrincipal || detail.heroImage || imageFile) || imagePath;
+  const logoPath = normalizeCenterImage(detail.logoCentro || detail.logo || centerInstitutionLogo) || centerInstitutionLogo || imagePath;
+  const coverImagePath = normalizeCenterImage(detail.imagenPortadaCentro || detail.portada || detail.imagenPrincipal || detail.heroImage || imageFile) || imagePath;
+  const historyImagePath = normalizeCenterImage(detail["imagenReseñaHistorica"] || detail.imagenResenaHistorica || detail.imagenPortadaCentro || detail.portada || detail.imagenPrincipal || imageFile) || coverImagePath;
   const galleryImages = Array.from({ length: 4 }, (_, index) => {
     const photo = Array.isArray(detail.fotos) ? detail.fotos[index] : "";
     return normalizeCenterImage(photo) || imagePath;
@@ -133,10 +186,12 @@ function getCenterProfile(district, name, image) {
     district: district.name,
     subtitulo: detail.subtitulo || "Centro infantil con acompañamiento, cuidado y formación integral",
     address,
-    mapsLink: detail.mapsLink || null,
-    portada: mainImagePath,
-    imagenPrincipal: mainImagePath,
-    logoCentro: imagePath,
+    mapsLink: detail.ubicacionGoogleMaps || detail.mapsLink || null,
+    ubicacionGoogleMaps: detail.ubicacionGoogleMaps || detail.mapsLink || "",
+    portada: coverImagePath,
+    imagenPrincipal: historyImagePath,
+    imagenResenaHistorica: historyImagePath,
+    logoCentro: logoPath,
     logoWawanakan: "assets/institucional/logotipo.png",
     resenaTitulo: detail.resenaTitulo || detail.historiaTitulo || "Reseña histórica",
     resena: detail.resenaTexto || detail.resena || `${displayName} forma parte de la red de centros infantiles acompañados por Wawanakan, fortaleciendo espacios de cuidado, aprendizaje y buen trato para la niñez.`,
@@ -327,7 +382,7 @@ function openCenter(districtIndex, centerIndex) {
 
       <div class="center-body">
         <div class="center-main-photo">
-          <img src="${center.imagenPrincipal}" alt="Imagen principal de ${center.name}">
+          <img src="${center.imagenResenaHistorica}" alt="Imagen de reseña histórica de ${center.name}">
         </div>
 
         <div class="center-info-panel">
@@ -410,13 +465,14 @@ function openCenter(districtIndex, centerIndex) {
   // luego se eliminan o reescriben elementos opcionales según el estado real del centro.
   const locationText = centerDetail.querySelector(".center-address-pill");
   if (locationText) {
-    const dirLink = center.mapsLink || centerDirectionsLink;
-    locationText.outerHTML = `<a class="center-location-button" href="${dirLink}" target="_blank" rel="noopener noreferrer">Cómo llegar al centro</a>`;
+    const originalMapLink = center.ubicacionGoogleMaps || center.mapsLink || "";
+    const dirLink = buildGoogleDirectionsUrl(originalMapLink, center.address) || originalMapLink || centerDirectionsLink;
+    locationText.outerHTML = `<a class="center-location-button" href="${dirLink}" data-map-link="${originalMapLink}" data-map-address="${center.address}" target="_blank" rel="noopener noreferrer">Cómo llegar al centro</a>`;
   }
 
   const centerTitle = centerDetail.querySelector(".center-hero-content h2");
   if (centerTitle) {
-    centerTitle.innerHTML = `<span>${center.name}</span><img class="center-title-logo" src="${centerInstitutionLogo}" alt="Logotipo Wawanakan">`;
+    centerTitle.innerHTML = `<span>${center.name}</span><img class="center-title-logo" src="${center.logoCentro}" alt="Logo de ${center.name}">`;
   }
 
   centerDetail.querySelector(".center-hero-logos")?.remove();
@@ -439,6 +495,23 @@ function openCenter(districtIndex, centerIndex) {
     link.textContent = index === 0 ? "Voluntariado" : "Pasantía";
     link.classList.add(index === 0 ? "center-action-volunteer" : "center-action-internship");
   });
+
+  const directionsButton = centerDetail.querySelector(".center-location-button");
+  if (directionsButton) {
+    directionsButton.addEventListener("click", async (event) => {
+      const originalLink = directionsButton.dataset.mapLink || "";
+      if (!originalLink) return;
+      event.preventDefault();
+      const mapWindow = window.open("about:blank", "_blank");
+      if (mapWindow) mapWindow.opener = null;
+      const directionsUrl = await resolveGoogleMapsDirectionsUrl(originalLink, directionsButton.dataset.mapAddress || "");
+      if (mapWindow) {
+        mapWindow.location.href = directionsUrl || originalLink;
+      } else {
+        window.location.href = directionsUrl || originalLink;
+      }
+    });
+  }
 
   const gallery = centerDetail.querySelector(".center-gallery");
   if (gallery) {

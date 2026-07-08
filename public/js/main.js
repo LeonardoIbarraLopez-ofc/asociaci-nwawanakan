@@ -451,9 +451,11 @@ function openCenter(districtIndex, centerIndex) {
           </section>
 
           <section class="center-history-card">
-            <span aria-hidden="true">📖</span>
             <div>
-              <h3>Reseña histórica</h3>
+              <div class="center-history-heading">
+                <span aria-hidden="true">📖</span>
+                <h3>Reseña histórica</h3>
+              </div>
               <p>${center.resena}</p>
               <button type="button">Conocer historia</button>
             </div>

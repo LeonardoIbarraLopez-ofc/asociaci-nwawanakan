@@ -7080,10 +7080,23 @@ body.home-page .centers-map-section {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
   text-align: center;
 }
 
-.center-history-card > span {
+.center-history-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.center-history-heading h3 {
+  margin: 0;
+}
+
+.center-history-heading > span {
   display: grid;
   place-items: center;
   flex: 0 0 auto;

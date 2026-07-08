@@ -7080,6 +7080,7 @@ body.home-page .centers-map-section {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  text-align: center;
 }
 
 .center-history-card > span {

@@ -17,9 +17,9 @@ import { SECTIONS, CENTROS_SECTION } from "./schema.js";
 import { buildForm } from "./form-builder.js";
 
 /* ── MARCADOR DE DIAGNÓSTICO (temporal) ──────────────────────────────── */
-console.log("%c[CMS] app.js BUILD-7 cargado | apiKey:", "background:#c8922a;color:#000;padding:2px 6px;border-radius:4px", FIREBASE_CONFIG.apiKey, "| configurado:", isFirebaseConfigured());
-document.title = "CMS BUILD-7 | " + document.title;
-window.__CMS_BUILD = 7;
+console.log("%c[CMS] app.js BUILD-8 cargado | apiKey:", "background:#c8922a;color:#000;padding:2px 6px;border-radius:4px", FIREBASE_CONFIG.apiKey, "| configurado:", isFirebaseConfigured());
+document.title = "CMS BUILD-8 | " + document.title;
+window.__CMS_BUILD = 8;
 
 /* ── Referencias del DOM ─────────────────────────────────────────────── */
 const $ = (id) => document.getElementById(id);
@@ -309,7 +309,6 @@ async function renderCentros(section) {
   const centerDetailFields = [
     { key: "subtitulo", label: "Subtítulo", type: "text" },
     { key: "address",   label: "Dirección", type: "text" },
-    { key: "mapsLink",  label: "Enlace 'Cómo llegar al centro'", type: "url" },
     { key: "logoCentro", label: "Logo del centro", type: "image", folder: "centros" },
     { key: "imagenPortadaCentro", label: "Imagen de portada del centro", type: "image", folder: "centros" },
     { key: "imagenReseñaHistorica", label: "Imagen de reseña histórica", type: "image", folder: "centros" },
@@ -445,6 +444,7 @@ async function renderCentros(section) {
       name: nameInput.value.trim() || "Centro",
       image: detailData.image,
       imagenPrincipal: detailData.imagenPrincipal,
+      mapsLink: detailData.mapsLink,
       ...form.collect()
     });
     return centerItem;

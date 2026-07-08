@@ -13,7 +13,8 @@ const centerDetail = document.querySelector("#center-detail");
 const hasHomeHero = document.querySelector(".hero") !== null;
 const hero = document.querySelector(".hero");
 const statNumbers = document.querySelectorAll(".stat-number");
-const mapCenterButtons = document.querySelectorAll(".map-center-button");
+let mapCenterButtons = document.querySelectorAll(".map-center-button");
+const mapCenterButtonsPanel = document.querySelector(".center-map-buttons");
 const mapSelectedLabel = document.querySelector("#map-selected-label");
 const mapInfoCenter = document.querySelector("#map-info-center");
 const mapInfoDistrict = document.querySelector("#map-info-district");
@@ -107,6 +108,58 @@ async function resolveGoogleMapsDirectionsUrl(originalLink, fallbackAddress = ""
   return directUrl || buildGoogleDirectionsUrl(fallbackAddress) || link;
 }
 
+function slugifyCenterId(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function buildMapCentersFromDistricts(centersData = {}) {
+  const referenceByName = {};
+  (centersData.centers || []).forEach((center) => {
+    if (center && center.name) referenceByName[center.name] = center;
+  });
+
+  const builtCenters = [];
+  (districts || []).forEach((district) => {
+    (district.centers || []).forEach((centerEntry) => {
+      const [centerName, centerImage] = Array.isArray(centerEntry)
+        ? centerEntry
+        : [centerEntry.name || "", centerEntry.image || ""];
+      if (!centerName) return;
+      const detail = centerDetails[centerName] || {};
+      const displayName = detail.name || centerName;
+      const reference = referenceByName[displayName] || referenceByName[centerName] || {};
+      const address = detail.address || reference.address || "Direccion institucional por actualizar, El Alto";
+      const mapsLink = detail.ubicacionGoogleMaps || detail.mapsLink || reference.mapsLink || "";
+      builtCenters.push({
+        ...reference,
+        id: reference.id || slugifyCenterId(displayName || centerName),
+        name: displayName,
+        district: district.name,
+        address,
+        mapsLink,
+        ubicacionGoogleMaps: detail.ubicacionGoogleMaps || mapsLink,
+        image: detail.image || centerImage || reference.image || "",
+        index: builtCenters.length
+      });
+    });
+  });
+  return builtCenters;
+}
+
+function refreshMapCenterIndex(centersData = {}) {
+  centers = buildMapCentersFromDistricts(centersData);
+  centersById = centers.reduce((acc, center, index) => {
+    acc[center.id] = { ...center, index };
+    return acc;
+  }, {});
+}
+
 async function loadData() {
   try {
     let centersData = null;
@@ -123,16 +176,11 @@ async function loadData() {
     if (!centersData) centersData = await fetch("data/centers.json").then(r => r.json());
     if (!configData) configData = await fetch("data/config.json").then(r => r.json());
 
-    districts = centersData.districts;
-    centers = centersData.centers;
-    centerDetails = centersData.centerDetails;
-    centerActivities = centersData.activities;
-    centerImpactDescriptions = centersData.impactDescriptions;
-
-    centersById = centers.reduce((acc, center, index) => {
-      acc[center.id] = { ...center, index };
-      return acc;
-    }, {});
+    districts = centersData.districts || [];
+    centerDetails = centersData.centerDetails || {};
+    centerActivities = centersData.activities || [];
+    centerImpactDescriptions = centersData.impactDescriptions || [];
+    refreshMapCenterIndex(centersData);
 
     centerDirectionsLink = configData.directionsLink;
     centerFormLink = configData.formLink;
@@ -210,11 +258,14 @@ function getCenterProfile(district, name, image) {
 }
 
 function getDirectionsFromCurrentLocation(center) {
+  const mapLink = center.ubicacionGoogleMaps || center.mapsLink || "";
+  const directionsUrl = buildGoogleDirectionsUrl(mapLink, center.address);
+  if (directionsUrl) return directionsUrl;
+  if (mapLink) return mapLink;
   if (typeof center.lat === "number" && typeof center.lng === "number") {
     return `https://www.google.com/maps/dir/?api=1&origin=Current%20Location&destination=${center.lat},${center.lng}`;
   }
-  if (center.mapsLink) return center.mapsLink;
-  return `https://www.google.com/maps/dir/?api=1&origin=Current%20Location&destination=${encodeURIComponent(center.address)}`;
+  return buildGoogleDirectionsUrl(center.address) || centerDirectionsLink;
 }
 
 function setHeaderState() {
@@ -310,9 +361,18 @@ function updateMapInfo(center) {
   if (mapDirectionsLink) mapDirectionsLink.href = getDirectionsFromCurrentLocation(center);
 }
 
+function renderMapCenterButtons() {
+  if (!mapCenterButtonsPanel || !centers.length) return;
+  mapCenterButtonsPanel.innerHTML = centers.map((center, index) => `
+    <button class="map-center-button center-tab is-visible${index === selectedCenterIndex ? " active" : ""}" type="button" data-center-map="${index}" data-center="${center.id}">${center.name}</button>
+  `).join("");
+  mapCenterButtons = mapCenterButtonsPanel.querySelectorAll(".map-center-button");
+}
+
 function setActiveMapCenter(centerReference) {
   const referencedCenter = typeof centerReference === "string" ? centersById[centerReference] : centers[centerReference];
   const center = referencedCenter || centers[0];
+  if (!center) return;
   selectedCenterIndex = center.index ?? centers.indexOf(center);
   mapCenterButtons.forEach((button) => {
     const isActive = button.dataset.center === center.id || Number(button.dataset.centerMap) === selectedCenterIndex;
@@ -651,10 +711,11 @@ if (centerDetail) {
   });
 }
 
-if (mapCenterButtons.length) {
-  mapCenterButtons.forEach((button) => {
-    if (button.disabled) return;
-    button.addEventListener("click", () => setActiveMapCenter(button.dataset.center || Number(button.dataset.centerMap)));
+if (mapCenterButtonsPanel) {
+  mapCenterButtonsPanel.addEventListener("click", (event) => {
+    const button = event.target.closest(".map-center-button");
+    if (!button || button.disabled) return;
+    setActiveMapCenter(button.dataset.center || Number(button.dataset.centerMap));
   });
 }
 
@@ -875,6 +936,7 @@ if (visionSlides.length) showVisionSlide(0);
 async function initializeCenters() {
   await loadData();
   renderDistricts();
+  renderMapCenterButtons();
   if (mapCenterButtons.length) {
     const initializeLocationMap = () => setActiveMapCenter(mapCenterButtons[0]?.dataset.center || 0);
     if (document.readyState === "loading") {
@@ -896,13 +958,14 @@ async function reloadCenters() {
   try {
     const centersData = await window.WawaContent.loadCenters();
     if (!centersData) return;
-    districts = centersData.districts;
-    centers = centersData.centers;
-    centerDetails = centersData.centerDetails;
-    centerActivities = centersData.activities;
-    centerImpactDescriptions = centersData.impactDescriptions;
-    centersById = centers.reduce((acc, c, i) => { acc[c.id] = { ...c, index: i }; return acc; }, {});
+    districts = centersData.districts || [];
+    centerDetails = centersData.centerDetails || {};
+    centerActivities = centersData.activities || [];
+    centerImpactDescriptions = centersData.impactDescriptions || [];
+    refreshMapCenterIndex(centersData);
     if (districtGrid) renderDistricts();
+    renderMapCenterButtons();
+    if (mapCenterButtons.length) setActiveMapCenter(mapCenterButtons[0]?.dataset.center || 0);
   } catch { /* silent */ }
 }
 document.addEventListener("wawa:content-updated", reloadCenters);

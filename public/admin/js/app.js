@@ -17,9 +17,9 @@ import { SECTIONS, CENTROS_SECTION } from "./schema.js";
 import { buildForm } from "./form-builder.js";
 
 /* ── MARCADOR DE DIAGNÓSTICO (temporal) ──────────────────────────────── */
-console.log("%c[CMS] app.js BUILD-6 cargado | apiKey:", "background:#c8922a;color:#000;padding:2px 6px;border-radius:4px", FIREBASE_CONFIG.apiKey, "| configurado:", isFirebaseConfigured());
-document.title = "CMS BUILD-6 | " + document.title;
-window.__CMS_BUILD = 6;
+console.log("%c[CMS] app.js BUILD-7 cargado | apiKey:", "background:#c8922a;color:#000;padding:2px 6px;border-radius:4px", FIREBASE_CONFIG.apiKey, "| configurado:", isFirebaseConfigured());
+document.title = "CMS BUILD-7 | " + document.title;
+window.__CMS_BUILD = 7;
 
 /* ── Referencias del DOM ─────────────────────────────────────────────── */
 const $ = (id) => document.getElementById(id);
@@ -310,12 +310,10 @@ async function renderCentros(section) {
     { key: "subtitulo", label: "Subtítulo", type: "text" },
     { key: "address",   label: "Dirección", type: "text" },
     { key: "mapsLink",  label: "Enlace 'Cómo llegar al centro'", type: "url" },
-    { key: "image",     label: "Imagen del centro", type: "image", folder: "centros" },
     { key: "logoCentro", label: "Logo del centro", type: "image", folder: "centros" },
     { key: "imagenPortadaCentro", label: "Imagen de portada del centro", type: "image", folder: "centros" },
     { key: "imagenReseñaHistorica", label: "Imagen de reseña histórica", type: "image", folder: "centros" },
     { key: "ubicacionGoogleMaps", label: "Ubicación Google Maps", type: "url" },
-    { key: "imagenPrincipal", label: "Imagen principal superior del centro", type: "image", folder: "centros" },
     { key: "resenaTitulo", label: "Titulo de la reseña historica", type: "text" },
     { key: "resenaTexto", label: "Texto/descripcion de la reseña historica", type: "textarea" },
     { key: "actividadIcono1", label: "Actividad 1 - Icono", type: "text" },
@@ -443,7 +441,12 @@ async function renderCentros(section) {
     ]);
 
     const centerItem = el("div", { class: "cms-objlist-item cms-center-item" }, [head, form.node, reassignRow]);
-    centerItem.__collect = () => ({ name: nameInput.value.trim() || "Centro", ...form.collect() });
+    centerItem.__collect = () => ({
+      name: nameInput.value.trim() || "Centro",
+      image: detailData.image,
+      imagenPrincipal: detailData.imagenPrincipal,
+      ...form.collect()
+    });
     return centerItem;
   }
 

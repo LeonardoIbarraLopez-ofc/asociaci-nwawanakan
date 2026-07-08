@@ -259,12 +259,12 @@ function getCenterProfile(district, name, image) {
 
 function getDirectionsFromCurrentLocation(center) {
   const mapLink = center.ubicacionGoogleMaps || center.mapsLink || "";
+  if (typeof center.lat === "number" && typeof center.lng === "number") {
+    return `https://www.google.com/maps/dir/?api=1&destination=${center.lat},${center.lng}&travelmode=driving`;
+  }
   const directionsUrl = buildGoogleDirectionsUrl(mapLink, center.address);
   if (directionsUrl) return directionsUrl;
   if (mapLink) return mapLink;
-  if (typeof center.lat === "number" && typeof center.lng === "number") {
-    return `https://www.google.com/maps/dir/?api=1&origin=Current%20Location&destination=${center.lat},${center.lng}`;
-  }
   return buildGoogleDirectionsUrl(center.address) || centerDirectionsLink;
 }
 
@@ -358,7 +358,14 @@ function updateMapInfo(center) {
   if (mapInfoCenter) mapInfoCenter.textContent = center.name;
   if (mapInfoDistrict) mapInfoDistrict.textContent = center.district;
   if (mapInfoAddress) mapInfoAddress.textContent = center.address;
-  if (mapDirectionsLink) mapDirectionsLink.href = getDirectionsFromCurrentLocation(center);
+  if (mapDirectionsLink) {
+    const mapLink = center.ubicacionGoogleMaps || center.mapsLink || "";
+    mapDirectionsLink.href = getDirectionsFromCurrentLocation(center);
+    mapDirectionsLink.dataset.mapLink = mapLink;
+    mapDirectionsLink.dataset.mapAddress = center.address || "";
+    mapDirectionsLink.dataset.mapLat = typeof center.lat === "number" ? String(center.lat) : "";
+    mapDirectionsLink.dataset.mapLng = typeof center.lng === "number" ? String(center.lng) : "";
+  }
 }
 
 function renderMapCenterButtons() {
@@ -716,6 +723,28 @@ if (mapCenterButtonsPanel) {
     const button = event.target.closest(".map-center-button");
     if (!button || button.disabled) return;
     setActiveMapCenter(button.dataset.center || Number(button.dataset.centerMap));
+  });
+}
+
+if (mapDirectionsLink) {
+  mapDirectionsLink.addEventListener("click", async (event) => {
+    const originalLink = mapDirectionsLink.dataset.mapLink || "";
+    const lat = mapDirectionsLink.dataset.mapLat || "";
+    const lng = mapDirectionsLink.dataset.mapLng || "";
+    if (!originalLink && (!lat || !lng)) return;
+    event.preventDefault();
+    const mapWindow = window.open("about:blank", "_blank");
+    if (mapWindow) mapWindow.opener = null;
+    const fallbackAddress = mapDirectionsLink.dataset.mapAddress || "";
+    const fallbackCoordinates = lat && lng ? `${lat},${lng}` : fallbackAddress;
+    const directionsUrl = originalLink
+      ? await resolveGoogleMapsDirectionsUrl(originalLink, fallbackCoordinates)
+      : buildGoogleDirectionsUrl(fallbackCoordinates);
+    if (mapWindow) {
+      mapWindow.location.href = directionsUrl || originalLink;
+    } else {
+      window.location.href = directionsUrl || originalLink;
+    }
   });
 }
 

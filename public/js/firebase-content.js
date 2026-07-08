@@ -17,7 +17,7 @@
  * para los centros y la configuración.
  */
 import { initFirebase } from "./firebase-app.js";
-import { DEFAULT_CONTENT } from "./content-defaults.js?v=9";
+import { DEFAULT_CONTENT } from "./content-defaults.js?v=10";
 
 /* ── Utilidades ──────────────────────────────────────────────────────── */
 
@@ -135,10 +135,14 @@ export async function loadContent() {
       getDocs(collection(db, "noticias")).catch((err) => {
         console.warn("[CMS] No se pudo leer colección noticias:", err.code);
         return { empty: true, docs: [] };
+      }),
+      getDocs(collection(db, "ubicacionesCentros")).catch((err) => {
+        console.warn("[CMS] No se pudo leer coleccion ubicacionesCentros:", err.code);
+        return { empty: true, docs: [] };
       })
     ]);
 
-    const [valSnap, dirSnap, newsSnap] = await Promise.race([
+    const [valSnap, dirSnap, newsSnap, locSnap] = await Promise.race([
       collectionPromise,
       new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout loading collections")), 5000))
     ]);
@@ -153,6 +157,11 @@ export async function loadContent() {
       content.noticias = newsSnap.docs
         .map((d) => ({ id: d.id, ...d.data() }))
         .sort((a, b) => String(b.fecha || "").localeCompare(String(a.fecha || "")));
+    }
+    if (locSnap && !locSnap.empty) {
+      content.ubicacionesCentros = locSnap.docs
+        .map((d) => ({ id: d.id, ...d.data() }))
+        .sort(byOrden);
     }
   } catch (error) {
     const errorMsg = error.message || error.code || "unknown error";
@@ -198,6 +207,22 @@ export async function loadCenters() {
 
 /** Devuelve la configuración (sitio/config) fusionada sobre defaults, o null si
  *  el CMS no está configurado. */
+export async function loadCenterLocations() {
+  const fallback = structuredClone(DEFAULT_CONTENT.ubicacionesCentros || []);
+  const fb = await initFirebase();
+  if (!fb) return fallback;
+  try {
+    const snap = await fb.fs.getDocs(fb.fs.collection(fb.db, "ubicacionesCentros"));
+    if (!snap || snap.empty) return fallback;
+    return snap.docs
+      .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+      .sort(byOrden);
+  } catch (error) {
+    console.warn("[CMS] No se pudieron leer las ubicaciones de centros desde Firestore:", error);
+    return fallback;
+  }
+}
+
 export async function loadSiteConfig() {
   const fb = await initFirebase();
   if (!fb) return null;
@@ -471,6 +496,12 @@ async function startRealtimeListeners() {
     });
     unsubscribeFunctions.push(unsubNoticias);
 
+    const unsubUbicaciones = fs.onSnapshot(fs.collection(db, "ubicacionesCentros"), (snap) => {
+      console.log(`[CMS] onSnapshot(ubicacionesCentros): ${snap.docs.length} docs`);
+      updateContent();
+    });
+    unsubscribeFunctions.push(unsubUbicaciones);
+
     console.log("[CMS] Listeners establecidos correctamente.");
   } catch (error) {
     console.error("[CMS] No se pudieron establecer listeners en tiempo real:", error);
@@ -525,4 +556,4 @@ if (document.readyState === "loading") {
   }
 }
 
-window.WawaContent = { loadContent, hydrate, loadCenters, loadSiteConfig };
+window.WawaContent = { loadContent, hydrate, loadCenters, loadCenterLocations, loadSiteConfig };

@@ -35,6 +35,21 @@ export const DEFAULT_CONTENT = {
     institutionLogo: "assets/institucional/logotipo.png"
   },
 
+  ubicacionesCentros: [
+    { id: "san-francisco", nombre: "San Francisco de Asis", distrito: "Distrito 2", direccion: "Zona Cupilupaca, Calle Rio Bermejo Nro. 1064, El Alto", linkGoogleMaps: "https://www.google.com/maps/dir/?api=1&destination=-16.521,-68.176&travelmode=driving", activo: "si", orden: 1 },
+    { id: "nueva-marka", nombre: "Nueva Marka", distrito: "Distrito 4", direccion: "Zona Nueva Marka, Calle Eliodoro Camacho y Plaza 10 de Febrero, frente al modulo policial Nueva Marka, El Alto", linkGoogleMaps: "https://www.google.com/maps/dir/?api=1&destination=-16.565,-68.206&travelmode=driving", activo: "si", orden: 2 },
+    { id: "maria-auxiliadora", nombre: "Maria Auxiliadora", distrito: "Distrito 1", direccion: "Villa Dolores, El Alto", linkGoogleMaps: "", activo: "si", orden: 3 },
+    { id: "mi-rinconcito", nombre: "Mi Rinconcito", distrito: "Distrito 5", direccion: "Zona Norte Huayna Potosi, Calle 24 Nro. 575, El Alto", linkGoogleMaps: "", activo: "si", orden: 4 },
+    { id: "sagrado-corazon", nombre: "Sagrado Corazon de Jesus", distrito: "Distrito 3", direccion: "Zona Cosmos 79, El Alto", linkGoogleMaps: "", activo: "si", orden: 5 },
+    { id: "madre-piedad", nombre: "Madre Piedad de la Cruz", distrito: "Distrito 3", direccion: "Urbanizacion Copacabana, El Alto", linkGoogleMaps: "", activo: "si", orden: 6 },
+    { id: "virgen-fuensanta", nombre: "Virgen de la Fuensanta", distrito: "Distrito 2", direccion: "Zona Santiago II, El Alto", linkGoogleMaps: "", activo: "si", orden: 7 },
+    { id: "cristo-consuelo", nombre: "Cristo del Consuelo", distrito: "Distrito 2", direccion: "Zona Villa Adela, El Alto", linkGoogleMaps: "", activo: "si", orden: 8 },
+    { id: "menesiano-yurinani", nombre: "Menesiano Yurinani", distrito: "Distrito 6", direccion: "Zona Alto Villa Victoria, El Alto", linkGoogleMaps: "", activo: "si", orden: 9 },
+    { id: "don-bosquito", nombre: "Don Bosquito", distrito: "Distrito 1", direccion: "Zona Villa Dolores, El Alto", linkGoogleMaps: "", activo: "si", orden: 10 },
+    { id: "fundacion-palliri", nombre: "Fundacion Palliri", distrito: "Distrito 2", direccion: "Zona Ballivian, El Alto", linkGoogleMaps: "", activo: "si", orden: 11 },
+    { id: "burgosmarka", nombre: "Burgosmarka", distrito: "Distrito 3", direccion: "Zona 7 de Septiembre, Calle 31 de Octubre Nro. 24, El Alto", linkGoogleMaps: "", activo: "si", orden: 12 }
+  ],
+
   // ── sitio/footer ───────────────────────────────────────────────────
   footer: {
     logoFooter: "assets/institucional/logotipo.png",

@@ -100,9 +100,9 @@ async function resolveGoogleMapsDirectionsUrl(originalLink, fallbackAddress = ""
       const expandedDirections = buildGoogleDirectionsUrl(expandedUrl);
       if (expandedDirections) return expandedDirections;
     } catch {
-      return buildGoogleDirectionsUrl(fallbackAddress) || link;
+      return link || buildGoogleDirectionsUrl(fallbackAddress);
     }
-    return buildGoogleDirectionsUrl(fallbackAddress) || link;
+    return link || buildGoogleDirectionsUrl(fallbackAddress);
   }
 
   return directUrl || buildGoogleDirectionsUrl(fallbackAddress) || link;
@@ -118,42 +118,27 @@ function slugifyCenterId(value) {
     .replace(/^-+|-+$/g, "");
 }
 
-function buildMapCentersFromDistricts(centersData = {}) {
-  const referenceByName = {};
-  (centersData.centers || []).forEach((center) => {
-    if (center && center.name) referenceByName[center.name] = center;
-  });
-
-  const builtCenters = [];
-  (districts || []).forEach((district) => {
-    (district.centers || []).forEach((centerEntry) => {
-      const [centerName, centerImage] = Array.isArray(centerEntry)
-        ? centerEntry
-        : [centerEntry.name || "", centerEntry.image || ""];
-      if (!centerName) return;
-      const detail = centerDetails[centerName] || {};
-      const displayName = detail.name || centerName;
-      const reference = referenceByName[displayName] || referenceByName[centerName] || {};
-      const address = detail.address || reference.address || "Direccion institucional por actualizar, El Alto";
-      const mapsLink = detail.ubicacionGoogleMaps || detail.mapsLink || reference.mapsLink || "";
-      builtCenters.push({
-        ...reference,
-        id: reference.id || slugifyCenterId(displayName || centerName),
-        name: displayName,
-        district: district.name,
-        address,
+function buildMapCentersFromLocations(locations = []) {
+  return (Array.isArray(locations) ? locations : [])
+    .filter((location) => location && location.activo !== false && location.activo !== "no")
+    .sort((a, b) => Number(a.orden ?? 0) - Number(b.orden ?? 0))
+    .map((location, index) => {
+      const name = location.nombre || location.name || "Centro";
+      const mapsLink = location.linkGoogleMaps || location.mapsLink || location.url || "";
+      return {
+        id: location.id || slugifyCenterId(name),
+        name,
+        district: location.distrito || location.district || "",
+        address: location.direccion || location.address || "",
         mapsLink,
-        ubicacionGoogleMaps: detail.ubicacionGoogleMaps || mapsLink,
-        image: detail.image || centerImage || reference.image || "",
-        index: builtCenters.length
-      });
+        ubicacionGoogleMaps: mapsLink,
+        index
+      };
     });
-  });
-  return builtCenters;
 }
 
-function refreshMapCenterIndex(centersData = {}) {
-  centers = buildMapCentersFromDistricts(centersData);
+function refreshMapCenterIndex(locations = []) {
+  centers = buildMapCentersFromLocations(locations);
   centersById = centers.reduce((acc, center, index) => {
     acc[center.id] = { ...center, index };
     return acc;
@@ -164,23 +149,29 @@ async function loadData() {
   try {
     let centersData = null;
     let configData = null;
+    let locationsData = null;
 
     // Preferir Firestore (CMS) cuando esté configurado; si no, usar los JSON locales.
     try {
       const cms = await import("./firebase-content.js");
-      [centersData, configData] = await Promise.all([cms.loadCenters(), cms.loadSiteConfig()]);
+      [centersData, configData, locationsData] = await Promise.all([
+        cms.loadCenters(),
+        cms.loadSiteConfig(),
+        cms.loadCenterLocations ? cms.loadCenterLocations() : []
+      ]);
     } catch {
       // El módulo del CMS o Firebase no está disponible: se usa el fallback JSON.
     }
 
     if (!centersData) centersData = await fetch("data/centers.json").then(r => r.json());
     if (!configData) configData = await fetch("data/config.json").then(r => r.json());
+    if (!locationsData) locationsData = [];
 
     districts = centersData.districts || [];
     centerDetails = centersData.centerDetails || {};
     centerActivities = centersData.activities || [];
     centerImpactDescriptions = centersData.impactDescriptions || [];
-    refreshMapCenterIndex(centersData);
+    refreshMapCenterIndex(locationsData);
 
     centerDirectionsLink = configData.directionsLink;
     centerFormLink = configData.formLink;
@@ -259,6 +250,7 @@ function getCenterProfile(district, name, image) {
 
 function getDirectionsFromCurrentLocation(center) {
   const mapLink = center.ubicacionGoogleMaps || center.mapsLink || "";
+  if (/maps\.app\.goo\.gl/i.test(mapLink)) return mapLink;
   if (typeof center.lat === "number" && typeof center.lng === "number") {
     return `https://www.google.com/maps/dir/?api=1&destination=${center.lat},${center.lng}&travelmode=driving`;
   }
@@ -985,13 +977,16 @@ setTimeout(initializeCenters, 3000);
 async function reloadCenters() {
   if (!window.WawaContent || !window.WawaContent.loadCenters) return;
   try {
-    const centersData = await window.WawaContent.loadCenters();
+    const [centersData, locationsData] = await Promise.all([
+      window.WawaContent.loadCenters(),
+      window.WawaContent.loadCenterLocations ? window.WawaContent.loadCenterLocations() : []
+    ]);
     if (!centersData) return;
     districts = centersData.districts || [];
     centerDetails = centersData.centerDetails || {};
     centerActivities = centersData.activities || [];
     centerImpactDescriptions = centersData.impactDescriptions || [];
-    refreshMapCenterIndex(centersData);
+    refreshMapCenterIndex(locationsData || []);
     if (districtGrid) renderDistricts();
     renderMapCenterButtons();
     if (mapCenterButtons.length) setActiveMapCenter(mapCenterButtons[0]?.dataset.center || 0);

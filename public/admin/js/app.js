@@ -7,19 +7,19 @@
  *   el contenido por defecto en Firestore (Fase I del plan).
  */
 import { isFirebaseConfigured, FIREBASE_CONFIG, CLOUDINARY } from "../../js/firebase-config.js";
-import { DEFAULT_CONTENT } from "../../js/content-defaults.js?v=9";
+import { DEFAULT_CONTENT } from "../../js/content-defaults.js?v=10";
 import { login, logout, onAuthChanged, authErrorMessage } from "./auth.js";
 import {
   getDocData, setDocData, replaceDocData,
   getCollectionData, setCollectionDoc, deleteCollectionDoc
 } from "./store.js";
-import { SECTIONS, CENTROS_SECTION } from "./schema.js?v=9";
+import { SECTIONS, CENTROS_SECTION } from "./schema.js?v=10";
 import { buildForm } from "./form-builder.js";
 
 /* ── MARCADOR DE DIAGNÓSTICO (temporal) ──────────────────────────────── */
-console.log("%c[CMS] app.js BUILD-9 cargado | apiKey:", "background:#c8922a;color:#000;padding:2px 6px;border-radius:4px", FIREBASE_CONFIG.apiKey, "| configurado:", isFirebaseConfigured());
-document.title = "CMS BUILD-9 | " + document.title;
-window.__CMS_BUILD = 9;
+console.log("%c[CMS] app.js BUILD-10 cargado | apiKey:", "background:#c8922a;color:#000;padding:2px 6px;border-radius:4px", FIREBASE_CONFIG.apiKey, "| configurado:", isFirebaseConfigured());
+document.title = "CMS BUILD-10 | " + document.title;
+window.__CMS_BUILD = 10;
 
 /* ── Referencias del DOM ─────────────────────────────────────────────── */
 const $ = (id) => document.getElementById(id);
@@ -211,7 +211,12 @@ async function renderCollection(section) {
           let id = nodes[i].__id || slugify(values[section.storage.idFrom]);
           while (used.has(id)) id += "-2";
           used.add(id);
-          await setCollectionDoc(section.storage.name, id, { ...values, orden: i });
+          const savedValues = { ...values, orden: i };
+          if (section.key === "ubicacionesCentros") {
+            const customOrder = Number(values.orden);
+            savedValues.orden = Number.isFinite(customOrder) ? customOrder : i;
+          }
+          await setCollectionDoc(section.storage.name, id, savedValues);
         }
         for (const oid of originalIds) {
           if (!used.has(oid)) await deleteCollectionDoc(section.storage.name, oid);
@@ -724,6 +729,16 @@ async function seedContent() {
     // Colecciones (escritura secuencial para evitar throttling)
     for (const v of DEFAULT_CONTENT.valores) {
       await setCollectionDoc("valores", v.id, { titulo: v.titulo, descripcion: v.descripcion, orden: v.orden });
+    }
+    for (const ubicacion of DEFAULT_CONTENT.ubicacionesCentros) {
+      await setCollectionDoc("ubicacionesCentros", ubicacion.id, {
+        nombre: ubicacion.nombre,
+        distrito: ubicacion.distrito,
+        direccion: ubicacion.direccion,
+        linkGoogleMaps: ubicacion.linkGoogleMaps,
+        activo: ubicacion.activo,
+        orden: ubicacion.orden
+      });
     }
     const dirUrls = [
       urlPresidenta, urlVicepresidenta, urlActas,

@@ -287,6 +287,24 @@ export const SECTIONS = [
         { value: "no", label: "Oculta" }
       ] }
     ]
+  },
+
+  {
+    key: "ubicacionesCentros",
+    label: "Ubicaciones de centros",
+    storage: { type: "collection", name: "ubicacionesCentros", orderBy: "orden", idFrom: "nombre" },
+    itemLabel: "Ubicacion",
+    fields: [
+      { key: "nombre", label: "Nombre del centro", type: "text" },
+      { key: "distrito", label: "Distrito", type: "text" },
+      { key: "direccion", label: "Direccion", type: "textarea" },
+      { key: "linkGoogleMaps", label: "Link de Google Maps", type: "url" },
+      { key: "activo", label: "Estado", type: "select", options: [
+        { value: "si", label: "Activo" },
+        { value: "no", label: "Inactivo" }
+      ] },
+      { key: "orden", label: "Orden de aparicion", type: "text" }
+    ]
   }
 ];
 

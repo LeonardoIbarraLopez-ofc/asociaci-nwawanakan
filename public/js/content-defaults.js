@@ -37,8 +37,21 @@ export const DEFAULT_CONTENT = {
 
   // ── sitio/footer ───────────────────────────────────────────────────
   footer: {
+    logoFooter: "assets/institucional/logotipo.png",
+    textoRedes: "Síguenos en nuestras redes:",
+    redesFooter: [
+      { nombre: "Facebook", url: "https://www.facebook.com/profile.php?id=61590971327508&locale=es_LA", activo: "si" },
+      { nombre: "TikTok", url: "https://www.tiktok.com/@asociacionwawanakan?is_from_webapp=1&sender_device=pc", activo: "si" },
+      { nombre: "WhatsApp", url: "https://wa.me/59179164334", activo: "si" },
+      { nombre: "Otro", url: "https://asociacionwawanakan-eng.github.io/asociaci-nwawanakan/", activo: "si" }
+    ],
+    visitanosTitulo: "VISÍTANOS",
     visitanos1: "Calle 6, Villa Dolores",
     visitanos2: "El Alto, La Paz - Bolivia",
+    contactoTitulo: "COMUNÍCATE CON NOSOTROS",
+    whatsappLink: "https://wa.me/59179164334",
+    whatsappTexto: "(+591) 79164334",
+    email: "presidencia.wawanakan@gmail.com",
     credito: "Asociación Wawanakan Kusisiñapa | Desde 2008 – 2026 | 18 años al servicio de la niñez",
     copyright: "© 2026. Todos los derechos reservados."
   },

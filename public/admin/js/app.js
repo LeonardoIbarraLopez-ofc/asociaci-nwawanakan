@@ -7,19 +7,19 @@
  *   el contenido por defecto en Firestore (Fase I del plan).
  */
 import { isFirebaseConfigured, FIREBASE_CONFIG, CLOUDINARY } from "../../js/firebase-config.js";
-import { DEFAULT_CONTENT } from "../../js/content-defaults.js";
+import { DEFAULT_CONTENT } from "../../js/content-defaults.js?v=9";
 import { login, logout, onAuthChanged, authErrorMessage } from "./auth.js";
 import {
   getDocData, setDocData, replaceDocData,
   getCollectionData, setCollectionDoc, deleteCollectionDoc
 } from "./store.js";
-import { SECTIONS, CENTROS_SECTION } from "./schema.js";
+import { SECTIONS, CENTROS_SECTION } from "./schema.js?v=9";
 import { buildForm } from "./form-builder.js";
 
 /* ── MARCADOR DE DIAGNÓSTICO (temporal) ──────────────────────────────── */
-console.log("%c[CMS] app.js BUILD-8 cargado | apiKey:", "background:#c8922a;color:#000;padding:2px 6px;border-radius:4px", FIREBASE_CONFIG.apiKey, "| configurado:", isFirebaseConfigured());
-document.title = "CMS BUILD-8 | " + document.title;
-window.__CMS_BUILD = 8;
+console.log("%c[CMS] app.js BUILD-9 cargado | apiKey:", "background:#c8922a;color:#000;padding:2px 6px;border-radius:4px", FIREBASE_CONFIG.apiKey, "| configurado:", isFirebaseConfigured());
+document.title = "CMS BUILD-9 | " + document.title;
+window.__CMS_BUILD = 9;
 
 /* ── Referencias del DOM ─────────────────────────────────────────────── */
 const $ = (id) => document.getElementById(id);

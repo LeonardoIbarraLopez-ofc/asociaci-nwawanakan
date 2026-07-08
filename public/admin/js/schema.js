@@ -244,6 +244,27 @@ export const SECTIONS = [
     label: "Pie de página",
     storage: { type: "doc", path: ["sitio", "footer"] },
     fields: [
+      { key: "logoFooter", label: "Logo del pie de pagina", type: "image", folder: "institucional" },
+      { key: "textoRedes", label: "Texto de redes sociales", type: "text" },
+      {
+        key: "redesFooter",
+        label: "Redes sociales del footer",
+        type: "objectList",
+        itemLabel: "Red social",
+        subfields: [
+          { key: "nombre", label: "Nombre de la red", type: "text" },
+          { key: "url", label: "Enlace URL", type: "url" },
+          { key: "activo", label: "Mostrar en el footer", type: "select", options: [
+            { value: "si", label: "Activo" },
+            { value: "no", label: "Oculto" }
+          ] }
+        ]
+      },
+      { key: "visitanosTitulo", label: "Visitanos - Titulo de seccion", type: "text" },
+      { key: "contactoTitulo", label: "Contacto - Titulo de seccion", type: "text" },
+      { key: "whatsappLink", label: "Contacto - Enlace de WhatsApp", type: "url" },
+      { key: "whatsappTexto", label: "Contacto - WhatsApp (texto)", type: "text" },
+      { key: "email", label: "Contacto - Correo electronico", type: "text" },
       { key: "visitanos1", label: "Visítanos — Línea 1", type: "text" },
       { key: "visitanos2", label: "Visítanos — Línea 2", type: "text" },
       { key: "credito", label: "Crédito (años de servicio)", type: "text" },

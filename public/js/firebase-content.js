@@ -17,7 +17,7 @@
  * para los centros y la configuración.
  */
 import { initFirebase } from "./firebase-app.js";
-import { DEFAULT_CONTENT } from "./content-defaults.js";
+import { DEFAULT_CONTENT } from "./content-defaults.js?v=9";
 
 /* ── Utilidades ──────────────────────────────────────────────────────── */
 
@@ -347,6 +347,30 @@ export function hydrate(content) {
     const value = get(content, el.dataset.cmsHref);
     if (value != null && value !== "") {
       el.setAttribute("href", value);
+      hrefUpdates++;
+    }
+  });
+
+  const footerSocials = get(content, "footer.redesFooter");
+  if (Array.isArray(footerSocials)) {
+    document.querySelectorAll("[data-footer-social-index]").forEach((el) => {
+      const item = footerSocials[Number(el.dataset.footerSocialIndex)] || {};
+      const active = item.activo !== false && item.activo !== "no";
+      el.hidden = !active;
+      if (item.url) {
+        el.setAttribute("href", item.url);
+        hrefUpdates++;
+      }
+      if (item.nombre) {
+        el.setAttribute("aria-label", `${item.nombre} de Wawanakan`);
+      }
+    });
+  }
+
+  document.querySelectorAll("[data-footer-email]").forEach((el) => {
+    const value = get(content, "footer.email");
+    if (value) {
+      el.setAttribute("href", `mailto:${value}`);
       hrefUpdates++;
     }
   });

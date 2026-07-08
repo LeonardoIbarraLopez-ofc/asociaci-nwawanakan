@@ -200,7 +200,7 @@ function getCenterProfile(district, name, image) {
       nombre: director.nombre || detail.directoraNombre || "Lic. Tania Loyola Acarapi Mamani",
       cargo: director.cargo || detail.directoraCargo || "Directora",
       foto: directorPhoto,
-      descripcion: "Lidera la gestión del centro con compromiso, vocación de servicio y enfoque en el bienestar integral de la niñez y sus familias."
+      descripcion: "La directora del centro coordina y acompaña el trabajo diario del centro infantil, apoyando a las educadoras, organizando las actividades y velando por el bienestar, protección y desarrollo integral de los niños y niñas."
     },
     galeria: galleryImages,
     actividades: centerSpecificActivities,

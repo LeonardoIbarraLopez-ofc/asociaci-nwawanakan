@@ -11905,7 +11905,6 @@ body.home-page #alcances .stat-card h3 {
   transform-style: preserve-3d;
 }
 
-.director-flip-card:hover .director-flip-inner,
 .director-flip-card.flipped .director-flip-inner {
   transform: rotateY(180deg);
 }

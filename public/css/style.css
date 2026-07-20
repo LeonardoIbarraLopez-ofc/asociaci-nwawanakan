@@ -9682,6 +9682,321 @@ body.home-page .allies-inner:hover {
   }
 }
 
+/* Voluntariado: "Como postular?" en grilla compacta */
+.voluntariado-process {
+  padding: 36px 0 50px !important;
+}
+
+.voluntariado-process-shell {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.voluntariado-process .voluntariado-section-heading {
+  margin: 0 0 26px !important;
+  text-align: left;
+}
+
+.voluntariado-process .voluntariado-section-heading h2 {
+  color: #ffc928 !important;
+  font-size: clamp(2.4rem, 5vw, 4.6rem) !important;
+  font-weight: 900;
+  line-height: 1.05 !important;
+  text-shadow: 0 5px 18px rgba(0, 0, 0, 0.45);
+}
+
+.voluntariado-process-layout {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  grid-template-areas:
+    "imagen paso1"
+    "paso2 paso3" !important;
+  gap: 22px !important;
+  align-items: stretch !important;
+  max-width: 1180px !important;
+  margin: 0 auto !important;
+  padding: 28px !important;
+  border: 1.5px solid rgba(255, 201, 40, 0.55) !important;
+  border-radius: 32px !important;
+  background: rgba(255, 244, 230, 0.18) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.voluntariado-process-intro {
+  grid-area: imagen;
+  display: flex !important;
+  min-height: 230px;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.voluntariado-process-image {
+  width: 100%;
+  height: 100% !important;
+  min-height: 230px !important;
+  border-radius: 28px !important;
+  overflow: hidden !important;
+}
+
+.voluntariado-process-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.voluntariado-process-intro p {
+  margin: 0 !important;
+  color: #ffffff !important;
+  font-size: clamp(1rem, 2vw, 1.25rem) !important;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.voluntariado-steps {
+  display: contents !important;
+}
+
+.voluntariado-steps::before {
+  display: none !important;
+  content: none !important;
+}
+
+.voluntariado-step:nth-child(1) {
+  grid-area: paso1;
+}
+
+.voluntariado-step:nth-child(2) {
+  grid-area: paso2;
+}
+
+.voluntariado-step:nth-child(3) {
+  grid-area: paso3;
+}
+
+.voluntariado-step,
+.voluntariado-step:last-child {
+  position: relative !important;
+  display: flex !important;
+  min-height: 230px !important;
+  padding: 0 !important;
+  border: 1.5px solid rgba(255, 201, 40, 0.55) !important;
+  border-radius: 30px !important;
+  background: linear-gradient(135deg, #421304, #6b260c) !important;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22) !important;
+  overflow: hidden !important;
+}
+
+.voluntariado-step::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: radial-gradient(circle at top right, rgba(255, 201, 40, 0.14), transparent 45%);
+  pointer-events: none;
+}
+
+.voluntariado-step:not(:last-child)::after,
+.voluntariado-step:nth-child(2)::after {
+  display: none !important;
+  content: none !important;
+}
+
+.voluntariado-step > span {
+  position: absolute !important;
+  top: 22px !important;
+  left: 22px !important;
+  z-index: 4 !important;
+  display: flex !important;
+  width: 54px !important;
+  height: 54px !important;
+  margin: 0 !important;
+  align-items: center;
+  justify-content: center;
+  border: 5px solid rgba(255, 255, 255, 0.9) !important;
+  border-radius: 50% !important;
+  background: rgba(255, 201, 40, 0.82) !important;
+  color: #421304 !important;
+  font-size: 1.45rem !important;
+  font-weight: 900 !important;
+  box-shadow: none !important;
+}
+
+.voluntariado-step-card,
+.apply-flip-card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: 230px !important;
+  border-radius: 30px !important;
+}
+
+.apply-flip-inner {
+  min-height: 230px !important;
+  border-radius: 30px !important;
+}
+
+.apply-flip-front,
+.apply-flip-back {
+  min-height: 230px !important;
+  padding: 76px 26px 28px !important;
+  border: 0 !important;
+  border-radius: 30px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.apply-flip-front h3 {
+  margin: 0 !important;
+  color: #ffc928 !important;
+  font-size: clamp(1.25rem, 2vw, 1.8rem) !important;
+  font-weight: 900 !important;
+  line-height: 1.15 !important;
+}
+
+.apply-flip-back p {
+  margin: 0 !important;
+  color: #fff4e6 !important;
+  font-size: 1rem !important;
+  line-height: 1.45 !important;
+}
+
+@media (max-width: 900px) {
+  .voluntariado-process-layout {
+    gap: 16px !important;
+    padding: 22px !important;
+  }
+
+  .voluntariado-process-intro,
+  .voluntariado-process-image,
+  .voluntariado-step,
+  .voluntariado-step-card,
+  .apply-flip-card,
+  .apply-flip-inner,
+  .apply-flip-front,
+  .apply-flip-back {
+    min-height: 200px !important;
+    border-radius: 26px !important;
+  }
+
+  .apply-flip-front,
+  .apply-flip-back {
+    padding: 70px 20px 24px !important;
+  }
+
+  .voluntariado-step > span {
+    top: 18px !important;
+    left: 18px !important;
+    width: 48px !important;
+    height: 48px !important;
+    font-size: 1.25rem !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .voluntariado-process {
+    padding: 28px 0 40px !important;
+  }
+
+  .voluntariado-process .voluntariado-section-heading {
+    margin-bottom: 18px !important;
+    text-align: center;
+  }
+
+  .voluntariado-process-layout {
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-areas:
+      "imagen paso1"
+      "paso2 paso3" !important;
+    gap: 12px !important;
+    padding: 14px !important;
+    border-radius: 24px !important;
+  }
+
+  .voluntariado-process-intro,
+  .voluntariado-process-image,
+  .voluntariado-step,
+  .voluntariado-step-card,
+  .apply-flip-card,
+  .apply-flip-inner,
+  .apply-flip-front,
+  .apply-flip-back {
+    min-height: 155px !important;
+    border-radius: 20px !important;
+  }
+
+  .voluntariado-process-intro {
+    gap: 8px;
+  }
+
+  .voluntariado-process-intro p {
+    font-size: 0.8rem !important;
+    line-height: 1.25;
+  }
+
+  .apply-flip-front,
+  .apply-flip-back {
+    padding: 56px 10px 16px !important;
+  }
+
+  .voluntariado-step > span {
+    top: 12px !important;
+    left: 12px !important;
+    width: 38px !important;
+    height: 38px !important;
+    border-width: 4px !important;
+    font-size: 1rem !important;
+  }
+
+  .apply-flip-front h3 {
+    font-size: 0.95rem !important;
+    line-height: 1.15 !important;
+  }
+
+  .apply-flip-back p {
+    font-size: 0.8rem !important;
+    line-height: 1.25 !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .voluntariado-process-layout {
+    gap: 10px !important;
+  }
+
+  .voluntariado-process-intro,
+  .voluntariado-process-image,
+  .voluntariado-step,
+  .voluntariado-step-card,
+  .apply-flip-card,
+  .apply-flip-inner,
+  .apply-flip-front,
+  .apply-flip-back {
+    min-height: 135px !important;
+  }
+
+  .apply-flip-front,
+  .apply-flip-back {
+    padding: 50px 8px 14px !important;
+  }
+
+  .apply-flip-front h3 {
+    font-size: 0.85rem !important;
+  }
+
+  .apply-flip-back p {
+    font-size: 0.72rem !important;
+  }
+
+  .voluntariado-step > span {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 0.9rem !important;
+  }
+}
+
 /* Voluntariado: CTA final sin tarjeta base */
 .voluntariado-glass .voluntariado-final-cta {
   padding-top: 10px !important;
